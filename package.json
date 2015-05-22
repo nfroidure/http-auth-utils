@@ -1,0 +1,37 @@
+{
+  "name": "http-auth-utils",
+  "version": "0.0.0",
+  "description": "Parse and build HTTP auth headers.",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "mocha --compilers js:babel/register src/**/*.mocha.js src/*.mocha.js",
+    "compile": "babel src --out-dir=dist",
+    "prepublish": "npm run compile"
+  },
+  "keywords": [
+    "REST",
+    "HTTP",
+    "server",
+    "web",
+    "services"
+  ],
+  "author": "Nicolas Froidure",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nfroidure/whook.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nfroidure/whook/issues"
+  },
+  "homepage": "https://github.com/nfroidure/whook",
+  "devDependencies": {
+    "babel": "^5.2.15",
+    "mocha": "^2.2.4",
+    "neatequal": "^1.0.0",
+    "sinon": "^1.14.1"
+  },
+  "dependencies": {
+    "yerror": "^1.0.0"
+  }
+}
