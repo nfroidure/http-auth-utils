@@ -7,7 +7,7 @@ const SEPARATOR_REGEXP = /", ?/;
 
 // FIXME: Create a real parser
 export const parseHTTPHeadersQuotedKeyValueSet =
-  function parseHTTPHeadersQuotedKeyValueSet(contents, authorizedKeys) {
+  function parseHTTPHeadersQuotedKeyValueSet(contents, authorizedKeys, requiredKeys = []) {
     return contents.split(SEPARATOR_REGEXP).map(function(part, partPosition, parts) {
       part = parts.length - 1 === partPosition ? part : part + '"';
       let pair = part.split(EQUAL);
@@ -28,7 +28,7 @@ export const parseHTTPHeadersQuotedKeyValueSet =
   };
 
 export const buildHTTPHeadersQuotedKeyValueSet =
-  function buildHTTPHeadersQuotedKeyValueSet(data, authorizedKeys, requiredKeys) {
+  function buildHTTPHeadersQuotedKeyValueSet(data, authorizedKeys, requiredKeys = []) {
     return authorizedKeys.reduce(function(contents, key) {
       if(data[key]) {
         return contents + (contents ? ', ' : '') + key + EQUAL +
