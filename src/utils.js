@@ -26,3 +26,14 @@ export const parseHTTPHeadersQuotedKeyValueSet =
       return parsedValues;
     }, {});
   };
+
+export const buildHTTPHeadersQuotedKeyValueSet =
+  function buildHTTPHeadersQuotedKeyValueSet(data, authorizedKeys, requiredKeys) {
+    return authorizedKeys.reduce(function(contents, key) {
+      if(data[key]) {
+        return contents + (contents ? ', ' : '') + key + EQUAL +
+          QUOTE + data[key] + QUOTE;
+      }
+      return contents;
+    }, '');
+  };
