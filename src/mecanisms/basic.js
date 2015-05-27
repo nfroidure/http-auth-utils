@@ -20,17 +20,22 @@ const BASIC = {
     if(!rest) {
       throw new YError('E_EMPTY_AUTH');
     }
-    let [username, password] = ((new Buffer(rest, 'base64')).toString()).split(':');
+    return {
+      hash: rest
+    };
+  },
+  buildAuthorizationRest: function buildAuthorizationRest({hash}) {
+    return hash;
+  },
+  computeHash: function computeHash({username, password}) {
+    return (new Buffer(username + ':' + password)).toString('base64');
+  },
+  decodeHash: function decodeHash(hash) {
+    let [username, password] = ((new Buffer(hash, 'base64')).toString()).split(':');
     return {
       username,
       password
     };
-  },
-  buildAuthorizationRest: function buildAuthorizationRest(data) {
-    return BASIC.computeHash(data);
-  },
-  computeHash: function computeHash({username, password}) {
-    return (new Buffer(username + ':' + password)).toString('base64');
   }
 };
 

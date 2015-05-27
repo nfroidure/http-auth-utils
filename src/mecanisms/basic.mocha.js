@@ -53,8 +53,7 @@ describe('BASIC', function() {
     it('should work', function() {
       neatequal(
         BASIC.parseAuthorizationRest('QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
-          username: 'Aladdin',
-          password: 'open sesame'
+          hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
         }
       );
     });
@@ -66,8 +65,7 @@ describe('BASIC', function() {
     it('should work', function() {
       assert.equal(
         BASIC.buildAuthorizationRest({
-          username: 'Aladdin',
-          password: 'open sesame'
+          hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
         }),
         'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
       );
@@ -77,14 +75,39 @@ describe('BASIC', function() {
       neatequal(
         BASIC.parseAuthorizationRest(
           BASIC.buildAuthorizationRest({
-            username: 'Aladdin',
-            password: 'open sesame'
+          hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
           })
         ), {
-          username: 'Aladdin',
-          password: 'open sesame'
+          hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
       });
     });
+
+  });
+
+  describe('computeHash', function() {
+
+      it('should work', function() {
+        assert.equal(
+          BASIC.computeHash({
+            username: 'Aladdin',
+            password: 'open sesame'
+          }),
+          'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+        );
+      });
+
+  });
+
+  describe('decodeHash', function() {
+
+      it('should work', function() {
+        neatequal(
+          BASIC.decodeHash('QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
+            username: 'Aladdin',
+            password: 'open sesame'
+          }
+        );
+      });
 
   });
 
