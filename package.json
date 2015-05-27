@@ -1,7 +1,7 @@
 {
   "name": "http-auth-utils",
   "version": "0.0.0",
-  "description": "Parse and build HTTP auth headers.",
+  "description": "Parse, build and deal with HTTP auth headers.",
   "main": "dist/index.js",
   "scripts": {
     "test": "mocha --compilers js:babel/register src/**/*.mocha.js src/*.mocha.js",
