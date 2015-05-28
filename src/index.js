@@ -38,3 +38,5 @@ export const parseAuthorizationHeader =
     }
     throw new YError('E_UNKNOWN_AUTH_MECANISM', header);
   };
+
+export const mecanisms = [BASIC, DIGEST];

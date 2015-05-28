@@ -11,20 +11,22 @@
   "keywords": [
     "REST",
     "HTTP",
-    "server",
-    "web",
-    "services"
+    "auth",
+    "authentication",
+    "authorization",
+    "basic",
+    "digest"
   ],
   "author": "Nicolas Froidure",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nfroidure/whook.git"
+    "url": "https://github.com/nfroidure/http-auth-utils.git"
   },
   "bugs": {
-    "url": "https://github.com/nfroidure/whook/issues"
+    "url": "https://github.com/nfroidure/http-auth-utils/issues"
   },
-  "homepage": "https://github.com/nfroidure/whook",
+  "homepage": "https://github.com/nfroidure/http-auth-utils",
   "devDependencies": {
     "babel": "^5.2.15",
     "mocha": "^2.2.4",

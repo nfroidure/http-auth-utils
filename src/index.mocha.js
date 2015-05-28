@@ -2,7 +2,8 @@ import assert from 'assert';
 import neatequal from 'neatequal';
 import {
   parseWWWAuthenticateHeader,
-  parseAuthorizationHeader
+  parseAuthorizationHeader,
+  mecanisms
 } from './index';
 
 describe('index', function() {
@@ -32,6 +33,17 @@ describe('index', function() {
             hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
           }
         }
+      );
+    });
+
+  });
+
+  describe('mecanisms', function() {
+
+    it('should export bot DIGEST and BASIC  mecanisms', function() {
+      assert.equal(
+        mecanisms.length,
+        2
       );
     });
 
