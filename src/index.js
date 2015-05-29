@@ -1,8 +1,10 @@
 import BASIC from './mecanisms/basic';
-import DIGEST from './mecanisms/basic';
+import DIGEST from './mecanisms/digest';
+
+export const mecanisms = [BASIC, DIGEST];
 
 export const parseWWWAuthenticateHeader =
-  function parseWWWAuthenticateHeader(header, authMecanisms = [BASIC, DIGEST]) {
+  function parseWWWAuthenticateHeader(header, authMecanisms = mecanisms) {
     let result = null;
     authMecanisms.some(function(authMecanism) {
       if(header.startsWith(authMecanism.type + ' ')) {
@@ -21,7 +23,7 @@ export const parseWWWAuthenticateHeader =
   };
 
 export const parseAuthorizationHeader =
-  function parseAuthorizationHeader(header, authMecanisms = [BASIC, DIGEST]) {
+  function parseAuthorizationHeader(header, authMecanisms = mecanisms) {
     let result = null;
     authMecanisms.some(function(authMecanism) {
       if(header.startsWith(authMecanism.type + ' ')) {
@@ -38,5 +40,3 @@ export const parseAuthorizationHeader =
     }
     throw new YError('E_UNKNOWN_AUTH_MECANISM', header);
   };
-
-export const mecanisms = [BASIC, DIGEST];
