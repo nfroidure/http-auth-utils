@@ -6,7 +6,9 @@
   "scripts": {
     "test": "mocha --compilers js:babel/register src/**/*.mocha.js src/*.mocha.js",
     "compile": "babel src --out-dir=dist",
-    "prepublish": "npm run compile"
+    "prepublish": "npm run compile",
+    "prelink": "npm run compile",
+    "cli": "env NPM_CLI=1"
   },
   "keywords": [
     "REST",
@@ -29,6 +31,7 @@
   "homepage": "https://github.com/nfroidure/http-auth-utils",
   "devDependencies": {
     "babel": "^5.2.15",
+    "jsdoc-to-markdown": "^1.1.1",
     "mocha": "^2.2.4",
     "neatequal": "^1.0.0",
     "sinon": "^1.14.1"

@@ -17,7 +17,7 @@ describe('BASIC', function() {
     it('should work', function() {
       neatequal(
         BASIC.parseWWWAuthenticateRest('realm="perlinpinpin"'), {
-        realm: 'perlinpinpin'
+          realm: 'perlinpinpin'
         }
       );
     });
