@@ -1,6 +1,6 @@
 {
   "name": "http-auth-utils",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Parse, build and deal with HTTP auth headers.",
   "main": "dist/index.js",
   "scripts": {
