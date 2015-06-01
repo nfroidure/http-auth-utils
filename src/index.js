@@ -8,9 +8,22 @@ import BASIC from './mecanisms/basic';
 import DIGEST from './mecanisms/digest';
 
 /**
+ * Basic authentication mecanism.
+ * @type {Object}
+ * @see  {@link module:http-auth-utils/mecanisms/basic}
+ */
+export {BASIC as BASIC};
+
+/**
+ * Digest authentication mecanism.
+ * @type {Object}
+ * @see  {@link module:http-auth-utils/mecanisms/digest}
+ */
+export {DIGEST as DIGEST};
+
+/**
  * Natively supported authentication mecanisms.
  * @type {Array}
- * @see  The Basic {@link module:http-auth-utils/mecanisms/basic} and Digest {@link module:http-auth-utils/mecanisms/digest}
  */
 export const mecanisms = [BASIC, DIGEST];
 

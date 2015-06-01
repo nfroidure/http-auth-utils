@@ -3,7 +3,9 @@ import neatequal from 'neatequal';
 import {
   parseWWWAuthenticateHeader,
   parseAuthorizationHeader,
-  mecanisms
+  mecanisms,
+  BASIC,
+  DIGEST
 } from './index';
 
 describe('index', function() {
@@ -45,6 +47,11 @@ describe('index', function() {
         mecanisms.length,
         2
       );
+    });
+
+    it('should export bot DIGEST and BASIC  mecanisms', function() {
+      assert(BASIC);
+      assert(DIGEST);
     });
 
   });
