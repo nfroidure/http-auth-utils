@@ -63,7 +63,9 @@ const BASIC = {
    * @example
    * assert.deepEqual(
    *   BASIC.parseAuthorizationRest('QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
-   *     hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+   *     hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ==',
+   *     username: 'Aladdin',
+   *     password: 'open sesame'
    *   }
    * );
    * @api public
@@ -72,8 +74,11 @@ const BASIC = {
     if(!rest) {
       throw new YError('E_EMPTY_AUTH');
     }
+    let {username, password} = BASIC.decodeHash(rest);
     return {
-      hash: rest
+      hash: rest,
+      username,
+      password
     };
   },
 
@@ -90,7 +95,13 @@ const BASIC = {
    * );
    * @api public
    */
-  buildAuthorizationRest: function buildAuthorizationRest({hash}) {
+  buildAuthorizationRest: function buildAuthorizationRest({hash, username, password} = {}) {
+    if(username && password) {
+      return BASIC.computeHash({username, password});
+    }
+    if(!hash) {
+      throw new YError('E_NO_HASH');
+    }
     return hash;
   },
 

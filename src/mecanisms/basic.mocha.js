@@ -53,7 +53,9 @@ describe('BASIC', function() {
     it('should work', function() {
       neatequal(
         BASIC.parseAuthorizationRest('QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
-          hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+          hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ==',
+          username: 'Aladdin',
+          password: 'open sesame'
         }
       );
     });
@@ -62,7 +64,17 @@ describe('BASIC', function() {
 
   describe('buildAuthorizationRest', function() {
 
-    it('should work', function() {
+    it('should work with credentials', function() {
+      assert.equal(
+        BASIC.buildAuthorizationRest({
+          username: 'Aladdin',
+          password: 'open sesame'
+        }),
+        'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+      );
+    });
+
+    it('should work with just the hash', function() {
       assert.equal(
         BASIC.buildAuthorizationRest({
           hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
@@ -75,10 +87,14 @@ describe('BASIC', function() {
       neatequal(
         BASIC.parseAuthorizationRest(
           BASIC.buildAuthorizationRest({
-          hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+          hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ==',
+          username: 'Aladdin',
+          password: 'open sesame'
           })
         ), {
-          hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+          hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ==',
+          username: 'Aladdin',
+          password: 'open sesame'
       });
     });
 

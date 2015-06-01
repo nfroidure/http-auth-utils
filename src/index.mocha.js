@@ -32,6 +32,8 @@ describe('index', function() {
         parseAuthorizationHeader('Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
           type: 'Basic',
           data: {
+          username: 'Aladdin',
+          password: 'open sesame',
             hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
           }
         }
