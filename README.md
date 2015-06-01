@@ -88,10 +88,10 @@ Parse HTTP Authorization header contents.
 **Example**
 ```js
 assert.equal(
-  parseAuthorizationHeader('Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
+  parseAuthorizationHeader('Basic QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
     type: 'Basic',
     data: {
-      hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+      hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU='
     }
   }
 );
@@ -186,8 +186,8 @@ Parse the Authorization header rest.
 **Example**
 ```js
 assert.deepEqual(
-  BASIC.parseAuthorizationRest('QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
-    hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+  BASIC.parseAuthorizationRest('QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
+    hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU='
   }
 );
 ```
@@ -207,9 +207,9 @@ Build the Authorization header rest.
 ```js
 assert.equal(
   BASIC.buildAuthorizationRest({
-    hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+    hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU='
   }),
-  'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+  'QWxpIEJhYmE6b3BlbiBzZXNhbWU='
 );
 ```
 <a name="module_http-auth-utils/mecanisms/basic..BASIC.computeHash"></a>
@@ -228,10 +228,10 @@ Compute the Basic authentication hash from the given credentials.
 ```js
 assert.equal(
   BASIC.computeHash({
-    username: 'Aladdin',
+    username: 'Ali Baba',
     password: 'open sesame'
   }),
-  'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+  'QWxpIEJhYmE6b3BlbiBzZXNhbWU='
 );
 ```
 <a name="module_http-auth-utils/mecanisms/basic..BASIC.decodeHash"></a>
@@ -249,8 +249,8 @@ Decode the Basic hash and return the corresponding credentials.
 **Example**
 ```js
 assert.deepEqual(
-  BASIC.decodeHash('QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
-    username: 'Aladdin',
+  BASIC.decodeHash('QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
+    username: 'Ali Baba',
     password: 'open sesame'
   }
 );

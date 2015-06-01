@@ -29,12 +29,12 @@ describe('index', function() {
 
     it('should parse Basic headers', function() {
       neatequal(
-        parseAuthorizationHeader('Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
+        parseAuthorizationHeader('Basic QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
           type: 'Basic',
           data: {
-          username: 'Aladdin',
+          username: 'Ali Baba',
           password: 'open sesame',
-            hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+            hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU='
           }
         }
       );
