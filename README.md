@@ -48,7 +48,6 @@ To contribute to this project, you must accept to publish it under the MIT
 Natively supported authentication mecanisms.
 
 **Kind**: static constant of <code>[http-auth-utils](#module_http-auth-utils)</code>
-**See**: The Basic [http-auth-utils/mecanisms/basic](#module_http-auth-utils/mecanisms/basic) and Digest [http-auth-utils/mecanisms/digest](#module_http-auth-utils/mecanisms/digest)
 <a name="module_http-auth-utils.parseWWWAuthenticateHeader"></a>
 ### http-auth-utils.parseWWWAuthenticateHeader ⇒ <code>Object</code>
 Parse HTTP WWW-Authenticate header contents.
