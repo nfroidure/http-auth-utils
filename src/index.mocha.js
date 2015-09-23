@@ -32,9 +32,19 @@ describe('index', function() {
         parseAuthorizationHeader('Basic QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
           type: 'Basic',
           data: {
-          username: 'Ali Baba',
-          password: 'open sesame',
-            hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU='
+            username: 'Ali Baba',
+            password: 'open sesame',
+            hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
+          },
+        }
+      );
+      neatequal(
+        parseAuthorizationHeader('Basic bmljb2xhcy5mcm9pZHVyZUBzaW1wbGlmaWVsZC5jb206dGVzdA=='), {
+          type: 'Basic',
+          data: {
+            username: 'nicolas.froidure@simplifield.com',
+            password: 'test',
+            hash: 'bmljb2xhcy5mcm9pZHVyZUBzaW1wbGlmaWVsZC5jb206dGVzdA==',
           }
         }
       );

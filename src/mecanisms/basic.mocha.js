@@ -58,6 +58,13 @@ describe('BASIC', function() {
           password: 'open sesame'
         }
       );
+      neatequal(
+        BASIC.parseAuthorizationRest('bmljb2xhcy5mcm9pZHVyZUBzaW1wbGlmaWVsZC5jb206dGVzdA=='), {
+          hash: 'bmljb2xhcy5mcm9pZHVyZUBzaW1wbGlmaWVsZC5jb206dGVzdA==',
+          username: 'nicolas.froidure@simplifield.com',
+          password: 'test'
+        }
+      );
     });
 
   });
