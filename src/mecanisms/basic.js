@@ -137,10 +137,10 @@ const BASIC = {
    * @api public
    */
   decodeHash: function decodeHash(hash) {
-    let [username, password] = ((new Buffer(hash, 'base64')).toString()).split(':');
+    let [username, ...passwordParts] = ((new Buffer(hash, 'base64')).toString()).split(':');
     return {
       username,
-      password
+      password: passwordParts.join(':')
     };
   }
 };
