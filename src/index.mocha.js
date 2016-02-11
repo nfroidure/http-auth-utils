@@ -50,6 +50,19 @@ describe('index', function() {
       );
     });
 
+    it('should parse Basic headers with a ":" char in the password', function() {
+      neatequal(
+        parseAuthorizationHeader('Basic Sm9objpSOlU6a2lkZGluZz8='), {
+          type: 'Basic',
+          data: {
+            username: 'John',
+            password: 'R:U:kidding?',
+            hash: 'Sm9objpSOlU6a2lkZGluZz8='
+          }
+        }
+      );
+    });
+
   });
 
   describe('mecanisms', function() {
