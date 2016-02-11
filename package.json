@@ -4,11 +4,14 @@
   "description": "Parse, build and deal with HTTP auth headers.",
   "main": "dist/index.js",
   "scripts": {
-    "test": "mocha --compilers js:babel/register src/**/*.mocha.js src/*.mocha.js",
+    "test": "mocha --compilers js:babel/register src/**/*.mocha.js src/*.mocha.js src/**/*.mocha.js",
     "compile": "babel src --out-dir=dist",
-    "prepublish": "npm run compile",
-    "prelink": "npm run compile",
-    "cli": "env NPM_CLI=1"
+    "cli": "env NPM_CLI=1",
+    "lint": "eslint index.js index.mocha.js",
+    "preversion": "npm run compile && npm run lint && npm test",
+    "doc": "cat src/index.js | jsdoc2md > API.md",
+    "coveralls": "istanbul cover _mocha --report lcovonly -- --compilers js:babel/register src/*.mocha.js src/**/*.mocha.js -R spec -t 5000 && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
+    "cover": "istanbul cover --report html _mocha -- --compilers js:babel/register src/*.mocha.js src/**/*.mocha.js -R spec -t 5000"
   },
   "keywords": [
     "REST",
@@ -30,7 +33,12 @@
   },
   "homepage": "https://github.com/nfroidure/http-auth-utils",
   "devDependencies": {
-    "babel": "^5.2.15",
+    "babel-cli": "^6.4.0",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-register": "^6.4.3",
+    "eslint": "^1.10.3",
+    "eslint-config-simplifield": "^1.2.0",
+    "istanbul": "^1.0.0-alpha.2",
     "jsdoc-to-markdown": "^1.1.1",
     "mocha": "^2.2.4",
     "neatequal": "^1.0.0",
