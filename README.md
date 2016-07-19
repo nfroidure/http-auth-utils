@@ -3,6 +3,14 @@
 > This library provide several utils to parse and build WWW-Authenticate and
  Authorization headers as described per the HTTP RFC.
 
+ [![NPM version](https://img.shields.io/npm/v/http-auth-utils.svg)](https://www.npmjs.com/package/http-auth-utils)
+ [![Build Status](https://travis-ci.org/nfroidure/http-auth-utils.svg?branch=master)](https://travis-ci.org/nfroidure/http-auth-utils)
+[![Dependency Status](https://david-dm.org/nfroidure/http-auth-utils.svg)](https://david-dm.org/nfroidure/http-auth-utils)
+[![devDependency Status](https://david-dm.org/nfroidure/http-auth-utils/dev-status.svg)](https://david-dm.org/nfroidure/http-auth-utils#info=devDependencies)
+[![Coverage Status](https://coveralls.io/repos/nfroidure/http-auth-utils/badge.svg?branch=master)](https://coveralls.io/r/nfroidure/http-auth-utils?branch=master)
+[![Code Climate](https://codeclimate.com/github/nfroidure/http-auth-utils/badges/gpa.svg)](https://codeclimate.com/github/nfroidure/http-auth-utils)
+[![Dependency Status](https://dependencyci.com/github/nfroidure/http-auth-utils/badge)](https://dependencyci.com/github/nfroidure/http-auth-utils)
+
 This library is intended to be framework agnostic and could be used either on
  the server and the client side.
 
