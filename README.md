@@ -35,41 +35,48 @@ To contribute to this project, you must accept to publish it under the MIT
  Licence.
 
 ## Modules
+
 <dl>
 <dt><a href="#module_http-auth-utils">http-auth-utils</a></dt>
 <dd></dd>
 <dt><a href="#module_http-auth-utils/mecanisms/basic">http-auth-utils/mecanisms/basic</a></dt>
 <dd></dd>
+<dt><a href="#module_http-auth-utils/mecanisms/bearer">http-auth-utils/mecanisms/bearer</a></dt>
+<dd></dd>
 <dt><a href="#module_http-auth-utils/mecanisms/digest">http-auth-utils/mecanisms/digest</a></dt>
 <dd></dd>
 </dl>
+
 <a name="module_http-auth-utils"></a>
+
 ## http-auth-utils
 
 * [http-auth-utils](#module_http-auth-utils)
-  * [.mecanisms](#module_http-auth-utils.mecanisms) : <code>Array</code>
-  * [.parseWWWAuthenticateHeader](#module_http-auth-utils.parseWWWAuthenticateHeader) ⇒ <code>Object</code>
-  * [.parseAuthorizationHeader](#module_http-auth-utils.parseAuthorizationHeader) ⇒ <code>Object</code>
+    * [.mecanisms](#module_http-auth-utils.mecanisms) : <code>Array</code>
+    * [.parseWWWAuthenticateHeader(header, [authMecanisms])](#module_http-auth-utils.parseWWWAuthenticateHeader) ⇒ <code>Object</code>
+    * [.parseAuthorizationHeader(header, [authMecanisms])](#module_http-auth-utils.parseAuthorizationHeader) ⇒ <code>Object</code>
 
 <a name="module_http-auth-utils.mecanisms"></a>
+
 ### http-auth-utils.mecanisms : <code>Array</code>
 Natively supported authentication mecanisms.
 
-**Kind**: static constant of <code>[http-auth-utils](#module_http-auth-utils)</code>
+**Kind**: static constant of <code>[http-auth-utils](#module_http-auth-utils)</code>  
 <a name="module_http-auth-utils.parseWWWAuthenticateHeader"></a>
-### http-auth-utils.parseWWWAuthenticateHeader ⇒ <code>Object</code>
+
+### http-auth-utils.parseWWWAuthenticateHeader(header, [authMecanisms]) ⇒ <code>Object</code>
 Parse HTTP WWW-Authenticate header contents.
 
-**Kind**: static constant of <code>[http-auth-utils](#module_http-auth-utils)</code>
-**Returns**: <code>Object</code> - Result of the contents parse.
-**Api**: public
+**Kind**: static method of <code>[http-auth-utils](#module_http-auth-utils)</code>  
+**Returns**: <code>Object</code> - Result of the contents parse.  
+**Api**: public  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | header | <code>string</code> |  | The WWW-Authenticate header contents |
 | [authMecanisms] | <code>Array</code> | <code>[BASIC, DIGEST]</code> | Allow providing custom authentication mecanisms. |
 
-**Example**
+**Example**  
 ```js
 assert.equal(
   parseWWWAuthenticateHeader('Basic realm="test"'), {
@@ -81,76 +88,81 @@ assert.equal(
 );
 ```
 <a name="module_http-auth-utils.parseAuthorizationHeader"></a>
-### http-auth-utils.parseAuthorizationHeader ⇒ <code>Object</code>
+
+### http-auth-utils.parseAuthorizationHeader(header, [authMecanisms]) ⇒ <code>Object</code>
 Parse HTTP Authorization header contents.
 
-**Kind**: static constant of <code>[http-auth-utils](#module_http-auth-utils)</code>
-**Returns**: <code>Object</code> - Result of the contents parse.
-**Api**: public
+**Kind**: static method of <code>[http-auth-utils](#module_http-auth-utils)</code>  
+**Returns**: <code>Object</code> - Result of the contents parse.  
+**Api**: public  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | header | <code>string</code> |  | The Authorization header contents |
-| [authMecanisms] | <code>Array</code> | <code>[BASIC, DIGEST]</code> | Allow providing custom authentication mecanisms. |
+| [authMecanisms] | <code>Array</code> | <code>[BASIC, DIGEST, BEARER]</code> | Allow custom authentication mecanisms. |
 
-**Example**
+**Example**  
 ```js
 assert.equal(
-  parseAuthorizationHeader('Basic QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
+  parseAuthorizationHeader('Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
     type: 'Basic',
     data: {
-      hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU='
+      hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
     }
   }
 );
 ```
 <a name="module_http-auth-utils/mecanisms/basic"></a>
+
 ## http-auth-utils/mecanisms/basic
 
 * [http-auth-utils/mecanisms/basic](#module_http-auth-utils/mecanisms/basic)
-  * [~BASIC](#module_http-auth-utils/mecanisms/basic..BASIC) : <code>Object</code>
+    * [~BASIC](#module_http-auth-utils/mecanisms/basic..BASIC) : <code>Object</code>
+        * [.type](#module_http-auth-utils/mecanisms/basic..BASIC.type) : <code>String</code>
+        * [.parseWWWAuthenticateRest(rest)](#module_http-auth-utils/mecanisms/basic..BASIC.parseWWWAuthenticateRest) ⇒ <code>Object</code>
+        * [.buildWWWAuthenticateRest(data)](#module_http-auth-utils/mecanisms/basic..BASIC.buildWWWAuthenticateRest) ⇒ <code>String</code>
+        * [.parseAuthorizationRest(rest)](#module_http-auth-utils/mecanisms/basic..BASIC.parseAuthorizationRest) ⇒ <code>Object</code>
+        * [.buildAuthorizationRest(content)](#module_http-auth-utils/mecanisms/basic..BASIC.buildAuthorizationRest) ⇒ <code>String</code>
+        * [.computeHash(credentials)](#module_http-auth-utils/mecanisms/basic..BASIC.computeHash) ⇒ <code>String</code>
+        * [.decodeHash(hash)](#module_http-auth-utils/mecanisms/basic..BASIC.decodeHash) ⇒ <code>Object</code>
+
+<a name="module_http-auth-utils/mecanisms/basic..BASIC"></a>
+
+### http-auth-utils/mecanisms/basic~BASIC : <code>Object</code>
+Basic authentication mecanism.
+
+**Kind**: inner constant of <code>[http-auth-utils/mecanisms/basic](#module_http-auth-utils/mecanisms/basic)</code>  
+**See**: http://tools.ietf.org/html/rfc2617#section-2  
+
+* [~BASIC](#module_http-auth-utils/mecanisms/basic..BASIC) : <code>Object</code>
     * [.type](#module_http-auth-utils/mecanisms/basic..BASIC.type) : <code>String</code>
     * [.parseWWWAuthenticateRest(rest)](#module_http-auth-utils/mecanisms/basic..BASIC.parseWWWAuthenticateRest) ⇒ <code>Object</code>
-    * [.buildWWWAuthenticateRest(content)](#module_http-auth-utils/mecanisms/basic..BASIC.buildWWWAuthenticateRest) ⇒ <code>String</code>
+    * [.buildWWWAuthenticateRest(data)](#module_http-auth-utils/mecanisms/basic..BASIC.buildWWWAuthenticateRest) ⇒ <code>String</code>
     * [.parseAuthorizationRest(rest)](#module_http-auth-utils/mecanisms/basic..BASIC.parseAuthorizationRest) ⇒ <code>Object</code>
     * [.buildAuthorizationRest(content)](#module_http-auth-utils/mecanisms/basic..BASIC.buildAuthorizationRest) ⇒ <code>String</code>
     * [.computeHash(credentials)](#module_http-auth-utils/mecanisms/basic..BASIC.computeHash) ⇒ <code>String</code>
     * [.decodeHash(hash)](#module_http-auth-utils/mecanisms/basic..BASIC.decodeHash) ⇒ <code>Object</code>
 
-<a name="module_http-auth-utils/mecanisms/basic..BASIC"></a>
-### http-auth-utils/mecanisms/basic~BASIC : <code>Object</code>
-Basic authentication mecanism.
-
-**Kind**: inner constant of <code>[http-auth-utils/mecanisms/basic](#module_http-auth-utils/mecanisms/basic)</code>
-**See**: http://tools.ietf.org/html/rfc2617#section-2
-
-* [~BASIC](#module_http-auth-utils/mecanisms/basic..BASIC) : <code>Object</code>
-  * [.type](#module_http-auth-utils/mecanisms/basic..BASIC.type) : <code>String</code>
-  * [.parseWWWAuthenticateRest(rest)](#module_http-auth-utils/mecanisms/basic..BASIC.parseWWWAuthenticateRest) ⇒ <code>Object</code>
-  * [.buildWWWAuthenticateRest(content)](#module_http-auth-utils/mecanisms/basic..BASIC.buildWWWAuthenticateRest) ⇒ <code>String</code>
-  * [.parseAuthorizationRest(rest)](#module_http-auth-utils/mecanisms/basic..BASIC.parseAuthorizationRest) ⇒ <code>Object</code>
-  * [.buildAuthorizationRest(content)](#module_http-auth-utils/mecanisms/basic..BASIC.buildAuthorizationRest) ⇒ <code>String</code>
-  * [.computeHash(credentials)](#module_http-auth-utils/mecanisms/basic..BASIC.computeHash) ⇒ <code>String</code>
-  * [.decodeHash(hash)](#module_http-auth-utils/mecanisms/basic..BASIC.decodeHash) ⇒ <code>Object</code>
-
 <a name="module_http-auth-utils/mecanisms/basic..BASIC.type"></a>
+
 #### BASIC.type : <code>String</code>
 The Basic auth mecanism prefix.
 
-**Kind**: static property of <code>[BASIC](#module_http-auth-utils/mecanisms/basic..BASIC)</code>
+**Kind**: static property of <code>[BASIC](#module_http-auth-utils/mecanisms/basic..BASIC)</code>  
 <a name="module_http-auth-utils/mecanisms/basic..BASIC.parseWWWAuthenticateRest"></a>
+
 #### BASIC.parseWWWAuthenticateRest(rest) ⇒ <code>Object</code>
 Parse the WWW Authenticate header rest.
 
-**Kind**: static method of <code>[BASIC](#module_http-auth-utils/mecanisms/basic..BASIC)</code>
-**Returns**: <code>Object</code> - Object representing the result of the parse operation.
-**Api**: public
+**Kind**: static method of <code>[BASIC](#module_http-auth-utils/mecanisms/basic..BASIC)</code>  
+**Returns**: <code>Object</code> - Object representing the result of the parse operation.  
+**Api**: public  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| rest | <code>String</code> | The header rest (string got after removing the authentication mecanism prefix). |
+| rest | <code>String</code> | The header rest (string after the authentication mecanism prefix). |
 
-**Example**
+**Example**  
 ```js
 assert.deepEqual(
   BASIC.parseWWWAuthenticateRest('realm="perlinpinpin"'), {
@@ -159,18 +171,19 @@ assert.deepEqual(
 );
 ```
 <a name="module_http-auth-utils/mecanisms/basic..BASIC.buildWWWAuthenticateRest"></a>
-#### BASIC.buildWWWAuthenticateRest(content) ⇒ <code>String</code>
+
+#### BASIC.buildWWWAuthenticateRest(data) ⇒ <code>String</code>
 Build the WWW Authenticate header rest.
 
-**Kind**: static method of <code>[BASIC](#module_http-auth-utils/mecanisms/basic..BASIC)</code>
-**Returns**: <code>String</code> - The built rest.
-**Api**: public
+**Kind**: static method of <code>[BASIC](#module_http-auth-utils/mecanisms/basic..BASIC)</code>  
+**Returns**: <code>String</code> - The built rest.  
+**Api**: public  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| content | <code>Object</code> | The content from wich to build the rest. |
+| data | <code>Object</code> | The content from wich to build the rest. |
 
-**Example**
+**Example**  
 ```js
 assert.equal(
   BASIC.buildWWWAuthenticateRest({
@@ -180,38 +193,42 @@ assert.equal(
 );
 ```
 <a name="module_http-auth-utils/mecanisms/basic..BASIC.parseAuthorizationRest"></a>
+
 #### BASIC.parseAuthorizationRest(rest) ⇒ <code>Object</code>
 Parse the Authorization header rest.
 
-**Kind**: static method of <code>[BASIC](#module_http-auth-utils/mecanisms/basic..BASIC)</code>
-**Returns**: <code>Object</code> - Object representing the result of the parse operation {hash}.
-**Api**: public
+**Kind**: static method of <code>[BASIC](#module_http-auth-utils/mecanisms/basic..BASIC)</code>  
+**Returns**: <code>Object</code> - Object representing the result of the parse operation {hash}.  
+**Api**: public  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| rest | <code>String</code> | The header rest (string got after removing the authentication mecanism prefix).) |
+| rest | <code>String</code> | The header rest (string after the authentication mecanism prefix).) |
 
-**Example**
+**Example**  
 ```js
 assert.deepEqual(
   BASIC.parseAuthorizationRest('QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
-    hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU='
+    hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
+    username: 'Ali Baba',
+    password: 'open sesame'
   }
 );
 ```
 <a name="module_http-auth-utils/mecanisms/basic..BASIC.buildAuthorizationRest"></a>
+
 #### BASIC.buildAuthorizationRest(content) ⇒ <code>String</code>
 Build the Authorization header rest.
 
-**Kind**: static method of <code>[BASIC](#module_http-auth-utils/mecanisms/basic..BASIC)</code>
-**Returns**: <code>String</code> - The rest built.
-**Api**: public
+**Kind**: static method of <code>[BASIC](#module_http-auth-utils/mecanisms/basic..BASIC)</code>  
+**Returns**: <code>String</code> - The rest built.  
+**Api**: public  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | content | <code>Object</code> | The content from wich to build the rest. |
 
-**Example**
+**Example**  
 ```js
 assert.equal(
   BASIC.buildAuthorizationRest({
@@ -221,18 +238,19 @@ assert.equal(
 );
 ```
 <a name="module_http-auth-utils/mecanisms/basic..BASIC.computeHash"></a>
+
 #### BASIC.computeHash(credentials) ⇒ <code>String</code>
 Compute the Basic authentication hash from the given credentials.
 
-**Kind**: static method of <code>[BASIC](#module_http-auth-utils/mecanisms/basic..BASIC)</code>
-**Returns**: <code>String</code> - The hash representing the credentials.
-**Api**: public
+**Kind**: static method of <code>[BASIC](#module_http-auth-utils/mecanisms/basic..BASIC)</code>  
+**Returns**: <code>String</code> - The hash representing the credentials.  
+**Api**: public  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | credentials | <code>Object</code> | The credentials to encode {username, password}. |
 
-**Example**
+**Example**  
 ```js
 assert.equal(
   BASIC.computeHash({
@@ -243,18 +261,19 @@ assert.equal(
 );
 ```
 <a name="module_http-auth-utils/mecanisms/basic..BASIC.decodeHash"></a>
+
 #### BASIC.decodeHash(hash) ⇒ <code>Object</code>
 Decode the Basic hash and return the corresponding credentials.
 
-**Kind**: static method of <code>[BASIC](#module_http-auth-utils/mecanisms/basic..BASIC)</code>
-**Returns**: <code>Object</code> - Object representing the credentials {username, password}.
-**Api**: public
+**Kind**: static method of <code>[BASIC](#module_http-auth-utils/mecanisms/basic..BASIC)</code>  
+**Returns**: <code>Object</code> - Object representing the credentials {username, password}.  
+**Api**: public  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | hash | <code>String</code> | The hash. |
 
-**Example**
+**Example**  
 ```js
 assert.deepEqual(
   BASIC.decodeHash('QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
@@ -263,23 +282,152 @@ assert.deepEqual(
   }
 );
 ```
+<a name="module_http-auth-utils/mecanisms/bearer"></a>
+
+## http-auth-utils/mecanisms/bearer
+
+* [http-auth-utils/mecanisms/bearer](#module_http-auth-utils/mecanisms/bearer)
+    * [~BEARER](#module_http-auth-utils/mecanisms/bearer..BEARER) : <code>Object</code>
+        * [.type](#module_http-auth-utils/mecanisms/bearer..BEARER.type) : <code>String</code>
+        * [.parseWWWAuthenticateRest(rest)](#module_http-auth-utils/mecanisms/bearer..BEARER.parseWWWAuthenticateRest) ⇒ <code>Object</code>
+        * [.buildWWWAuthenticateRest(data)](#module_http-auth-utils/mecanisms/bearer..BEARER.buildWWWAuthenticateRest) ⇒ <code>String</code>
+        * [.parseAuthorizationRest(rest)](#module_http-auth-utils/mecanisms/bearer..BEARER.parseAuthorizationRest) ⇒ <code>Object</code>
+        * [.buildAuthorizationRest(content)](#module_http-auth-utils/mecanisms/bearer..BEARER.buildAuthorizationRest) ⇒ <code>String</code>
+
+<a name="module_http-auth-utils/mecanisms/bearer..BEARER"></a>
+
+### http-auth-utils/mecanisms/bearer~BEARER : <code>Object</code>
+Bearer authentication mecanism.
+
+**Kind**: inner constant of <code>[http-auth-utils/mecanisms/bearer](#module_http-auth-utils/mecanisms/bearer)</code>  
+**See**: https://tools.ietf.org/html/rfc6750#section-3  
+
+* [~BEARER](#module_http-auth-utils/mecanisms/bearer..BEARER) : <code>Object</code>
+    * [.type](#module_http-auth-utils/mecanisms/bearer..BEARER.type) : <code>String</code>
+    * [.parseWWWAuthenticateRest(rest)](#module_http-auth-utils/mecanisms/bearer..BEARER.parseWWWAuthenticateRest) ⇒ <code>Object</code>
+    * [.buildWWWAuthenticateRest(data)](#module_http-auth-utils/mecanisms/bearer..BEARER.buildWWWAuthenticateRest) ⇒ <code>String</code>
+    * [.parseAuthorizationRest(rest)](#module_http-auth-utils/mecanisms/bearer..BEARER.parseAuthorizationRest) ⇒ <code>Object</code>
+    * [.buildAuthorizationRest(content)](#module_http-auth-utils/mecanisms/bearer..BEARER.buildAuthorizationRest) ⇒ <code>String</code>
+
+<a name="module_http-auth-utils/mecanisms/bearer..BEARER.type"></a>
+
+#### BEARER.type : <code>String</code>
+The Digest auth mecanism prefix.
+
+**Kind**: static property of <code>[BEARER](#module_http-auth-utils/mecanisms/bearer..BEARER)</code>  
+<a name="module_http-auth-utils/mecanisms/bearer..BEARER.parseWWWAuthenticateRest"></a>
+
+#### BEARER.parseWWWAuthenticateRest(rest) ⇒ <code>Object</code>
+Parse the WWW Authenticate header rest.
+
+**Kind**: static method of <code>[BEARER](#module_http-auth-utils/mecanisms/bearer..BEARER)</code>  
+**Returns**: <code>Object</code> - Object representing the result of the parse operation.  
+**Api**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| rest | <code>String</code> | The header rest (string after the authentication mecanism prefix). |
+
+**Example**  
+```js
+assert.deepEqual(
+  BEARER.parseWWWAuthenticateRest(
+    'realm="testrealm@host.com", ' +
+    'scope="openid profile email"'
+  ), {
+    realm: 'testrealm@host.com',
+    scope: 'openid profile email',
+  }
+);
+```
+<a name="module_http-auth-utils/mecanisms/bearer..BEARER.buildWWWAuthenticateRest"></a>
+
+#### BEARER.buildWWWAuthenticateRest(data) ⇒ <code>String</code>
+Build the WWW Authenticate header rest.
+
+**Kind**: static method of <code>[BEARER](#module_http-auth-utils/mecanisms/bearer..BEARER)</code>  
+**Returns**: <code>String</code> - The built rest.  
+**Api**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| data | <code>Object</code> | The content from wich to build the rest. |
+
+**Example**  
+```js
+assert.equal(
+  BEARER.buildWWWAuthenticateRest({
+    realm: 'testrealm@host.com',
+    error: 'invalid_request',
+    error_description: 'The access token expired',
+  }),
+  'realm="testrealm@host.com", ' +
+  'error="invalid_request", ' +
+  'error_description="The access token expired"'
+);
+```
+<a name="module_http-auth-utils/mecanisms/bearer..BEARER.parseAuthorizationRest"></a>
+
+#### BEARER.parseAuthorizationRest(rest) ⇒ <code>Object</code>
+Parse the Authorization header rest.
+
+**Kind**: static method of <code>[BEARER](#module_http-auth-utils/mecanisms/bearer..BEARER)</code>  
+**Returns**: <code>Object</code> - Object representing the result of the parse operation {hash}.  
+**Api**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| rest | <code>String</code> | The header rest (string after the authentication mecanism prefix).) |
+
+**Example**  
+```js
+assert.deepEqual(
+  BEARER.parseAuthorizationRest('mF_9.B5f-4.1JqM'), {
+    hash: 'mF_9.B5f-4.1JqM',
+  }
+);
+```
+<a name="module_http-auth-utils/mecanisms/bearer..BEARER.buildAuthorizationRest"></a>
+
+#### BEARER.buildAuthorizationRest(content) ⇒ <code>String</code>
+Build the Authorization header rest.
+
+**Kind**: static method of <code>[BEARER](#module_http-auth-utils/mecanisms/bearer..BEARER)</code>  
+**Returns**: <code>String</code> - The rest built.  
+**Api**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| content | <code>Object</code> | The content from wich to build the rest. |
+
+**Example**  
+```js
+assert.equal(
+  BEARER.buildAuthorizationRest({
+    hash: 'mF_9.B5f-4.1JqM'
+  }),
+  'mF_9.B5f-4.1JqM=='
+);
+```
 <a name="module_http-auth-utils/mecanisms/digest"></a>
+
 ## http-auth-utils/mecanisms/digest
 
 * [http-auth-utils/mecanisms/digest](#module_http-auth-utils/mecanisms/digest)
-  * [~DIGEST](#module_http-auth-utils/mecanisms/digest..DIGEST) : <code>Object</code>
-    * [.type](#module_http-auth-utils/mecanisms/digest..DIGEST.type) : <code>String</code>
-    * [.parseWWWAuthenticateRest(rest)](#module_http-auth-utils/mecanisms/digest..DIGEST.parseWWWAuthenticateRest) ⇒ <code>Object</code>
-    * [.buildWWWAuthenticateRest(content)](#module_http-auth-utils/mecanisms/digest..DIGEST.buildWWWAuthenticateRest) ⇒ <code>String</code>
-    * [.parseAuthorizationRest(rest)](#module_http-auth-utils/mecanisms/digest..DIGEST.parseAuthorizationRest) ⇒ <code>Object</code>
-    * [.buildAuthorizationRest(content)](#module_http-auth-utils/mecanisms/digest..DIGEST.buildAuthorizationRest) ⇒ <code>String</code>
-    * [.computeHash(credentials)](#module_http-auth-utils/mecanisms/digest..DIGEST.computeHash) ⇒ <code>String</code>
+    * [~DIGEST](#module_http-auth-utils/mecanisms/digest..DIGEST) : <code>Object</code>
+        * [.type](#module_http-auth-utils/mecanisms/digest..DIGEST.type) : <code>String</code>
+        * [.parseWWWAuthenticateRest(rest)](#module_http-auth-utils/mecanisms/digest..DIGEST.parseWWWAuthenticateRest) ⇒ <code>Object</code>
+        * [.buildWWWAuthenticateRest(data)](#module_http-auth-utils/mecanisms/digest..DIGEST.buildWWWAuthenticateRest) ⇒ <code>String</code>
+        * [.parseAuthorizationRest(rest)](#module_http-auth-utils/mecanisms/digest..DIGEST.parseAuthorizationRest) ⇒ <code>Object</code>
+        * [.buildAuthorizationRest(data)](#module_http-auth-utils/mecanisms/digest..DIGEST.buildAuthorizationRest) ⇒ <code>String</code>
+        * [.computeHash(data)](#module_http-auth-utils/mecanisms/digest..DIGEST.computeHash) ⇒ <code>String</code>
 
 <a name="module_http-auth-utils/mecanisms/digest..DIGEST"></a>
+
 ### http-auth-utils/mecanisms/digest~DIGEST : <code>Object</code>
 Digest authentication mecanism.
 
-**Kind**: inner constant of <code>[http-auth-utils/mecanisms/digest](#module_http-auth-utils/mecanisms/digest)</code>
+**Kind**: inner constant of <code>[http-auth-utils/mecanisms/digest](#module_http-auth-utils/mecanisms/digest)</code>  
 **See**
 
 - http://tools.ietf.org/html/rfc2617#section-3
@@ -287,31 +435,33 @@ Digest authentication mecanism.
 
 
 * [~DIGEST](#module_http-auth-utils/mecanisms/digest..DIGEST) : <code>Object</code>
-  * [.type](#module_http-auth-utils/mecanisms/digest..DIGEST.type) : <code>String</code>
-  * [.parseWWWAuthenticateRest(rest)](#module_http-auth-utils/mecanisms/digest..DIGEST.parseWWWAuthenticateRest) ⇒ <code>Object</code>
-  * [.buildWWWAuthenticateRest(content)](#module_http-auth-utils/mecanisms/digest..DIGEST.buildWWWAuthenticateRest) ⇒ <code>String</code>
-  * [.parseAuthorizationRest(rest)](#module_http-auth-utils/mecanisms/digest..DIGEST.parseAuthorizationRest) ⇒ <code>Object</code>
-  * [.buildAuthorizationRest(content)](#module_http-auth-utils/mecanisms/digest..DIGEST.buildAuthorizationRest) ⇒ <code>String</code>
-  * [.computeHash(credentials)](#module_http-auth-utils/mecanisms/digest..DIGEST.computeHash) ⇒ <code>String</code>
+    * [.type](#module_http-auth-utils/mecanisms/digest..DIGEST.type) : <code>String</code>
+    * [.parseWWWAuthenticateRest(rest)](#module_http-auth-utils/mecanisms/digest..DIGEST.parseWWWAuthenticateRest) ⇒ <code>Object</code>
+    * [.buildWWWAuthenticateRest(data)](#module_http-auth-utils/mecanisms/digest..DIGEST.buildWWWAuthenticateRest) ⇒ <code>String</code>
+    * [.parseAuthorizationRest(rest)](#module_http-auth-utils/mecanisms/digest..DIGEST.parseAuthorizationRest) ⇒ <code>Object</code>
+    * [.buildAuthorizationRest(data)](#module_http-auth-utils/mecanisms/digest..DIGEST.buildAuthorizationRest) ⇒ <code>String</code>
+    * [.computeHash(data)](#module_http-auth-utils/mecanisms/digest..DIGEST.computeHash) ⇒ <code>String</code>
 
 <a name="module_http-auth-utils/mecanisms/digest..DIGEST.type"></a>
+
 #### DIGEST.type : <code>String</code>
 The Digest auth mecanism prefix.
 
-**Kind**: static property of <code>[DIGEST](#module_http-auth-utils/mecanisms/digest..DIGEST)</code>
+**Kind**: static property of <code>[DIGEST](#module_http-auth-utils/mecanisms/digest..DIGEST)</code>  
 <a name="module_http-auth-utils/mecanisms/digest..DIGEST.parseWWWAuthenticateRest"></a>
+
 #### DIGEST.parseWWWAuthenticateRest(rest) ⇒ <code>Object</code>
 Parse the WWW Authenticate header rest.
 
-**Kind**: static method of <code>[DIGEST](#module_http-auth-utils/mecanisms/digest..DIGEST)</code>
-**Returns**: <code>Object</code> - Object representing the result of the parse operation.
-**Api**: public
+**Kind**: static method of <code>[DIGEST](#module_http-auth-utils/mecanisms/digest..DIGEST)</code>  
+**Returns**: <code>Object</code> - Object representing the result of the parse operation.  
+**Api**: public  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| rest | <code>String</code> | The header rest (string got after removing the authentication mecanism prefix). |
+| rest | <code>String</code> | The header rest (string after the authentication mecanism prefix). |
 
-**Example**
+**Example**  
 ```js
 assert.deepEqual(
   DIGEST.parseWWWAuthenticateRest(
@@ -328,18 +478,19 @@ assert.deepEqual(
 );
 ```
 <a name="module_http-auth-utils/mecanisms/digest..DIGEST.buildWWWAuthenticateRest"></a>
-#### DIGEST.buildWWWAuthenticateRest(content) ⇒ <code>String</code>
+
+#### DIGEST.buildWWWAuthenticateRest(data) ⇒ <code>String</code>
 Build the WWW Authenticate header rest.
 
-**Kind**: static method of <code>[DIGEST](#module_http-auth-utils/mecanisms/digest..DIGEST)</code>
-**Returns**: <code>String</code> - The built rest.
-**Api**: public
+**Kind**: static method of <code>[DIGEST](#module_http-auth-utils/mecanisms/digest..DIGEST)</code>  
+**Returns**: <code>String</code> - The built rest.  
+**Api**: public  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| content | <code>Object</code> | The content from wich to build the rest. |
+| data | <code>Object</code> | The content from wich to build the rest. |
 
-**Example**
+**Example**  
 ```js
 assert.equal(
   DIGEST.buildWWWAuthenticateRest({
@@ -355,18 +506,19 @@ assert.equal(
 );
 ```
 <a name="module_http-auth-utils/mecanisms/digest..DIGEST.parseAuthorizationRest"></a>
+
 #### DIGEST.parseAuthorizationRest(rest) ⇒ <code>Object</code>
 Parse the Authorization header rest.
 
-**Kind**: static method of <code>[DIGEST](#module_http-auth-utils/mecanisms/digest..DIGEST)</code>
-**Returns**: <code>Object</code> - Object representing the result of the parse operation {hash}.
-**Api**: public
+**Kind**: static method of <code>[DIGEST](#module_http-auth-utils/mecanisms/digest..DIGEST)</code>  
+**Returns**: <code>Object</code> - Object representing the result of the parse operation {hash}.  
+**Api**: public  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| rest | <code>String</code> | The header rest (string got after removing the authentication mecanism prefix).) |
+| rest | <code>String</code> | The header rest (string after the authentication mecanism prefix).) |
 
-**Example**
+**Example**  
 ```js
 assert.deepEqual(
   DIGEST.parseAuthorizationRest(
@@ -393,18 +545,19 @@ assert.deepEqual(
 );
 ```
 <a name="module_http-auth-utils/mecanisms/digest..DIGEST.buildAuthorizationRest"></a>
-#### DIGEST.buildAuthorizationRest(content) ⇒ <code>String</code>
+
+#### DIGEST.buildAuthorizationRest(data) ⇒ <code>String</code>
 Build the Authorization header rest.
 
-**Kind**: static method of <code>[DIGEST](#module_http-auth-utils/mecanisms/digest..DIGEST)</code>
-**Returns**: <code>String</code> - The rest built.
-**Api**: public
+**Kind**: static method of <code>[DIGEST](#module_http-auth-utils/mecanisms/digest..DIGEST)</code>  
+**Returns**: <code>String</code> - The rest built.  
+**Api**: public  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| content | <code>Object</code> | The content from wich to build the rest. |
+| data | <code>Object</code> | The content from wich to build the rest. |
 
-**Example**
+**Example**  
 ```js
 assert.equal(
   DIGEST.buildAuthorizationRest({
@@ -430,18 +583,19 @@ assert.equal(
 );
 ```
 <a name="module_http-auth-utils/mecanisms/digest..DIGEST.computeHash"></a>
-#### DIGEST.computeHash(credentials) ⇒ <code>String</code>
+
+#### DIGEST.computeHash(data) ⇒ <code>String</code>
 Compute the Digest authentication hash from the given credentials.
 
-**Kind**: static method of <code>[DIGEST](#module_http-auth-utils/mecanisms/digest..DIGEST)</code>
-**Returns**: <code>String</code> - The hash representing the credentials.
-**Api**: public
+**Kind**: static method of <code>[DIGEST](#module_http-auth-utils/mecanisms/digest..DIGEST)</code>  
+**Returns**: <code>String</code> - The hash representing the credentials.  
+**Api**: public  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| credentials | <code>Object</code> | The credentials to encode and other encoding details. |
+| data | <code>Object</code> | The credentials to encode and other encoding details. |
 
-**Example**
+**Example**  
 ```js
 assert.equal(
   DIGEST.computeHash({
