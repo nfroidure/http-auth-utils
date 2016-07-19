@@ -5,7 +5,8 @@ import {
   parseAuthorizationHeader,
   mecanisms,
   BASIC,
-  DIGEST
+  DIGEST,
+  BEARER,
 } from './index';
 
 describe('index', function() {
@@ -17,8 +18,8 @@ describe('index', function() {
         parseWWWAuthenticateHeader('Basic realm="test"'), {
           type: 'Basic',
           data: {
-            realm: 'test'
-          }
+            realm: 'test',
+          },
         }
       );
     });
@@ -45,7 +46,7 @@ describe('index', function() {
             username: 'nicolas.froidure@simplifield.com',
             password: 'test',
             hash: 'bmljb2xhcy5mcm9pZHVyZUBzaW1wbGlmaWVsZC5jb206dGVzdA==',
-          }
+          },
         }
       );
     });
@@ -57,8 +58,8 @@ describe('index', function() {
           data: {
             username: 'John',
             password: 'R:U:kidding?',
-            hash: 'Sm9objpSOlU6a2lkZGluZz8='
-          }
+            hash: 'Sm9objpSOlU6a2lkZGluZz8=',
+          },
         }
       );
     });
@@ -70,13 +71,14 @@ describe('index', function() {
     it('should export bot DIGEST and BASIC  mecanisms', function() {
       assert.equal(
         mecanisms.length,
-        2
+        3
       );
     });
 
-    it('should export bot DIGEST and BASIC  mecanisms', function() {
+    it('should export DIGEST BASIC and BEARER mecanisms', function() {
       assert(BASIC);
       assert(DIGEST);
+      assert(BEARER);
     });
 
   });

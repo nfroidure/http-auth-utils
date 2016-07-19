@@ -1,23 +1,13 @@
-'use strict';
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _assert = require('assert');
-
-var _assert2 = _interopRequireDefault(_assert);
-
-var _neatequal = require('neatequal');
-
-var _neatequal2 = _interopRequireDefault(_neatequal);
-
-var _index = require('./index');
+import assert from 'assert';
+import neatequal from 'neatequal';
+import { parseWWWAuthenticateHeader, parseAuthorizationHeader, mecanisms, BASIC, DIGEST } from './index';
 
 describe('index', function () {
 
   describe('parseWWWAuthenticateHeader', function () {
 
     it('should parse Basic headers', function () {
-      (0, _neatequal2['default'])((0, _index.parseWWWAuthenticateHeader)('Basic realm="test"'), {
+      neatequal(parseWWWAuthenticateHeader('Basic realm="test"'), {
         type: 'Basic',
         data: {
           realm: 'test'
@@ -29,7 +19,7 @@ describe('index', function () {
   describe('parseAuthorizationHeader', function () {
 
     it('should parse Basic headers', function () {
-      (0, _neatequal2['default'])((0, _index.parseAuthorizationHeader)('Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
+      neatequal(parseAuthorizationHeader('Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
         type: 'Basic',
         data: {
           username: 'Aladdin',
@@ -37,7 +27,7 @@ describe('index', function () {
           hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
         }
       });
-      (0, _neatequal2['default'])((0, _index.parseAuthorizationHeader)('Basic bmljb2xhcy5mcm9pZHVyZUBzaW1wbGlmaWVsZC5jb206dGVzdA=='), {
+      neatequal(parseAuthorizationHeader('Basic bmljb2xhcy5mcm9pZHVyZUBzaW1wbGlmaWVsZC5jb206dGVzdA=='), {
         type: 'Basic',
         data: {
           username: 'nicolas.froidure@simplifield.com',
@@ -46,17 +36,28 @@ describe('index', function () {
         }
       });
     });
+
+    it('should parse Basic headers with a ":" char in the password', function () {
+      neatequal(parseAuthorizationHeader('Basic Sm9objpSOlU6a2lkZGluZz8='), {
+        type: 'Basic',
+        data: {
+          username: 'John',
+          password: 'R:U:kidding?',
+          hash: 'Sm9objpSOlU6a2lkZGluZz8='
+        }
+      });
+    });
   });
 
   describe('mecanisms', function () {
 
     it('should export bot DIGEST and BASIC  mecanisms', function () {
-      _assert2['default'].equal(_index.mecanisms.length, 2);
+      assert.equal(mecanisms.length, 2);
     });
 
     it('should export bot DIGEST and BASIC  mecanisms', function () {
-      (0, _assert2['default'])(_index.BASIC);
-      (0, _assert2['default'])(_index.DIGEST);
+      assert(BASIC);
+      assert(DIGEST);
     });
   });
 });

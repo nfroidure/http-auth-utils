@@ -1,11 +1,12 @@
 import YError from 'yerror';
 
 import BASIC from './mecanisms/basic';
+import DIGEST from './mecanisms/digest';
+import BEARER from './mecanisms/bearer';
+
 /**
  * @module http-auth-utils
  */
-
-import DIGEST from './mecanisms/digest';
 
 /**
  * Basic authentication mecanism.
@@ -22,10 +23,17 @@ export {BASIC as BASIC};
 export {DIGEST as DIGEST};
 
 /**
+ * Bearer authentication mecanism.
+ * @type {Object}
+ * @see  {@link module:http-auth-utils/mecanisms/digest}
+ */
+export {BEARER as BEARER};
+
+/**
  * Natively supported authentication mecanisms.
  * @type {Array}
  */
-export const mecanisms = [BASIC, DIGEST];
+export const mecanisms = [BASIC, DIGEST, BEARER];
 
 /**
  * Parse HTTP WWW-Authenticate header contents.
@@ -67,7 +75,7 @@ export const parseWWWAuthenticateHeader =
  * Parse HTTP Authorization header contents.
  * @type {Function}
  * @param {string} header The Authorization header contents
- * @param {Array} [authMecanisms=[BASIC, DIGEST]] Allow providing custom authentication mecanisms.
+ * @param {Array} [authMecanisms=[BASIC, DIGEST, BEARER]] Allow providing custom authentication mecanisms.
  * @return {Object} Result of the contents parse.
  * @api public
  * @example
