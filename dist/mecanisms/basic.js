@@ -16,7 +16,6 @@ function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); } /*
                                                                                * @module http-auth-utils/mecanisms/basic
                                                                                */
 
-
 var AUTHORIZED_WWW_AUTHENTICATE_KEYS = ['realm'];
 
 /**
@@ -34,7 +33,7 @@ var BASIC = {
 
   /**
    * Parse the WWW Authenticate header rest.
-   * @param  {String} rest The header rest (string got after removing the authentication mecanism prefix).
+   * @param  {String} rest The header rest (string after the authentication mecanism prefix).
    * @return {Object}      Object representing the result of the parse operation.
    * @example
    * assert.deepEqual(
@@ -50,7 +49,7 @@ var BASIC = {
 
   /**
    * Build the WWW Authenticate header rest.
-   * @param  {Object} content The content from wich to build the rest.
+   * @param  {Object} data The content from wich to build the rest.
    * @return {String}         The built rest.
    * @example
    * assert.equal(
@@ -67,7 +66,7 @@ var BASIC = {
 
   /**
    * Parse the Authorization header rest.
-   * @param  {String} rest The header rest (string got after removing the authentication mecanism prefix).)
+   * @param  {String} rest The header rest (string after the authentication mecanism prefix).)
    * @return {Object}      Object representing the result of the parse operation {hash}.
    * @example
    * assert.deepEqual(
@@ -88,6 +87,7 @@ var BASIC = {
 
     var username = _BASIC$decodeHash.username;
     var password = _BASIC$decodeHash.password;
+
 
     return {
       hash: rest,

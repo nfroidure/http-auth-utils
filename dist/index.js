@@ -3,7 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.parseAuthorizationHeader = exports.parseWWWAuthenticateHeader = exports.mecanisms = exports.BEARER = exports.DIGEST = exports.BASIC = undefined;
+exports.mecanisms = exports.BEARER = exports.DIGEST = exports.BASIC = undefined;
+exports.parseWWWAuthenticateHeader = parseWWWAuthenticateHeader;
+exports.parseAuthorizationHeader = parseAuthorizationHeader;
 
 var _yerror = require('yerror');
 
@@ -74,10 +76,11 @@ var mecanisms = exports.mecanisms = [_basic2.default, _digest2.default, _bearer2
  *   }
  * );
  */
-var parseWWWAuthenticateHeader = exports.parseWWWAuthenticateHeader = function parseWWWAuthenticateHeader(header) {
+function parseWWWAuthenticateHeader(header) {
   var authMecanisms = arguments.length <= 1 || arguments[1] === undefined ? mecanisms : arguments[1];
 
   var result = null;
+
   authMecanisms.some(function (authMecanism) {
     if (0 === header.indexOf(authMecanism.type + ' ')) {
       result = {
@@ -90,13 +93,13 @@ var parseWWWAuthenticateHeader = exports.parseWWWAuthenticateHeader = function p
     return result;
   }
   throw new _yerror2.default('E_UNKNOWN_AUTH_MECANISM', header);
-};
+}
 
 /**
  * Parse HTTP Authorization header contents.
  * @type {Function}
  * @param {string} header The Authorization header contents
- * @param {Array} [authMecanisms=[BASIC, DIGEST, BEARER]] Allow providing custom authentication mecanisms.
+ * @param {Array} [authMecanisms=[BASIC, DIGEST, BEARER]] Allow custom authentication mecanisms.
  * @return {Object} Result of the contents parse.
  * @api public
  * @example
@@ -109,10 +112,11 @@ var parseWWWAuthenticateHeader = exports.parseWWWAuthenticateHeader = function p
  *   }
  * );
  */
-var parseAuthorizationHeader = exports.parseAuthorizationHeader = function parseAuthorizationHeader(header) {
+function parseAuthorizationHeader(header) {
   var authMecanisms = arguments.length <= 1 || arguments[1] === undefined ? mecanisms : arguments[1];
 
   var result = null;
+
   authMecanisms.some(function (authMecanism) {
     if (0 === header.indexOf(authMecanism.type + ' ')) {
       result = {
@@ -125,4 +129,4 @@ var parseAuthorizationHeader = exports.parseAuthorizationHeader = function parse
     return result;
   }
   throw new _yerror2.default('E_UNKNOWN_AUTH_MECANISM', header);
-};
+}

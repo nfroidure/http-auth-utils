@@ -35,7 +35,7 @@ var DIGEST = {
 
   /**
    * Parse the WWW Authenticate header rest.
-   * @param  {String} rest The header rest (string got after removing the authentication mecanism prefix).
+   * @param  {String} rest The header rest (string after the authentication mecanism prefix).
    * @return {Object}      Object representing the result of the parse operation.
    * @example
    * assert.deepEqual(
@@ -59,7 +59,7 @@ var DIGEST = {
 
   /**
    * Build the WWW Authenticate header rest.
-   * @param  {Object} content The content from wich to build the rest.
+   * @param  {Object} data The content from wich to build the rest.
    * @return {String}         The built rest.
    * @example
    * assert.equal(
@@ -82,7 +82,7 @@ var DIGEST = {
 
   /**
    * Parse the Authorization header rest.
-   * @param  {String} rest The header rest (string got after removing the authentication mecanism prefix).)
+   * @param  {String} rest The header rest (string after the authentication mecanism prefix).)
    * @return {Object}      Object representing the result of the parse operation {hash}.
    * @example
    * assert.deepEqual(
@@ -116,7 +116,7 @@ var DIGEST = {
 
   /**
    * Build the Authorization header rest.
-   * @param  {Object} content The content from wich to build the rest.
+   * @param  {Object} data The content from wich to build the rest.
    * @return {String}         The rest built.
    * @example
    * assert.equal(
@@ -149,7 +149,7 @@ var DIGEST = {
 
   /**
    * Compute the Digest authentication hash from the given credentials.
-   * @param  {Object} credentials The credentials to encode and other encoding details.
+   * @param  {Object} data The credentials to encode and other encoding details.
    * @return {String}             The hash representing the credentials.
    * @example
    * assert.equal(
@@ -172,12 +172,14 @@ var DIGEST = {
   computeHash: function computeHash(data) {
     var ha1 = data.ha1 || _computeHash(data.algorithm, [data.username, data.realm, data.password].join(':'));
     var ha2 = _computeHash(data.algorithm, [data.method, data.uri].join(':'));
+
     return _computeHash(data.algorithm, [ha1, data.nonce, data.nc, data.cnonce, data.qop, ha2].join(':'));
   }
 };
 
 function _computeHash(algorithm, str) {
   var hashsum = _crypto2.default.createHash(algorithm);
+
   hashsum.update(str);
   return hashsum.digest('hex');
 }

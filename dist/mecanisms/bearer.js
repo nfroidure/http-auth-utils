@@ -4,11 +4,19 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _yerror = require('yerror');
+
+var _yerror2 = _interopRequireDefault(_yerror);
+
 var _utils = require('../utils');
 
-var AUTHORIZED_WWW_AUTHENTICATE_KEYS = ['realm', 'scope', 'error', 'error_description']; /**
-                                                                                          * @module http-auth-utils/mecanisms/bearer
-                                                                                          */
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @module http-auth-utils/mecanisms/bearer
+ */
+
+var AUTHORIZED_WWW_AUTHENTICATE_KEYS = ['realm', 'scope', 'error', 'error_description'];
 
 var AUTHORIZED_ERROR_CODES = ['invalid_request', 'invalid_token', 'insufficient_scope'];
 
@@ -27,7 +35,7 @@ var BEARER = {
 
   /**
    * Parse the WWW Authenticate header rest.
-   * @param  {String} rest The header rest (string got after removing the authentication mecanism prefix).
+   * @param  {String} rest The header rest (string after the authentication mecanism prefix).
    * @return {Object}      Object representing the result of the parse operation.
    * @example
    * assert.deepEqual(
@@ -47,7 +55,7 @@ var BEARER = {
 
   /**
    * Build the WWW Authenticate header rest.
-   * @param  {Object} content The content from wich to build the rest.
+   * @param  {Object} data The content from wich to build the rest.
    * @return {String}         The built rest.
    * @example
    * assert.equal(
@@ -63,15 +71,15 @@ var BEARER = {
    * @api public
    */
   buildWWWAuthenticateRest: function buildWWWAuthenticateRest(data) {
-    if (data.error && -i === AUTHORIZED_ERROR_CODES.indeOf(data.error)) {
-      throw new YError('E_INVALID_ERROR', data.error, AUTHORIZED_ERROR_CODES);
+    if (data.error && -1 === AUTHORIZED_ERROR_CODES.indeOf(data.error)) {
+      throw new _yerror2.default('E_INVALID_ERROR', data.error, AUTHORIZED_ERROR_CODES);
     }
     return (0, _utils.buildHTTPHeadersQuotedKeyValueSet)(data, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
   },
 
   /**
    * Parse the Authorization header rest.
-   * @param  {String} rest The header rest (string got after removing the authentication mecanism prefix).)
+   * @param  {String} rest The header rest (string after the authentication mecanism prefix).)
    * @return {Object}      Object representing the result of the parse operation {hash}.
    * @example
    * assert.deepEqual(
@@ -83,7 +91,7 @@ var BEARER = {
    */
   parseAuthorizationRest: function parseAuthorizationRest(rest) {
     if (!rest) {
-      throw new YError('E_EMPTY_AUTH');
+      throw new _yerror2.default('E_EMPTY_AUTH');
     }
     return {
       hash: rest
@@ -109,7 +117,7 @@ var BEARER = {
     var hash = _ref.hash;
 
     if (!hash) {
-      throw new YError('E_NO_HASH');
+      throw new _yerror2.default('E_NO_HASH');
     }
     return hash;
   }
