@@ -13,21 +13,21 @@ import BEARER from './mecanisms/bearer';
  * @type {Object}
  * @see  {@link module:http-auth-utils/mecanisms/basic}
  */
-export {BASIC as BASIC};
+export { BASIC as BASIC };
 
 /**
  * Digest authentication mecanism.
  * @type {Object}
  * @see  {@link module:http-auth-utils/mecanisms/digest}
  */
-export {DIGEST as DIGEST};
+export { DIGEST as DIGEST };
 
 /**
  * Bearer authentication mecanism.
  * @type {Object}
  * @see  {@link module:http-auth-utils/mecanisms/digest}
  */
-export {BEARER as BEARER};
+export { BEARER as BEARER };
 
 /**
  * Natively supported authentication mecanisms.
@@ -52,30 +52,30 @@ export const mecanisms = [BASIC, DIGEST, BEARER];
  *   }
  * );
  */
-export const parseWWWAuthenticateHeader =
-  function parseWWWAuthenticateHeader(header, authMecanisms = mecanisms) {
-    let result = null;
-    authMecanisms.some(function(authMecanism) {
-      if(0 === header.indexOf(authMecanism.type + ' ')) {
-        result = {
-          type: authMecanism.type,
-          data: authMecanism.parseWWWAuthenticateRest(
-            header.substr(authMecanism.type.length + 1)
-          )
-        };
-      }
-    });
-    if(result) {
-      return result;
+export function parseWWWAuthenticateHeader(header, authMecanisms = mecanisms) {
+  let result = null;
+
+  authMecanisms.some((authMecanism) => {
+    if(0 === header.indexOf(authMecanism.type + ' ')) {
+      result = {
+        type: authMecanism.type,
+        data: authMecanism.parseWWWAuthenticateRest(
+          header.substr(authMecanism.type.length + 1)
+        ),
+      };
     }
-    throw new YError('E_UNKNOWN_AUTH_MECANISM', header);
-  };
+  });
+  if(result) {
+    return result;
+  }
+  throw new YError('E_UNKNOWN_AUTH_MECANISM', header);
+}
 
 /**
  * Parse HTTP Authorization header contents.
  * @type {Function}
  * @param {string} header The Authorization header contents
- * @param {Array} [authMecanisms=[BASIC, DIGEST, BEARER]] Allow providing custom authentication mecanisms.
+ * @param {Array} [authMecanisms=[BASIC, DIGEST, BEARER]] Allow custom authentication mecanisms.
  * @return {Object} Result of the contents parse.
  * @api public
  * @example
@@ -88,21 +88,21 @@ export const parseWWWAuthenticateHeader =
  *   }
  * );
  */
-export const parseAuthorizationHeader =
-  function parseAuthorizationHeader(header, authMecanisms = mecanisms) {
-    let result = null;
-    authMecanisms.some(function(authMecanism) {
-      if(0 === header.indexOf(authMecanism.type + ' ')) {
-        result = {
-          type: authMecanism.type,
-          data: authMecanism.parseAuthorizationRest(
-            header.substr(authMecanism.type.length + 1)
-          )
-        };
-      }
-    });
-    if(result) {
-      return result;
+export function parseAuthorizationHeader(header, authMecanisms = mecanisms) {
+  let result = null;
+
+  authMecanisms.some(function(authMecanism) {
+    if(0 === header.indexOf(authMecanism.type + ' ')) {
+      result = {
+        type: authMecanism.type,
+        data: authMecanism.parseAuthorizationRest(
+          header.substr(authMecanism.type.length + 1)
+        ),
+      };
     }
-    throw new YError('E_UNKNOWN_AUTH_MECANISM', header);
-  };
+  });
+  if(result) {
+    return result;
+  }
+  throw new YError('E_UNKNOWN_AUTH_MECANISM', header);
+}

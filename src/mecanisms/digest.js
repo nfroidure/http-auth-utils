@@ -4,17 +4,17 @@
 
 import {
   parseHTTPHeadersQuotedKeyValueSet,
-  buildHTTPHeadersQuotedKeyValueSet
+  buildHTTPHeadersQuotedKeyValueSet,
 } from '../utils';
 
 import crypto from 'crypto';
 
 const AUTHORIZED_WWW_AUTHENTICATE_KEYS = [
-  'realm', 'domain', 'qop', 'nonce', 'opaque', 'stale', 'algorithm'
+  'realm', 'domain', 'qop', 'nonce', 'opaque', 'stale', 'algorithm',
 ];
 const AUTHORIZED_AUTHORIZATION_KEYS = [
   'username', 'realm', 'nonce', 'uri', 'response', 'algorithm', 'cnonce',
-  'opaque', 'qop', 'nc'
+  'opaque', 'qop', 'nc',
 ];
 
 /**
@@ -33,7 +33,7 @@ const DIGEST = {
 
   /**
    * Parse the WWW Authenticate header rest.
-   * @param  {String} rest The header rest (string got after removing the authentication mecanism prefix).
+   * @param  {String} rest The header rest (string after the authentication mecanism prefix).
    * @return {Object}      Object representing the result of the parse operation.
    * @example
    * assert.deepEqual(
@@ -57,7 +57,7 @@ const DIGEST = {
 
   /**
    * Build the WWW Authenticate header rest.
-   * @param  {Object} content The content from wich to build the rest.
+   * @param  {Object} data The content from wich to build the rest.
    * @return {String}         The built rest.
    * @example
    * assert.equal(
@@ -80,7 +80,7 @@ const DIGEST = {
 
   /**
    * Parse the Authorization header rest.
-   * @param  {String} rest The header rest (string got after removing the authentication mecanism prefix).)
+   * @param  {String} rest The header rest (string after the authentication mecanism prefix).)
    * @return {Object}      Object representing the result of the parse operation {hash}.
    * @example
    * assert.deepEqual(
@@ -114,7 +114,7 @@ const DIGEST = {
 
   /**
    * Build the Authorization header rest.
-   * @param  {Object} content The content from wich to build the rest.
+   * @param  {Object} data The content from wich to build the rest.
    * @return {String}         The rest built.
    * @example
    * assert.equal(
@@ -147,7 +147,7 @@ const DIGEST = {
 
   /**
    * Compute the Digest authentication hash from the given credentials.
-   * @param  {Object} credentials The credentials to encode and other encoding details.
+   * @param  {Object} data The credentials to encode and other encoding details.
    * @return {String}             The hash representing the credentials.
    * @example
    * assert.equal(
@@ -168,20 +168,22 @@ const DIGEST = {
    * @api public
    */
   computeHash: function computeHash(data) {
-    let ha1 = data.ha1 || _computeHash(data.algorithm, [
-      data.username, data.realm, data.password
+    const ha1 = data.ha1 || _computeHash(data.algorithm, [
+      data.username, data.realm, data.password,
     ].join(':'));
-    let ha2 = _computeHash(data.algorithm, [
-      data.method, data.uri
+    const ha2 = _computeHash(data.algorithm, [
+      data.method, data.uri,
     ].join(':'));
+
     return _computeHash(data.algorithm, [
-      ha1, data.nonce, data.nc, data.cnonce, data.qop, ha2
+      ha1, data.nonce, data.nc, data.cnonce, data.qop, ha2,
     ].join(':'));
-  }
+  },
 };
 
 function _computeHash(algorithm, str) {
-  let hashsum = crypto.createHash(algorithm);
+  const hashsum = crypto.createHash(algorithm);
+
   hashsum.update(str);
   return hashsum.digest('hex');
 }

@@ -9,11 +9,11 @@ import {
   BEARER,
 } from './index';
 
-describe('index', function() {
+describe('index', () => {
 
-  describe('parseWWWAuthenticateHeader', function() {
+  describe('parseWWWAuthenticateHeader', () => {
 
-    it('should parse Basic headers', function() {
+    it('should parse Basic headers', () => {
       neatequal(
         parseWWWAuthenticateHeader('Basic realm="test"'), {
           type: 'Basic',
@@ -26,9 +26,9 @@ describe('index', function() {
 
   });
 
-  describe('parseAuthorizationHeader', function() {
+  describe('parseAuthorizationHeader', () => {
 
-    it('should parse Basic headers', function() {
+    it('should parse Basic headers', () => {
       neatequal(
         parseAuthorizationHeader('Basic QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
           type: 'Basic',
@@ -51,7 +51,7 @@ describe('index', function() {
       );
     });
 
-    it('should parse Basic headers with a ":" char in the password', function() {
+    it('should parse Basic headers with a ":" char in the password', () => {
       neatequal(
         parseAuthorizationHeader('Basic Sm9objpSOlU6a2lkZGluZz8='), {
           type: 'Basic',
@@ -66,16 +66,16 @@ describe('index', function() {
 
   });
 
-  describe('mecanisms', function() {
+  describe('mecanisms', () => {
 
-    it('should export bot DIGEST and BASIC  mecanisms', function() {
+    it('should export bot DIGEST and BASIC  mecanisms', () => {
       assert.equal(
         mecanisms.length,
         3
       );
     });
 
-    it('should export DIGEST BASIC and BEARER mecanisms', function() {
+    it('should export DIGEST BASIC and BEARER mecanisms', () => {
       assert(BASIC);
       assert(DIGEST);
       assert(BEARER);

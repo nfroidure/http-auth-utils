@@ -1,13 +1,23 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _utils = require('../utils');
+
+var _crypto = require('crypto');
+
+var _crypto2 = _interopRequireDefault(_crypto);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  * @module http-auth-utils/mecanisms/digest
  */
 
-import { parseHTTPHeadersQuotedKeyValueSet, buildHTTPHeadersQuotedKeyValueSet } from '../utils';
-
-import crypto from 'crypto';
-
-const AUTHORIZED_WWW_AUTHENTICATE_KEYS = ['realm', 'domain', 'qop', 'nonce', 'opaque', 'stale', 'algorithm'];
-const AUTHORIZED_AUTHORIZATION_KEYS = ['username', 'realm', 'nonce', 'uri', 'response', 'algorithm', 'cnonce', 'opaque', 'qop', 'nc'];
+var AUTHORIZED_WWW_AUTHENTICATE_KEYS = ['realm', 'domain', 'qop', 'nonce', 'opaque', 'stale', 'algorithm'];
+var AUTHORIZED_AUTHORIZATION_KEYS = ['username', 'realm', 'nonce', 'uri', 'response', 'algorithm', 'cnonce', 'opaque', 'qop', 'nc'];
 
 /**
  * Digest authentication mecanism.
@@ -15,7 +25,7 @@ const AUTHORIZED_AUTHORIZATION_KEYS = ['username', 'realm', 'nonce', 'uri', 'res
  * @see http://tools.ietf.org/html/rfc2617#section-3
  * @see http://tools.ietf.org/html/rfc2069#section-2
  */
-const DIGEST = {
+var DIGEST = {
 
   /**
    * The Digest auth mecanism prefix.
@@ -44,7 +54,7 @@ const DIGEST = {
    * @api public
    */
   parseWWWAuthenticateRest: function parseWWWAuthenticateRest(rest) {
-    return parseHTTPHeadersQuotedKeyValueSet(rest, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
+    return (0, _utils.parseHTTPHeadersQuotedKeyValueSet)(rest, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
   },
 
   /**
@@ -67,7 +77,7 @@ const DIGEST = {
    * @api public
    */
   buildWWWAuthenticateRest: function buildWWWAuthenticateRest(data) {
-    return buildHTTPHeadersQuotedKeyValueSet(data, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
+    return (0, _utils.buildHTTPHeadersQuotedKeyValueSet)(data, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
   },
 
   /**
@@ -101,7 +111,7 @@ const DIGEST = {
    * @api public
    */
   parseAuthorizationRest: function parseAuthorizationRest(rest) {
-    return parseHTTPHeadersQuotedKeyValueSet(rest, AUTHORIZED_AUTHORIZATION_KEYS, []);
+    return (0, _utils.parseHTTPHeadersQuotedKeyValueSet)(rest, AUTHORIZED_AUTHORIZATION_KEYS, []);
   },
 
   /**
@@ -134,7 +144,7 @@ const DIGEST = {
    * @api public
    */
   buildAuthorizationRest: function buildAuthorizationRest(data) {
-    return buildHTTPHeadersQuotedKeyValueSet(data, AUTHORIZED_AUTHORIZATION_KEYS, []);
+    return (0, _utils.buildHTTPHeadersQuotedKeyValueSet)(data, AUTHORIZED_AUTHORIZATION_KEYS, []);
   },
 
   /**
@@ -160,16 +170,16 @@ const DIGEST = {
    * @api public
    */
   computeHash: function computeHash(data) {
-    let ha1 = data.ha1 || _computeHash(data.algorithm, [data.username, data.realm, data.password].join(':'));
-    let ha2 = _computeHash(data.algorithm, [data.method, data.uri].join(':'));
+    var ha1 = data.ha1 || _computeHash(data.algorithm, [data.username, data.realm, data.password].join(':'));
+    var ha2 = _computeHash(data.algorithm, [data.method, data.uri].join(':'));
     return _computeHash(data.algorithm, [ha1, data.nonce, data.nc, data.cnonce, data.qop, ha2].join(':'));
   }
 };
 
 function _computeHash(algorithm, str) {
-  let hashsum = crypto.createHash(algorithm);
+  var hashsum = _crypto2.default.createHash(algorithm);
   hashsum.update(str);
   return hashsum.digest('hex');
 }
 
-export default DIGEST;
+exports.default = DIGEST;

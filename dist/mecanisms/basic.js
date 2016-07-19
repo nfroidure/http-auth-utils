@@ -1,18 +1,30 @@
-/**
- * @module http-auth-utils/mecanisms/basic
- */
-import YError from 'yerror';
+'use strict';
 
-import { parseHTTPHeadersQuotedKeyValueSet, buildHTTPHeadersQuotedKeyValueSet } from '../utils';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-const AUTHORIZED_WWW_AUTHENTICATE_KEYS = ['realm'];
+var _yerror = require('yerror');
+
+var _yerror2 = _interopRequireDefault(_yerror);
+
+var _utils = require('../utils');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); } /**
+                                                                               * @module http-auth-utils/mecanisms/basic
+                                                                               */
+
+
+var AUTHORIZED_WWW_AUTHENTICATE_KEYS = ['realm'];
 
 /**
  * Basic authentication mecanism.
  * @type {Object}
  * @see http://tools.ietf.org/html/rfc2617#section-2
  */
-const BASIC = {
+var BASIC = {
 
   /**
    * The Basic auth mecanism prefix.
@@ -33,7 +45,7 @@ const BASIC = {
    * @api public
    */
   parseWWWAuthenticateRest: function parseWWWAuthenticateRest(rest) {
-    return parseHTTPHeadersQuotedKeyValueSet(rest, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
+    return (0, _utils.parseHTTPHeadersQuotedKeyValueSet)(rest, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
   },
 
   /**
@@ -50,7 +62,7 @@ const BASIC = {
    * @api public
    */
   buildWWWAuthenticateRest: function buildWWWAuthenticateRest(data) {
-    return buildHTTPHeadersQuotedKeyValueSet(data, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
+    return (0, _utils.buildHTTPHeadersQuotedKeyValueSet)(data, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
   },
 
   /**
@@ -59,9 +71,9 @@ const BASIC = {
    * @return {Object}      Object representing the result of the parse operation {hash}.
    * @example
    * assert.deepEqual(
-   *   BASIC.parseAuthorizationRest('QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
-   *     hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ==',
-   *     username: 'Aladdin',
+   *   BASIC.parseAuthorizationRest('QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
+   *     hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
+   *     username: 'Ali Baba',
    *     password: 'open sesame'
    *   }
    * );
@@ -69,13 +81,18 @@ const BASIC = {
    */
   parseAuthorizationRest: function parseAuthorizationRest(rest) {
     if (!rest) {
-      throw new YError('E_EMPTY_AUTH');
+      throw new _yerror2.default('E_EMPTY_AUTH');
     }
-    let { username, password } = BASIC.decodeHash(rest);
+
+    var _BASIC$decodeHash = BASIC.decodeHash(rest);
+
+    var username = _BASIC$decodeHash.username;
+    var password = _BASIC$decodeHash.password;
+
     return {
       hash: rest,
-      username,
-      password
+      username: username,
+      password: password
     };
   },
 
@@ -86,18 +103,24 @@ const BASIC = {
    * @example
    * assert.equal(
    *   BASIC.buildAuthorizationRest({
-   *     hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+   *     hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU='
    *   }),
-   *   'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+   *   'QWxpIEJhYmE6b3BlbiBzZXNhbWU='
    * );
    * @api public
    */
-  buildAuthorizationRest: function buildAuthorizationRest({ hash, username, password } = {}) {
+  buildAuthorizationRest: function buildAuthorizationRest() {
+    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+    var hash = _ref.hash;
+    var username = _ref.username;
+    var password = _ref.password;
+
     if (username && password) {
-      return BASIC.computeHash({ username, password });
+      return BASIC.computeHash({ username: username, password: password });
     }
     if (!hash) {
-      throw new YError('E_NO_HASH');
+      throw new _yerror2.default('E_NO_HASH');
     }
     return hash;
   },
@@ -109,14 +132,17 @@ const BASIC = {
    * @example
    * assert.equal(
    *   BASIC.computeHash({
-   *     username: 'Aladdin',
+   *     username: 'Ali Baba',
    *     password: 'open sesame'
    *   }),
-   *   'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+   *   'QWxpIEJhYmE6b3BlbiBzZXNhbWU='
    * );
    * @api public
    */
-  computeHash: function computeHash({ username, password }) {
+  computeHash: function computeHash(_ref2) {
+    var username = _ref2.username;
+    var password = _ref2.password;
+
     return new Buffer(username + ':' + password).toString('base64');
   },
 
@@ -126,20 +152,27 @@ const BASIC = {
    * @return {Object}      Object representing the credentials {username, password}.
    * @example
    * assert.deepEqual(
-   *   BASIC.decodeHash('QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
-   *     username: 'Aladdin',
+   *   BASIC.decodeHash('QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
+   *     username: 'Ali Baba',
    *     password: 'open sesame'
    *   }
    * );
    * @api public
    */
   decodeHash: function decodeHash(hash) {
-    let [username, ...passwordParts] = new Buffer(hash, 'base64').toString().split(':');
+    var _toString$split = new Buffer(hash, 'base64').toString().split(':');
+
+    var _toString$split2 = _toArray(_toString$split);
+
+    var username = _toString$split2[0];
+
+    var passwordParts = _toString$split2.slice(1);
+
     return {
-      username,
+      username: username,
       password: passwordParts.join(':')
     };
   }
 };
 
-export default BASIC;
+exports.default = BASIC;

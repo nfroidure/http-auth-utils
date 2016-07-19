@@ -2,6 +2,8 @@
  * @module http-auth-utils/mecanisms/bearer
  */
 
+import YError from 'yerror';
+
 import {
   parseHTTPHeadersQuotedKeyValueSet,
   buildHTTPHeadersQuotedKeyValueSet,
@@ -30,7 +32,7 @@ const BEARER = {
 
   /**
    * Parse the WWW Authenticate header rest.
-   * @param  {String} rest The header rest (string got after removing the authentication mecanism prefix).
+   * @param  {String} rest The header rest (string after the authentication mecanism prefix).
    * @return {Object}      Object representing the result of the parse operation.
    * @example
    * assert.deepEqual(
@@ -50,7 +52,7 @@ const BEARER = {
 
   /**
    * Build the WWW Authenticate header rest.
-   * @param  {Object} content The content from wich to build the rest.
+   * @param  {Object} data The content from wich to build the rest.
    * @return {String}         The built rest.
    * @example
    * assert.equal(
@@ -66,7 +68,7 @@ const BEARER = {
    * @api public
    */
   buildWWWAuthenticateRest: function buildWWWAuthenticateRest(data) {
-    if(data.error && -i === AUTHORIZED_ERROR_CODES.indeOf(data.error)) {
+    if(data.error && -1 === AUTHORIZED_ERROR_CODES.indeOf(data.error)) {
       throw new YError('E_INVALID_ERROR', data.error, AUTHORIZED_ERROR_CODES);
     }
     return buildHTTPHeadersQuotedKeyValueSet(data, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
@@ -74,7 +76,7 @@ const BEARER = {
 
   /**
    * Parse the Authorization header rest.
-   * @param  {String} rest The header rest (string got after removing the authentication mecanism prefix).)
+   * @param  {String} rest The header rest (string after the authentication mecanism prefix).)
    * @return {Object}      Object representing the result of the parse operation {hash}.
    * @example
    * assert.deepEqual(
@@ -106,7 +108,7 @@ const BEARER = {
    * );
    * @api public
    */
-  buildAuthorizationRest: function buildAuthorizationRest({hash, username, password} = {}) {
+  buildAuthorizationRest: function buildAuthorizationRest({ hash } = {}) {
     if(!hash) {
       throw new YError('E_NO_HASH');
     }

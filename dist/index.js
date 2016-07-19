@@ -1,31 +1,61 @@
-import YError from 'yerror';
+'use strict';
 
-import BASIC from './mecanisms/basic';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.parseAuthorizationHeader = exports.parseWWWAuthenticateHeader = exports.mecanisms = exports.BEARER = exports.DIGEST = exports.BASIC = undefined;
+
+var _yerror = require('yerror');
+
+var _yerror2 = _interopRequireDefault(_yerror);
+
+var _basic = require('./mecanisms/basic');
+
+var _basic2 = _interopRequireDefault(_basic);
+
+var _digest = require('./mecanisms/digest');
+
+var _digest2 = _interopRequireDefault(_digest);
+
+var _bearer = require('./mecanisms/bearer');
+
+var _bearer2 = _interopRequireDefault(_bearer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  * @module http-auth-utils
  */
-
-import DIGEST from './mecanisms/digest';
 
 /**
  * Basic authentication mecanism.
  * @type {Object}
  * @see  {@link module:http-auth-utils/mecanisms/basic}
  */
-export { BASIC };
+exports.BASIC = _basic2.default;
 
 /**
  * Digest authentication mecanism.
  * @type {Object}
  * @see  {@link module:http-auth-utils/mecanisms/digest}
  */
-export { DIGEST };
+
+exports.DIGEST = _digest2.default;
+
+/**
+ * Bearer authentication mecanism.
+ * @type {Object}
+ * @see  {@link module:http-auth-utils/mecanisms/digest}
+ */
+
+exports.BEARER = _bearer2.default;
 
 /**
  * Natively supported authentication mecanisms.
  * @type {Array}
  */
-export const mecanisms = [BASIC, DIGEST];
+
+var mecanisms = exports.mecanisms = [_basic2.default, _digest2.default, _bearer2.default];
 
 /**
  * Parse HTTP WWW-Authenticate header contents.
@@ -44,8 +74,10 @@ export const mecanisms = [BASIC, DIGEST];
  *   }
  * );
  */
-export const parseWWWAuthenticateHeader = function parseWWWAuthenticateHeader(header, authMecanisms = mecanisms) {
-  let result = null;
+var parseWWWAuthenticateHeader = exports.parseWWWAuthenticateHeader = function parseWWWAuthenticateHeader(header) {
+  var authMecanisms = arguments.length <= 1 || arguments[1] === undefined ? mecanisms : arguments[1];
+
+  var result = null;
   authMecanisms.some(function (authMecanism) {
     if (0 === header.indexOf(authMecanism.type + ' ')) {
       result = {
@@ -57,14 +89,14 @@ export const parseWWWAuthenticateHeader = function parseWWWAuthenticateHeader(he
   if (result) {
     return result;
   }
-  throw new YError('E_UNKNOWN_AUTH_MECANISM', header);
+  throw new _yerror2.default('E_UNKNOWN_AUTH_MECANISM', header);
 };
 
 /**
  * Parse HTTP Authorization header contents.
  * @type {Function}
  * @param {string} header The Authorization header contents
- * @param {Array} [authMecanisms=[BASIC, DIGEST]] Allow providing custom authentication mecanisms.
+ * @param {Array} [authMecanisms=[BASIC, DIGEST, BEARER]] Allow providing custom authentication mecanisms.
  * @return {Object} Result of the contents parse.
  * @api public
  * @example
@@ -77,8 +109,10 @@ export const parseWWWAuthenticateHeader = function parseWWWAuthenticateHeader(he
  *   }
  * );
  */
-export const parseAuthorizationHeader = function parseAuthorizationHeader(header, authMecanisms = mecanisms) {
-  let result = null;
+var parseAuthorizationHeader = exports.parseAuthorizationHeader = function parseAuthorizationHeader(header) {
+  var authMecanisms = arguments.length <= 1 || arguments[1] === undefined ? mecanisms : arguments[1];
+
+  var result = null;
   authMecanisms.some(function (authMecanism) {
     if (0 === header.indexOf(authMecanism.type + ' ')) {
       result = {
@@ -90,5 +124,5 @@ export const parseAuthorizationHeader = function parseAuthorizationHeader(header
   if (result) {
     return result;
   }
-  throw new YError('E_UNKNOWN_AUTH_MECANISM', header);
+  throw new _yerror2.default('E_UNKNOWN_AUTH_MECANISM', header);
 };

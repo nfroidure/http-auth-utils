@@ -1,20 +1,32 @@
-import assert from 'assert';
-import neatequal from 'neatequal';
-import BASIC from './basic';
+'use strict';
+
+var _assert = require('assert');
+
+var _assert2 = _interopRequireDefault(_assert);
+
+var _neatequal = require('neatequal');
+
+var _neatequal2 = _interopRequireDefault(_neatequal);
+
+var _basic = require('./basic');
+
+var _basic2 = _interopRequireDefault(_basic);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 describe('BASIC', function () {
 
   describe('type', function () {
 
     it('should be the basic auth prefix', function () {
-      assert.equal(BASIC.type, 'Basic');
+      _assert2.default.equal(_basic2.default.type, 'Basic');
     });
   });
 
   describe('parseWWWAuthenticateRest', function () {
 
     it('should work', function () {
-      neatequal(BASIC.parseWWWAuthenticateRest('realm="perlinpinpin"'), {
+      (0, _neatequal2.default)(_basic2.default.parseWWWAuthenticateRest('realm="perlinpinpin"'), {
         realm: 'perlinpinpin'
       });
     });
@@ -23,13 +35,13 @@ describe('BASIC', function () {
   describe('buildWWWAuthenticateRest', function () {
 
     it('should work', function () {
-      assert.equal(BASIC.buildWWWAuthenticateRest({
+      _assert2.default.equal(_basic2.default.buildWWWAuthenticateRest({
         realm: 'perlinpinpin'
       }), 'realm="perlinpinpin"');
     });
 
     it('should be the inverse of parseWWWAuthenticateRest', function () {
-      neatequal(BASIC.parseWWWAuthenticateRest(BASIC.buildWWWAuthenticateRest({
+      (0, _neatequal2.default)(_basic2.default.parseWWWAuthenticateRest(_basic2.default.buildWWWAuthenticateRest({
         realm: 'perlinpinpin'
       })), {
         realm: 'perlinpinpin'
@@ -40,12 +52,12 @@ describe('BASIC', function () {
   describe('parseAuthorizationRest', function () {
 
     it('should work', function () {
-      neatequal(BASIC.parseAuthorizationRest('QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
-        hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ==',
-        username: 'Aladdin',
+      (0, _neatequal2.default)(_basic2.default.parseAuthorizationRest('QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
+        hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
+        username: 'Ali Baba',
         password: 'open sesame'
       });
-      neatequal(BASIC.parseAuthorizationRest('bmljb2xhcy5mcm9pZHVyZUBzaW1wbGlmaWVsZC5jb206dGVzdA=='), {
+      (0, _neatequal2.default)(_basic2.default.parseAuthorizationRest('bmljb2xhcy5mcm9pZHVyZUBzaW1wbGlmaWVsZC5jb206dGVzdA=='), {
         hash: 'bmljb2xhcy5mcm9pZHVyZUBzaW1wbGlmaWVsZC5jb206dGVzdA==',
         username: 'nicolas.froidure@simplifield.com',
         password: 'test'
@@ -56,26 +68,26 @@ describe('BASIC', function () {
   describe('buildAuthorizationRest', function () {
 
     it('should work with credentials', function () {
-      assert.equal(BASIC.buildAuthorizationRest({
-        username: 'Aladdin',
+      _assert2.default.equal(_basic2.default.buildAuthorizationRest({
+        username: 'Ali Baba',
         password: 'open sesame'
-      }), 'QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
+      }), 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=');
     });
 
     it('should work with just the hash', function () {
-      assert.equal(BASIC.buildAuthorizationRest({
-        hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
-      }), 'QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
+      _assert2.default.equal(_basic2.default.buildAuthorizationRest({
+        hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU='
+      }), 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=');
     });
 
     it('should be the inverse of parseAuthorizationRest', function () {
-      neatequal(BASIC.parseAuthorizationRest(BASIC.buildAuthorizationRest({
-        hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ==',
-        username: 'Aladdin',
+      (0, _neatequal2.default)(_basic2.default.parseAuthorizationRest(_basic2.default.buildAuthorizationRest({
+        hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
+        username: 'Ali Baba',
         password: 'open sesame'
       })), {
-        hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ==',
-        username: 'Aladdin',
+        hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
+        username: 'Ali Baba',
         password: 'open sesame'
       });
     });
@@ -84,18 +96,18 @@ describe('BASIC', function () {
   describe('computeHash', function () {
 
     it('should work', function () {
-      assert.equal(BASIC.computeHash({
-        username: 'Aladdin',
+      _assert2.default.equal(_basic2.default.computeHash({
+        username: 'Ali Baba',
         password: 'open sesame'
-      }), 'QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
+      }), 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=');
     });
   });
 
   describe('decodeHash', function () {
 
     it('should work', function () {
-      neatequal(BASIC.decodeHash('QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
-        username: 'Aladdin',
+      (0, _neatequal2.default)(_basic2.default.decodeHash('QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
+        username: 'Ali Baba',
         password: 'open sesame'
       });
     });

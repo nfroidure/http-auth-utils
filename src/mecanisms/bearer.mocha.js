@@ -2,19 +2,19 @@ import assert from 'assert';
 import neatequal from 'neatequal';
 import BEARER from './bearer';
 
-describe('BEARER', function() {
+describe('BEARER', () => {
 
-  describe('type', function() {
+  describe('type', () => {
 
-    it('should be the basic auth prefix', function() {
+    it('should be the basic auth prefix', () => {
       assert.equal(BEARER.type, 'Bearer');
     });
 
   });
 
-  describe('parseWWWAuthenticateRest', function() {
+  describe('parseWWWAuthenticateRest', () => {
 
-    it('should work', function() {
+    it('should work', () => {
       neatequal(
         BEARER.parseWWWAuthenticateRest('realm="perlinpinpin"'), {
           realm: 'perlinpinpin',
@@ -24,9 +24,9 @@ describe('BEARER', function() {
 
   });
 
-  describe('buildWWWAuthenticateRest', function() {
+  describe('buildWWWAuthenticateRest', () => {
 
-    it('should work', function() {
+    it('should work', () => {
       assert.equal(
         BEARER.buildWWWAuthenticateRest({
           realm: 'perlinpinpin',
@@ -35,7 +35,7 @@ describe('BEARER', function() {
       );
     });
 
-    it('should be the inverse of parseWWWAuthenticateRest', function() {
+    it('should be the inverse of parseWWWAuthenticateRest', () => {
       neatequal(
         BEARER.parseWWWAuthenticateRest(
           BEARER.buildWWWAuthenticateRest({
@@ -49,9 +49,9 @@ describe('BEARER', function() {
 
   });
 
-  describe('parseAuthorizationRest', function() {
+  describe('parseAuthorizationRest', () => {
 
-    it('should work', function() {
+    it('should work', () => {
       neatequal(
         BEARER.parseAuthorizationRest('mF_9.B5f-4.1JqM'), {
           hash: 'mF_9.B5f-4.1JqM',
@@ -61,9 +61,9 @@ describe('BEARER', function() {
 
   });
 
-  describe('buildAuthorizationRest', function() {
+  describe('buildAuthorizationRest', () => {
 
-    it('should work', function() {
+    it('should work', () => {
       assert.equal(
         BEARER.buildAuthorizationRest({
           hash: 'mF_9.B5f-4.1JqM',
@@ -72,7 +72,7 @@ describe('BEARER', function() {
       );
     });
 
-    it('should be the inverse of parseAuthorizationRest', function() {
+    it('should be the inverse of parseAuthorizationRest', () => {
       neatequal(
         BEARER.parseAuthorizationRest(
           BEARER.buildAuthorizationRest({

@@ -1,19 +1,23 @@
-/**
- * @module http-auth-utils/mecanisms/bearer
- */
+'use strict';
 
-import { parseHTTPHeadersQuotedKeyValueSet, buildHTTPHeadersQuotedKeyValueSet } from '../utils';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-const AUTHORIZED_WWW_AUTHENTICATE_KEYS = ['realm', 'scope', 'error', 'error_description'];
+var _utils = require('../utils');
 
-const AUTHORIZED_ERROR_CODES = ['invalid_request', 'invalid_token', 'insufficient_scope'];
+var AUTHORIZED_WWW_AUTHENTICATE_KEYS = ['realm', 'scope', 'error', 'error_description']; /**
+                                                                                          * @module http-auth-utils/mecanisms/bearer
+                                                                                          */
+
+var AUTHORIZED_ERROR_CODES = ['invalid_request', 'invalid_token', 'insufficient_scope'];
 
 /**
  * Bearer authentication mecanism.
  * @type {Object}
  * @see https://tools.ietf.org/html/rfc6750#section-3
  */
-const BEARER = {
+var BEARER = {
 
   /**
    * The Digest auth mecanism prefix.
@@ -38,7 +42,7 @@ const BEARER = {
    * @api public
    */
   parseWWWAuthenticateRest: function parseWWWAuthenticateRest(rest) {
-    return parseHTTPHeadersQuotedKeyValueSet(rest, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
+    return (0, _utils.parseHTTPHeadersQuotedKeyValueSet)(rest, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
   },
 
   /**
@@ -62,7 +66,7 @@ const BEARER = {
     if (data.error && -i === AUTHORIZED_ERROR_CODES.indeOf(data.error)) {
       throw new YError('E_INVALID_ERROR', data.error, AUTHORIZED_ERROR_CODES);
     }
-    return buildHTTPHeadersQuotedKeyValueSet(data, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
+    return (0, _utils.buildHTTPHeadersQuotedKeyValueSet)(data, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
   },
 
   /**
@@ -99,7 +103,11 @@ const BEARER = {
    * );
    * @api public
    */
-  buildAuthorizationRest: function buildAuthorizationRest({ hash, username, password } = {}) {
+  buildAuthorizationRest: function buildAuthorizationRest() {
+    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+    var hash = _ref.hash;
+
     if (!hash) {
       throw new YError('E_NO_HASH');
     }
@@ -107,4 +115,4 @@ const BEARER = {
   }
 };
 
-export default BEARER;
+exports.default = BEARER;

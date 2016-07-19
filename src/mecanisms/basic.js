@@ -1,11 +1,12 @@
 /**
  * @module http-auth-utils/mecanisms/basic
  */
+
 import YError from 'yerror';
 
 import {
   parseHTTPHeadersQuotedKeyValueSet,
-  buildHTTPHeadersQuotedKeyValueSet
+  buildHTTPHeadersQuotedKeyValueSet,
 } from '../utils';
 
 const AUTHORIZED_WWW_AUTHENTICATE_KEYS = ['realm'];
@@ -25,7 +26,7 @@ const BASIC = {
 
   /**
    * Parse the WWW Authenticate header rest.
-   * @param  {String} rest The header rest (string got after removing the authentication mecanism prefix).
+   * @param  {String} rest The header rest (string after the authentication mecanism prefix).
    * @return {Object}      Object representing the result of the parse operation.
    * @example
    * assert.deepEqual(
@@ -41,7 +42,7 @@ const BASIC = {
 
   /**
    * Build the WWW Authenticate header rest.
-   * @param  {Object} content The content from wich to build the rest.
+   * @param  {Object} data The content from wich to build the rest.
    * @return {String}         The built rest.
    * @example
    * assert.equal(
@@ -58,7 +59,7 @@ const BASIC = {
 
   /**
    * Parse the Authorization header rest.
-   * @param  {String} rest The header rest (string got after removing the authentication mecanism prefix).)
+   * @param  {String} rest The header rest (string after the authentication mecanism prefix).)
    * @return {Object}      Object representing the result of the parse operation {hash}.
    * @example
    * assert.deepEqual(
@@ -74,11 +75,12 @@ const BASIC = {
     if(!rest) {
       throw new YError('E_EMPTY_AUTH');
     }
-    let {username, password} = BASIC.decodeHash(rest);
+    const { username, password } = BASIC.decodeHash(rest);
+
     return {
       hash: rest,
       username,
-      password
+      password,
     };
   },
 
@@ -95,9 +97,9 @@ const BASIC = {
    * );
    * @api public
    */
-  buildAuthorizationRest: function buildAuthorizationRest({hash, username, password} = {}) {
+  buildAuthorizationRest: function buildAuthorizationRest({ hash, username, password } = {}) {
     if(username && password) {
-      return BASIC.computeHash({username, password});
+      return BASIC.computeHash({ username, password });
     }
     if(!hash) {
       throw new YError('E_NO_HASH');
@@ -119,7 +121,7 @@ const BASIC = {
    * );
    * @api public
    */
-  computeHash: function computeHash({username, password}) {
+  computeHash: function computeHash({ username, password }) {
     return (new Buffer(username + ':' + password)).toString('base64');
   },
 
@@ -140,9 +142,9 @@ const BASIC = {
     let [username, ...passwordParts] = ((new Buffer(hash, 'base64')).toString()).split(':');
     return {
       username,
-      password: passwordParts.join(':')
+      password: passwordParts.join(':'),
     };
-  }
+  },
 };
 
 export default BASIC;
