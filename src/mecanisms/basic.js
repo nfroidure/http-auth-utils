@@ -62,9 +62,9 @@ const BASIC = {
    * @return {Object}      Object representing the result of the parse operation {hash}.
    * @example
    * assert.deepEqual(
-   *   BASIC.parseAuthorizationRest('QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
-   *     hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ==',
-   *     username: 'Aladdin',
+   *   BASIC.parseAuthorizationRest('QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
+   *     hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
+   *     username: 'Ali Baba',
    *     password: 'open sesame'
    *   }
    * );
@@ -89,9 +89,9 @@ const BASIC = {
    * @example
    * assert.equal(
    *   BASIC.buildAuthorizationRest({
-   *     hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+   *     hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU='
    *   }),
-   *   'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+   *   'QWxpIEJhYmE6b3BlbiBzZXNhbWU='
    * );
    * @api public
    */
@@ -112,10 +112,10 @@ const BASIC = {
    * @example
    * assert.equal(
    *   BASIC.computeHash({
-   *     username: 'Aladdin',
+   *     username: 'Ali Baba',
    *     password: 'open sesame'
    *   }),
-   *   'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+   *   'QWxpIEJhYmE6b3BlbiBzZXNhbWU='
    * );
    * @api public
    */
@@ -129,8 +129,8 @@ const BASIC = {
    * @return {Object}      Object representing the credentials {username, password}.
    * @example
    * assert.deepEqual(
-   *   BASIC.decodeHash('QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
-   *     username: 'Aladdin',
+   *   BASIC.decodeHash('QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
+   *     username: 'Ali Baba',
    *     password: 'open sesame'
    *   }
    * );

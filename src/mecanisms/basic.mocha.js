@@ -52,9 +52,9 @@ describe('BASIC', function() {
 
     it('should work', function() {
       neatequal(
-        BASIC.parseAuthorizationRest('QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
-          hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ==',
-          username: 'Aladdin',
+        BASIC.parseAuthorizationRest('QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
+          hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
+          username: 'Ali Baba',
           password: 'open sesame'
         }
       );
@@ -74,19 +74,19 @@ describe('BASIC', function() {
     it('should work with credentials', function() {
       assert.equal(
         BASIC.buildAuthorizationRest({
-          username: 'Aladdin',
+          username: 'Ali Baba',
           password: 'open sesame'
         }),
-        'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+        'QWxpIEJhYmE6b3BlbiBzZXNhbWU='
       );
     });
 
     it('should work with just the hash', function() {
       assert.equal(
         BASIC.buildAuthorizationRest({
-          hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+          hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU='
         }),
-        'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+        'QWxpIEJhYmE6b3BlbiBzZXNhbWU='
       );
     });
 
@@ -94,13 +94,13 @@ describe('BASIC', function() {
       neatequal(
         BASIC.parseAuthorizationRest(
           BASIC.buildAuthorizationRest({
-          hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ==',
-          username: 'Aladdin',
+          hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
+          username: 'Ali Baba',
           password: 'open sesame'
           })
         ), {
-          hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ==',
-          username: 'Aladdin',
+          hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
+          username: 'Ali Baba',
           password: 'open sesame'
       });
     });
@@ -112,10 +112,10 @@ describe('BASIC', function() {
       it('should work', function() {
         assert.equal(
           BASIC.computeHash({
-            username: 'Aladdin',
+            username: 'Ali Baba',
             password: 'open sesame'
           }),
-          'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+          'QWxpIEJhYmE6b3BlbiBzZXNhbWU='
         );
       });
 
@@ -125,8 +125,8 @@ describe('BASIC', function() {
 
       it('should work', function() {
         neatequal(
-          BASIC.decodeHash('QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
-            username: 'Aladdin',
+          BASIC.decodeHash('QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
+            username: 'Ali Baba',
             password: 'open sesame'
           }
         );
