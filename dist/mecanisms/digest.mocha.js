@@ -1,32 +1,20 @@
-'use strict';
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _assert = require('assert');
-
-var _assert2 = _interopRequireDefault(_assert);
-
-var _neatequal = require('neatequal');
-
-var _neatequal2 = _interopRequireDefault(_neatequal);
-
-var _digest = require('./digest');
-
-var _digest2 = _interopRequireDefault(_digest);
+import assert from 'assert';
+import neatequal from 'neatequal';
+import DIGEST from './digest';
 
 describe('digest', function () {
 
   describe('type', function () {
 
     it('should be the digest auth prefix', function () {
-      _assert2['default'].equal(_digest2['default'].type, 'Digest');
+      assert.equal(DIGEST.type, 'Digest');
     });
   });
 
   describe('parseWWWAuthenticateRest', function () {
 
     it('should work', function () {
-      (0, _neatequal2['default'])(_digest2['default'].parseWWWAuthenticateRest('realm="testrealm@host.com", ' + 'qop="auth, auth-int", ' + 'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' + 'opaque="5ccc069c403ebaf9f0171e9517f40e41"'), {
+      neatequal(DIGEST.parseWWWAuthenticateRest('realm="testrealm@host.com", ' + 'qop="auth, auth-int", ' + 'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' + 'opaque="5ccc069c403ebaf9f0171e9517f40e41"'), {
         realm: 'testrealm@host.com',
         qop: 'auth, auth-int',
         nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
@@ -38,7 +26,7 @@ describe('digest', function () {
   describe('buildWWWAuthenticateRest', function () {
 
     it('should work', function () {
-      _assert2['default'].equal(_digest2['default'].buildWWWAuthenticateRest({
+      assert.equal(DIGEST.buildWWWAuthenticateRest({
         realm: 'testrealm@host.com',
         qop: 'auth, auth-int',
         nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
@@ -47,7 +35,7 @@ describe('digest', function () {
     });
 
     it('should be the inverse of parseWWWAuthenticateRest', function () {
-      (0, _neatequal2['default'])(_digest2['default'].parseWWWAuthenticateRest(_digest2['default'].buildWWWAuthenticateRest({
+      neatequal(DIGEST.parseWWWAuthenticateRest(DIGEST.buildWWWAuthenticateRest({
         realm: 'perlinpinpin'
       })), {
         realm: 'perlinpinpin'
@@ -58,7 +46,7 @@ describe('digest', function () {
   describe('parseAuthorizationRest', function () {
 
     it('should work', function () {
-      (0, _neatequal2['default'])(_digest2['default'].parseAuthorizationRest('username="Mufasa",' + 'realm="testrealm@host.com",' + 'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093",' + 'uri="/dir/index.html",' + 'qop="auth",' + 'nc="00000001",' + 'cnonce="0a4f113b",' + 'response="6629fae49393a05397450978507c4ef1",' + 'opaque="5ccc069c403ebaf9f0171e9517f40e41"'), {
+      neatequal(DIGEST.parseAuthorizationRest('username="Mufasa",' + 'realm="testrealm@host.com",' + 'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093",' + 'uri="/dir/index.html",' + 'qop="auth",' + 'nc="00000001",' + 'cnonce="0a4f113b",' + 'response="6629fae49393a05397450978507c4ef1",' + 'opaque="5ccc069c403ebaf9f0171e9517f40e41"'), {
         username: "Mufasa",
         realm: 'testrealm@host.com',
         nonce: "dcd98b7102dd2f0e8b11d0f600bfb0c093",
@@ -75,7 +63,7 @@ describe('digest', function () {
   describe('buildAuthorizationRest', function () {
 
     it('should work', function () {
-      _assert2['default'].equal(_digest2['default'].buildAuthorizationRest({
+      assert.equal(DIGEST.buildAuthorizationRest({
         username: "Mufasa",
         realm: 'testrealm@host.com',
         nonce: "dcd98b7102dd2f0e8b11d0f600bfb0c093",
@@ -89,7 +77,7 @@ describe('digest', function () {
     });
 
     it('should be the inverse of parseAuthorizationRest', function () {
-      (0, _neatequal2['default'])(_digest2['default'].parseAuthorizationRest(_digest2['default'].buildAuthorizationRest({
+      neatequal(DIGEST.parseAuthorizationRest(DIGEST.buildAuthorizationRest({
         username: "Mufasa",
         realm: 'testrealm@host.com',
         nonce: "dcd98b7102dd2f0e8b11d0f600bfb0c093",
@@ -116,7 +104,7 @@ describe('digest', function () {
   describe('computeHash', function () {
 
     it('should work', function () {
-      _assert2['default'].equal(_digest2['default'].computeHash({
+      assert.equal(DIGEST.computeHash({
         username: 'Mufasa',
         realm: 'testrealm@host.com',
         password: 'Circle Of Life',

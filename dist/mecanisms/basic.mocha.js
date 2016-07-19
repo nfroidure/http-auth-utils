@@ -1,32 +1,20 @@
-'use strict';
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _assert = require('assert');
-
-var _assert2 = _interopRequireDefault(_assert);
-
-var _neatequal = require('neatequal');
-
-var _neatequal2 = _interopRequireDefault(_neatequal);
-
-var _basic = require('./basic');
-
-var _basic2 = _interopRequireDefault(_basic);
+import assert from 'assert';
+import neatequal from 'neatequal';
+import BASIC from './basic';
 
 describe('BASIC', function () {
 
   describe('type', function () {
 
     it('should be the basic auth prefix', function () {
-      _assert2['default'].equal(_basic2['default'].type, 'Basic');
+      assert.equal(BASIC.type, 'Basic');
     });
   });
 
   describe('parseWWWAuthenticateRest', function () {
 
     it('should work', function () {
-      (0, _neatequal2['default'])(_basic2['default'].parseWWWAuthenticateRest('realm="perlinpinpin"'), {
+      neatequal(BASIC.parseWWWAuthenticateRest('realm="perlinpinpin"'), {
         realm: 'perlinpinpin'
       });
     });
@@ -35,13 +23,13 @@ describe('BASIC', function () {
   describe('buildWWWAuthenticateRest', function () {
 
     it('should work', function () {
-      _assert2['default'].equal(_basic2['default'].buildWWWAuthenticateRest({
+      assert.equal(BASIC.buildWWWAuthenticateRest({
         realm: 'perlinpinpin'
       }), 'realm="perlinpinpin"');
     });
 
     it('should be the inverse of parseWWWAuthenticateRest', function () {
-      (0, _neatequal2['default'])(_basic2['default'].parseWWWAuthenticateRest(_basic2['default'].buildWWWAuthenticateRest({
+      neatequal(BASIC.parseWWWAuthenticateRest(BASIC.buildWWWAuthenticateRest({
         realm: 'perlinpinpin'
       })), {
         realm: 'perlinpinpin'
@@ -52,12 +40,12 @@ describe('BASIC', function () {
   describe('parseAuthorizationRest', function () {
 
     it('should work', function () {
-      (0, _neatequal2['default'])(_basic2['default'].parseAuthorizationRest('QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
+      neatequal(BASIC.parseAuthorizationRest('QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
         hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ==',
         username: 'Aladdin',
         password: 'open sesame'
       });
-      (0, _neatequal2['default'])(_basic2['default'].parseAuthorizationRest('bmljb2xhcy5mcm9pZHVyZUBzaW1wbGlmaWVsZC5jb206dGVzdA=='), {
+      neatequal(BASIC.parseAuthorizationRest('bmljb2xhcy5mcm9pZHVyZUBzaW1wbGlmaWVsZC5jb206dGVzdA=='), {
         hash: 'bmljb2xhcy5mcm9pZHVyZUBzaW1wbGlmaWVsZC5jb206dGVzdA==',
         username: 'nicolas.froidure@simplifield.com',
         password: 'test'
@@ -68,20 +56,20 @@ describe('BASIC', function () {
   describe('buildAuthorizationRest', function () {
 
     it('should work with credentials', function () {
-      _assert2['default'].equal(_basic2['default'].buildAuthorizationRest({
+      assert.equal(BASIC.buildAuthorizationRest({
         username: 'Aladdin',
         password: 'open sesame'
       }), 'QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
     });
 
     it('should work with just the hash', function () {
-      _assert2['default'].equal(_basic2['default'].buildAuthorizationRest({
+      assert.equal(BASIC.buildAuthorizationRest({
         hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
       }), 'QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
     });
 
     it('should be the inverse of parseAuthorizationRest', function () {
-      (0, _neatequal2['default'])(_basic2['default'].parseAuthorizationRest(_basic2['default'].buildAuthorizationRest({
+      neatequal(BASIC.parseAuthorizationRest(BASIC.buildAuthorizationRest({
         hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ==',
         username: 'Aladdin',
         password: 'open sesame'
@@ -96,7 +84,7 @@ describe('BASIC', function () {
   describe('computeHash', function () {
 
     it('should work', function () {
-      _assert2['default'].equal(_basic2['default'].computeHash({
+      assert.equal(BASIC.computeHash({
         username: 'Aladdin',
         password: 'open sesame'
       }), 'QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
@@ -106,7 +94,7 @@ describe('BASIC', function () {
   describe('decodeHash', function () {
 
     it('should work', function () {
-      (0, _neatequal2['default'])(_basic2['default'].decodeHash('QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
+      neatequal(BASIC.decodeHash('QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
         username: 'Aladdin',
         password: 'open sesame'
       });

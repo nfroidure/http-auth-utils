@@ -1,30 +1,18 @@
 /**
  * @module http-auth-utils/mecanisms/basic
  */
-'use strict';
+import YError from 'yerror';
 
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
+import { parseHTTPHeadersQuotedKeyValueSet, buildHTTPHeadersQuotedKeyValueSet } from '../utils';
 
-var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _yerror = require('yerror');
-
-var _yerror2 = _interopRequireDefault(_yerror);
-
-var _utils = require('../utils');
-
-var AUTHORIZED_WWW_AUTHENTICATE_KEYS = ['realm'];
+const AUTHORIZED_WWW_AUTHENTICATE_KEYS = ['realm'];
 
 /**
  * Basic authentication mecanism.
  * @type {Object}
  * @see http://tools.ietf.org/html/rfc2617#section-2
  */
-var BASIC = {
+const BASIC = {
 
   /**
    * The Basic auth mecanism prefix.
@@ -45,7 +33,7 @@ var BASIC = {
    * @api public
    */
   parseWWWAuthenticateRest: function parseWWWAuthenticateRest(rest) {
-    return (0, _utils.parseHTTPHeadersQuotedKeyValueSet)(rest, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
+    return parseHTTPHeadersQuotedKeyValueSet(rest, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
   },
 
   /**
@@ -62,7 +50,7 @@ var BASIC = {
    * @api public
    */
   buildWWWAuthenticateRest: function buildWWWAuthenticateRest(data) {
-    return (0, _utils.buildHTTPHeadersQuotedKeyValueSet)(data, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
+    return buildHTTPHeadersQuotedKeyValueSet(data, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
   },
 
   /**
@@ -81,18 +69,13 @@ var BASIC = {
    */
   parseAuthorizationRest: function parseAuthorizationRest(rest) {
     if (!rest) {
-      throw new _yerror2['default']('E_EMPTY_AUTH');
+      throw new YError('E_EMPTY_AUTH');
     }
-
-    var _BASIC$decodeHash = BASIC.decodeHash(rest);
-
-    var username = _BASIC$decodeHash.username;
-    var password = _BASIC$decodeHash.password;
-
+    let { username, password } = BASIC.decodeHash(rest);
     return {
       hash: rest,
-      username: username,
-      password: password
+      username,
+      password
     };
   },
 
@@ -109,18 +92,12 @@ var BASIC = {
    * );
    * @api public
    */
-  buildAuthorizationRest: function buildAuthorizationRest() {
-    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-    var hash = _ref.hash;
-    var username = _ref.username;
-    var password = _ref.password;
-
+  buildAuthorizationRest: function buildAuthorizationRest({ hash, username, password } = {}) {
     if (username && password) {
-      return BASIC.computeHash({ username: username, password: password });
+      return BASIC.computeHash({ username, password });
     }
     if (!hash) {
-      throw new _yerror2['default']('E_NO_HASH');
+      throw new YError('E_NO_HASH');
     }
     return hash;
   },
@@ -139,10 +116,7 @@ var BASIC = {
    * );
    * @api public
    */
-  computeHash: function computeHash(_ref2) {
-    var username = _ref2.username;
-    var password = _ref2.password;
-
+  computeHash: function computeHash({ username, password }) {
     return new Buffer(username + ':' + password).toString('base64');
   },
 
@@ -160,19 +134,12 @@ var BASIC = {
    * @api public
    */
   decodeHash: function decodeHash(hash) {
-    var _toString$split = new Buffer(hash, 'base64').toString().split(':');
-
-    var _toString$split2 = _slicedToArray(_toString$split, 2);
-
-    var username = _toString$split2[0];
-    var password = _toString$split2[1];
-
+    let [username, ...passwordParts] = new Buffer(hash, 'base64').toString().split(':');
     return {
-      username: username,
-      password: password
+      username,
+      password: passwordParts.join(':')
     };
   }
 };
 
-exports['default'] = BASIC;
-module.exports = exports['default'];
+export default BASIC;
