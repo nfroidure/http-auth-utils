@@ -63,12 +63,14 @@ export function parseWWWAuthenticateHeader(header, authMecanisms = mecanisms) {
           header.substr(authMecanism.type.length + 1)
         ),
       };
+      return true;
     }
+    return false;
   });
-  if(result) {
-    return result;
+  if(!result) {
+    throw new YError('E_UNKNOWN_AUTH_MECANISM', header);
   }
-  throw new YError('E_UNKNOWN_AUTH_MECANISM', header);
+  return result;
 }
 
 /**
@@ -99,7 +101,9 @@ export function parseAuthorizationHeader(header, authMecanisms = mecanisms) {
           header.substr(authMecanism.type.length + 1)
         ),
       };
+      return true;
     }
+    return false;
   });
   if(result) {
     return result;

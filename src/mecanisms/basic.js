@@ -99,7 +99,10 @@ const BASIC = {
    */
   buildAuthorizationRest: function buildAuthorizationRest({ hash, username, password } = {}) {
     if(username && password) {
-      return BASIC.computeHash({ username, password });
+      return BASIC.computeHash({
+        username,
+        password,
+      });
     }
     if(!hash) {
       throw new YError('E_NO_HASH');
