@@ -1,3 +1,8 @@
+<a name="1.0.1"></a>
+## [1.0.1](https://github.com/nfroidure/http-auth-utils/compare/v1.0.0...v1.0.1) (2017-12-04)
+
+
+
 
 ### upcoming (2017/03/04 15:33 +00:00)
 - [ae47241](https://github.com/nfroidure/http-auth-utils/commit/ae4724123a06493ee72c91e7c5f448dde280440c) Add metapak-nfroidure (@nfroidure)
