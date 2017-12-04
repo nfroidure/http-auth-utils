@@ -78,8 +78,7 @@
     "sinon": "^1.14.1"
   },
   "dependencies": {
-    "debug": "2.6.1",
-    "yerror": "^1.0.0"
+    "yerror": "^2.1.0"
   },
   "engines": {
     "node": ">=6.9.5"
