@@ -17,7 +17,6 @@ const AUTHORIZED_WWW_AUTHENTICATE_KEYS = ['realm'];
  * @see http://tools.ietf.org/html/rfc2617#section-2
  */
 const BASIC = {
-
   /**
    * The Basic auth mecanism prefix.
    * @type {String}
@@ -37,7 +36,11 @@ const BASIC = {
    * @api public
    */
   parseWWWAuthenticateRest: function parseWWWAuthenticateRest(rest) {
-    return parseHTTPHeadersQuotedKeyValueSet(rest, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
+    return parseHTTPHeadersQuotedKeyValueSet(
+      rest,
+      AUTHORIZED_WWW_AUTHENTICATE_KEYS,
+      [],
+    );
   },
 
   /**
@@ -54,7 +57,11 @@ const BASIC = {
    * @api public
    */
   buildWWWAuthenticateRest: function buildWWWAuthenticateRest(data) {
-    return buildHTTPHeadersQuotedKeyValueSet(data, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
+    return buildHTTPHeadersQuotedKeyValueSet(
+      data,
+      AUTHORIZED_WWW_AUTHENTICATE_KEYS,
+      [],
+    );
   },
 
   /**
@@ -72,7 +79,7 @@ const BASIC = {
    * @api public
    */
   parseAuthorizationRest: function parseAuthorizationRest(rest) {
-    if(!rest) {
+    if (!rest) {
       throw new YError('E_EMPTY_AUTH');
     }
     const { username, password } = BASIC.decodeHash(rest);
@@ -97,14 +104,16 @@ const BASIC = {
    * );
    * @api public
    */
-  buildAuthorizationRest: function buildAuthorizationRest({ hash, username, password } = {}) {
-    if(username && password) {
+  buildAuthorizationRest: function buildAuthorizationRest(
+    { hash, username, password } = {},
+  ) {
+    if (username && password) {
       return BASIC.computeHash({
         username,
         password,
       });
     }
-    if(!hash) {
+    if (!hash) {
       throw new YError('E_NO_HASH');
     }
     return hash;
@@ -125,7 +134,7 @@ const BASIC = {
    * @api public
    */
   computeHash: function computeHash({ username, password }) {
-    return (new Buffer(username + ':' + password)).toString('base64');
+    return new Buffer(username + ':' + password).toString('base64');
   },
 
   /**
@@ -142,7 +151,9 @@ const BASIC = {
    * @api public
    */
   decodeHash: function decodeHash(hash) {
-    let [username, ...passwordParts] = ((new Buffer(hash, 'base64')).toString()).split(':');
+    let [username, ...passwordParts] = new Buffer(hash, 'base64')
+      .toString()
+      .split(':');
     return {
       username,
       password: passwordParts.join(':'),

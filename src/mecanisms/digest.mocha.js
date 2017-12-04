@@ -3,37 +3,32 @@ import neatequal from 'neatequal';
 import DIGEST from './digest';
 
 describe('digest', () => {
-
   describe('type', () => {
-
     it('should be the digest auth prefix', () => {
       assert.equal(DIGEST.type, 'Digest');
     });
-
   });
 
   describe('parseWWWAuthenticateRest', () => {
-
     it('should work', () => {
       neatequal(
         DIGEST.parseWWWAuthenticateRest(
           'realm="testrealm@host.com", ' +
-          'qop="auth, auth-int", ' +
-          'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' +
-          'opaque="5ccc069c403ebaf9f0171e9517f40e41"'
-        ), {
+            'qop="auth, auth-int", ' +
+            'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' +
+            'opaque="5ccc069c403ebaf9f0171e9517f40e41"',
+        ),
+        {
           realm: 'testrealm@host.com',
           qop: 'auth, auth-int',
           nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
           opaque: '5ccc069c403ebaf9f0171e9517f40e41',
-        }
+        },
       );
     });
-
   });
 
   describe('buildWWWAuthenticateRest', () => {
-
     it('should work', () => {
       assert.equal(
         DIGEST.buildWWWAuthenticateRest({
@@ -43,9 +38,9 @@ describe('digest', () => {
           opaque: '5ccc069c403ebaf9f0171e9517f40e41',
         }),
         'realm="testrealm@host.com", ' +
-        'qop="auth, auth-int", ' +
-        'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' +
-        'opaque="5ccc069c403ebaf9f0171e9517f40e41"'
+          'qop="auth, auth-int", ' +
+          'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' +
+          'opaque="5ccc069c403ebaf9f0171e9517f40e41"',
       );
     });
 
@@ -54,30 +49,30 @@ describe('digest', () => {
         DIGEST.parseWWWAuthenticateRest(
           DIGEST.buildWWWAuthenticateRest({
             realm: 'perlinpinpin',
-          })
-        ), {
+          }),
+        ),
+        {
           realm: 'perlinpinpin',
-        }
+        },
       );
     });
-
   });
 
   describe('parseAuthorizationRest', () => {
-
     it('should work', () => {
       neatequal(
         DIGEST.parseAuthorizationRest(
           'username="Mufasa",' +
-          'realm="testrealm@host.com",' +
-          'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093",' +
-          'uri="/dir/index.html",' +
-          'qop="auth",' +
-          'nc="00000001",' +
-          'cnonce="0a4f113b",' +
-          'response="6629fae49393a05397450978507c4ef1",' +
-          'opaque="5ccc069c403ebaf9f0171e9517f40e41"'
-        ), {
+            'realm="testrealm@host.com",' +
+            'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093",' +
+            'uri="/dir/index.html",' +
+            'qop="auth",' +
+            'nc="00000001",' +
+            'cnonce="0a4f113b",' +
+            'response="6629fae49393a05397450978507c4ef1",' +
+            'opaque="5ccc069c403ebaf9f0171e9517f40e41"',
+        ),
+        {
           username: 'Mufasa',
           realm: 'testrealm@host.com',
           nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
@@ -87,14 +82,12 @@ describe('digest', () => {
           cnonce: '0a4f113b',
           response: '6629fae49393a05397450978507c4ef1',
           opaque: '5ccc069c403ebaf9f0171e9517f40e41',
-        }
+        },
       );
     });
-
   });
 
   describe('buildAuthorizationRest', () => {
-
     it('should work', () => {
       assert.equal(
         DIGEST.buildAuthorizationRest({
@@ -109,14 +102,14 @@ describe('digest', () => {
           opaque: '5ccc069c403ebaf9f0171e9517f40e41',
         }),
         'username="Mufasa", ' +
-        'realm="testrealm@host.com", ' +
-        'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' +
-        'uri="/dir/index.html", ' +
-        'response="6629fae49393a05397450978507c4ef1", ' +
-        'cnonce="0a4f113b", ' +
-        'opaque="5ccc069c403ebaf9f0171e9517f40e41", ' +
-        'qop="auth", ' +
-        'nc="00000001"'
+          'realm="testrealm@host.com", ' +
+          'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' +
+          'uri="/dir/index.html", ' +
+          'response="6629fae49393a05397450978507c4ef1", ' +
+          'cnonce="0a4f113b", ' +
+          'opaque="5ccc069c403ebaf9f0171e9517f40e41", ' +
+          'qop="auth", ' +
+          'nc="00000001"',
       );
     });
 
@@ -133,8 +126,9 @@ describe('digest', () => {
             cnonce: '0a4f113b',
             response: '6629fae49393a05397450978507c4ef1',
             opaque: '5ccc069c403ebaf9f0171e9517f40e41',
-          })
-        ), {
+          }),
+        ),
+        {
           username: 'Mufasa',
           realm: 'testrealm@host.com',
           nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
@@ -144,14 +138,12 @@ describe('digest', () => {
           cnonce: '0a4f113b',
           response: '6629fae49393a05397450978507c4ef1',
           opaque: '5ccc069c403ebaf9f0171e9517f40e41',
-        }
+        },
       );
     });
-
   });
 
   describe('computeHash', () => {
-
     it('should work', () => {
       assert.equal(
         DIGEST.computeHash({
@@ -166,10 +158,8 @@ describe('digest', () => {
           qop: 'auth',
           algorithm: 'md5',
         }),
-        '6629fae49393a05397450978507c4ef1'
+        '6629fae49393a05397450978507c4ef1',
       );
     });
-
   });
-
 });

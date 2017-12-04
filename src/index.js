@@ -13,21 +13,21 @@ import BEARER from './mecanisms/bearer';
  * @type {Object}
  * @see  {@link module:http-auth-utils/mecanisms/basic}
  */
-export { BASIC as BASIC };
+export { BASIC };
 
 /**
  * Digest authentication mecanism.
  * @type {Object}
  * @see  {@link module:http-auth-utils/mecanisms/digest}
  */
-export { DIGEST as DIGEST };
+export { DIGEST };
 
 /**
  * Bearer authentication mecanism.
  * @type {Object}
  * @see  {@link module:http-auth-utils/mecanisms/digest}
  */
-export { BEARER as BEARER };
+export { BEARER };
 
 /**
  * Natively supported authentication mecanisms.
@@ -55,19 +55,19 @@ export const mecanisms = [BASIC, DIGEST, BEARER];
 export function parseWWWAuthenticateHeader(header, authMecanisms = mecanisms) {
   let result = null;
 
-  authMecanisms.some((authMecanism) => {
-    if(0 === header.indexOf(authMecanism.type + ' ')) {
+  authMecanisms.some(authMecanism => {
+    if (0 === header.indexOf(authMecanism.type + ' ')) {
       result = {
         type: authMecanism.type,
         data: authMecanism.parseWWWAuthenticateRest(
-          header.substr(authMecanism.type.length + 1)
+          header.substr(authMecanism.type.length + 1),
         ),
       };
       return true;
     }
     return false;
   });
-  if(!result) {
+  if (!result) {
     throw new YError('E_UNKNOWN_AUTH_MECANISM', header);
   }
   return result;
@@ -94,18 +94,18 @@ export function parseAuthorizationHeader(header, authMecanisms = mecanisms) {
   let result = null;
 
   authMecanisms.some(function(authMecanism) {
-    if(0 === header.indexOf(authMecanism.type + ' ')) {
+    if (0 === header.indexOf(authMecanism.type + ' ')) {
       result = {
         type: authMecanism.type,
         data: authMecanism.parseAuthorizationRest(
-          header.substr(authMecanism.type.length + 1)
+          header.substr(authMecanism.type.length + 1),
         ),
       };
       return true;
     }
     return false;
   });
-  if(result) {
+  if (result) {
     return result;
   }
   throw new YError('E_UNKNOWN_AUTH_MECANISM', header);

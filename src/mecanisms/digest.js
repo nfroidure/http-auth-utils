@@ -10,11 +10,25 @@ import {
 import crypto from 'crypto';
 
 const AUTHORIZED_WWW_AUTHENTICATE_KEYS = [
-  'realm', 'domain', 'qop', 'nonce', 'opaque', 'stale', 'algorithm',
+  'realm',
+  'domain',
+  'qop',
+  'nonce',
+  'opaque',
+  'stale',
+  'algorithm',
 ];
 const AUTHORIZED_AUTHORIZATION_KEYS = [
-  'username', 'realm', 'nonce', 'uri', 'response', 'algorithm', 'cnonce',
-  'opaque', 'qop', 'nc',
+  'username',
+  'realm',
+  'nonce',
+  'uri',
+  'response',
+  'algorithm',
+  'cnonce',
+  'opaque',
+  'qop',
+  'nc',
 ];
 
 /**
@@ -24,7 +38,6 @@ const AUTHORIZED_AUTHORIZATION_KEYS = [
  * @see http://tools.ietf.org/html/rfc2069#section-2
  */
 const DIGEST = {
-
   /**
    * The Digest auth mecanism prefix.
    * @type {String}
@@ -52,7 +65,11 @@ const DIGEST = {
    * @api public
    */
   parseWWWAuthenticateRest: function parseWWWAuthenticateRest(rest) {
-    return parseHTTPHeadersQuotedKeyValueSet(rest, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
+    return parseHTTPHeadersQuotedKeyValueSet(
+      rest,
+      AUTHORIZED_WWW_AUTHENTICATE_KEYS,
+      [],
+    );
   },
 
   /**
@@ -75,7 +92,11 @@ const DIGEST = {
    * @api public
    */
   buildWWWAuthenticateRest: function buildWWWAuthenticateRest(data) {
-    return buildHTTPHeadersQuotedKeyValueSet(data, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
+    return buildHTTPHeadersQuotedKeyValueSet(
+      data,
+      AUTHORIZED_WWW_AUTHENTICATE_KEYS,
+      [],
+    );
   },
 
   /**
@@ -109,7 +130,11 @@ const DIGEST = {
    * @api public
    */
   parseAuthorizationRest: function parseAuthorizationRest(rest) {
-    return parseHTTPHeadersQuotedKeyValueSet(rest, AUTHORIZED_AUTHORIZATION_KEYS, []);
+    return parseHTTPHeadersQuotedKeyValueSet(
+      rest,
+      AUTHORIZED_AUTHORIZATION_KEYS,
+      [],
+    );
   },
 
   /**
@@ -142,7 +167,11 @@ const DIGEST = {
    * @api public
    */
   buildAuthorizationRest: function buildAuthorizationRest(data) {
-    return buildHTTPHeadersQuotedKeyValueSet(data, AUTHORIZED_AUTHORIZATION_KEYS, []);
+    return buildHTTPHeadersQuotedKeyValueSet(
+      data,
+      AUTHORIZED_AUTHORIZATION_KEYS,
+      [],
+    );
   },
 
   /**
@@ -168,16 +197,18 @@ const DIGEST = {
    * @api public
    */
   computeHash: function computeHash(data) {
-    const ha1 = data.ha1 || _computeHash(data.algorithm, [
-      data.username, data.realm, data.password,
-    ].join(':'));
-    const ha2 = _computeHash(data.algorithm, [
-      data.method, data.uri,
-    ].join(':'));
+    const ha1 =
+      data.ha1 ||
+      _computeHash(
+        data.algorithm,
+        [data.username, data.realm, data.password].join(':'),
+      );
+    const ha2 = _computeHash(data.algorithm, [data.method, data.uri].join(':'));
 
-    return _computeHash(data.algorithm, [
-      ha1, data.nonce, data.nc, data.cnonce, data.qop, ha2,
-    ].join(':'));
+    return _computeHash(
+      data.algorithm,
+      [ha1, data.nonce, data.nc, data.cnonce, data.qop, ha2].join(':'),
+    );
   },
 };
 

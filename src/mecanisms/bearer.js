@@ -10,11 +10,16 @@ import {
 } from '../utils';
 
 const AUTHORIZED_WWW_AUTHENTICATE_KEYS = [
-  'realm', 'scope', 'error', 'error_description',
+  'realm',
+  'scope',
+  'error',
+  'error_description',
 ];
 
 const AUTHORIZED_ERROR_CODES = [
-  'invalid_request', 'invalid_token', 'insufficient_scope',
+  'invalid_request',
+  'invalid_token',
+  'insufficient_scope',
 ];
 
 /**
@@ -23,7 +28,6 @@ const AUTHORIZED_ERROR_CODES = [
  * @see https://tools.ietf.org/html/rfc6750#section-3
  */
 const BEARER = {
-
   /**
    * The Digest auth mecanism prefix.
    * @type {String}
@@ -47,7 +51,11 @@ const BEARER = {
    * @api public
    */
   parseWWWAuthenticateRest: function parseWWWAuthenticateRest(rest) {
-    return parseHTTPHeadersQuotedKeyValueSet(rest, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
+    return parseHTTPHeadersQuotedKeyValueSet(
+      rest,
+      AUTHORIZED_WWW_AUTHENTICATE_KEYS,
+      [],
+    );
   },
 
   /**
@@ -68,10 +76,14 @@ const BEARER = {
    * @api public
    */
   buildWWWAuthenticateRest: function buildWWWAuthenticateRest(data) {
-    if(data.error && -1 === AUTHORIZED_ERROR_CODES.indeOf(data.error)) {
+    if (data.error && -1 === AUTHORIZED_ERROR_CODES.indeOf(data.error)) {
       throw new YError('E_INVALID_ERROR', data.error, AUTHORIZED_ERROR_CODES);
     }
-    return buildHTTPHeadersQuotedKeyValueSet(data, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
+    return buildHTTPHeadersQuotedKeyValueSet(
+      data,
+      AUTHORIZED_WWW_AUTHENTICATE_KEYS,
+      [],
+    );
   },
 
   /**
@@ -87,7 +99,7 @@ const BEARER = {
    * @api public
    */
   parseAuthorizationRest: function parseAuthorizationRest(rest) {
-    if(!rest) {
+    if (!rest) {
       throw new YError('E_EMPTY_AUTH');
     }
     return {
@@ -109,7 +121,7 @@ const BEARER = {
    * @api public
    */
   buildAuthorizationRest: function buildAuthorizationRest({ hash } = {}) {
-    if(!hash) {
+    if (!hash) {
       throw new YError('E_NO_HASH');
     }
     return hash;

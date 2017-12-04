@@ -9,9 +9,13 @@
       "testsFiles": "src/*.mocha.js"
     },
     "configs": [
-      "babel",
+      "readme",
+      "eslint",
+      "mocha",
       "jsdocs",
-      "readme"
+      "codeclimate",
+      "babel",
+      "travis"
     ]
   },
   "scripts": {
@@ -23,10 +27,11 @@
     "cz": "env NODE_ENV=${NODE_ENV:-cli} git cz",
     "doc": "mkdir -p .readme; echo \"# API\" > .readme/API.md; jsdoc2md src/*.js src/**/*.js >> .readme/API.md",
     "lint": "eslint src/*.js src/**/*.js",
-    "metapak": "metapak || echo 'Please `npm install --save-dev metapak`' && exit 0",
-    "postinstall": "npm run metapak; npm run metapak --silent",
-    "preversion": "npm t && npm run lint && npm run compile",
-    "test": "mocha --compilers js:babel-register src/*.mocha.js",
+    "metapak": "metapak",
+    "mocha": "mocha --compilers js:babel-register src/*.mocha.js",
+    "prettier": "prettier --write src/*.js src/**/*.js",
+    "preversion": "npm t && npm run lint && npm run metapak -s && npm run compile",
+    "test": "npm run mocha",
     "version": "npm run changelog && git add CHANGELOG.md"
   },
   "keywords": [
@@ -49,22 +54,27 @@
   },
   "homepage": "https://github.com/nfroidure/http-auth-utils",
   "devDependencies": {
-    "babel-cli": "^6.4.0",
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^7.1.0",
+    "babel-plugin-transform-async-to-module-method": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-es2015": "^6.3.13",
-    "babel-register": "^6.4.3",
+    "babel-register": "^6.9.0",
     "commitizen": "^2.9.6",
-    "conventional-changelog-cli": "^1.2.0",
-    "coveralls": "2.11.15",
+    "conventional-changelog-cli": "^1.3.5",
+    "coveralls": "^2.13.3",
     "cz-conventional-changelog": "^2.0.0",
-    "eslint": "3.16.0",
-    "eslint-config-simplifield": "4.1.1",
+    "eslint": "^4.12.1",
+    "eslint-plugin-prettier": "^2.3.1",
     "istanbul": "^1.0.0-alpha.2",
-    "jsdoc-to-markdown": "^3.0.0",
-    "metapak": "0.0.18",
-    "metapak-nfroidure": "0.4.1",
-    "mocha": "3.2.0",
-    "mocha-lcov-reporter": "1.3.0",
+    "jsdoc-to-markdown": "^3.1.0-0",
+    "metapak": "^1.0.2",
+    "metapak-nfroidure": "^2.0.2",
+    "mocha": "^3.5.3",
+    "mocha-lcov-reporter": "^1.3.0",
     "neatequal": "^1.0.0",
+    "prettier": "^1.8.2",
     "sinon": "^1.14.1"
   },
   "dependencies": {
@@ -81,16 +91,16 @@
   },
   "greenkeeper": {
     "ignore": [
-      "debug",
-      "eslint",
-      "eslint-config-simplifield",
-      "mocha",
-      "mocha-lcov-reporter",
       "commitizen",
       "cz-conventional-changelog",
+      "conventional-changelog-cli",
+      "eslint",
+      "eslint-config-prettier",
+      "prettier",
+      "mocha",
+      "mocha-lcov-reporter",
       "coveralls",
       "istanbul",
-      "conventional-changelog-cli",
       "jsdoc-to-markdown"
     ]
   }
