@@ -1,3 +1,23 @@
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/nfroidure/http-auth-utils/compare/v1.0.1...v2.0.0) (2018-08-30)
+
+
+### Bug Fixes
+
+* **Root modules:** Fix exportation of root modules ([0ae79ee](https://github.com/nfroidure/http-auth-utils/commit/0ae79ee))
+
+
+### Code Refactoring
+
+* **Typo:** Fix the mechanism typo ([d2ebdde](https://github.com/nfroidure/http-auth-utils/commit/d2ebdde))
+
+
+### BREAKING CHANGES
+
+* **Typo:** The mechanism word replaced the bad mecanism one everywhere
+
+
+
 <a name="1.0.1"></a>
 ## [1.0.1](https://github.com/nfroidure/http-auth-utils/compare/v1.0.0...v1.0.1) (2017-12-04)
 

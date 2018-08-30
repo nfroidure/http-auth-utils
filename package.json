@@ -1,13 +1,15 @@
 {
   "name": "http-auth-utils",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Parse, build and deal with HTTP auth headers.",
   "main": "dist/index.js",
   "metapak": {
     "data": {
       "files": "'src/**/*.js'",
       "testsFiles": "'src/**/*.mocha.js'",
-      "ignore": ["dist"]
+      "ignore": [
+        "dist"
+      ]
     },
     "configs": [
       "readme",
