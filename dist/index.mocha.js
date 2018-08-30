@@ -22,11 +22,33 @@ describe('index', function () {
         }
       });
     });
+    it('should parse Basic headers', function () {
+      (0, _neatequal2.default)((0, _index.parseWWWAuthenticateHeader)('Basic realm="test"', _index.mechanisms), {
+        type: 'Basic',
+        data: {
+          realm: 'test'
+        }
+      });
+    });
+
+    it('should fail with unknown headers', function () {
+      _assert2.default.throws(function () {
+        return (0, _index.parseWWWAuthenticateHeader)('Kikoolol realm="test"');
+      }, /E_UNKNOWN_AUTH_MEChANISM/);
+    });
   });
 
   describe('parseAuthorizationHeader', function () {
     it('should parse Basic headers', function () {
       (0, _neatequal2.default)((0, _index.parseAuthorizationHeader)('Basic QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
+        type: 'Basic',
+        data: {
+          username: 'Ali Baba',
+          password: 'open sesame',
+          hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU='
+        }
+      });
+      (0, _neatequal2.default)((0, _index.parseAuthorizationHeader)('Basic QWxpIEJhYmE6b3BlbiBzZXNhbWU=', _index.mechanisms), {
         type: 'Basic',
         data: {
           username: 'Ali Baba',
@@ -54,14 +76,20 @@ describe('index', function () {
         }
       });
     });
+
+    it('should fail with unknown headers', function () {
+      _assert2.default.throws(function () {
+        return (0, _index.parseAuthorizationHeader)('Kikoolol ddd');
+      }, /E_UNKNOWN_AUTH_MEChANISM/);
+    });
   });
 
-  describe('mecanisms', function () {
-    it('should export bot DIGEST and BASIC  mecanisms', function () {
-      _assert2.default.equal(_index.mecanisms.length, 3);
+  describe('mechanisms', function () {
+    it('should export bot DIGEST and BASIC  mechanisms', function () {
+      _assert2.default.equal(_index.mechanisms.length, 3);
     });
 
-    it('should export DIGEST BASIC and BEARER mecanisms', function () {
+    it('should export DIGEST BASIC and BEARER mechanisms', function () {
       (0, _assert2.default)(_index.BASIC);
       (0, _assert2.default)(_index.DIGEST);
       (0, _assert2.default)(_index.BEARER);

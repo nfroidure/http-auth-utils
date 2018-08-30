@@ -65,7 +65,7 @@ function buildHTTPHeadersQuotedKeyValueSet(data, authorizedKeys) {
 
 function _checkRequiredKeys(requiredKeys, data) {
   requiredKeys.forEach(function (name) {
-    if ('undefined' !== typeof data[name]) {
+    if ('undefined' === typeof data[name]) {
       throw new _yerror2.default('E_REQUIRED_KEY', name);
     }
   });

@@ -59,6 +59,10 @@ describe('BASIC', () => {
         },
       );
     });
+
+    it('should fail with empty rest', () => {
+      assert.throws(() => BASIC.parseAuthorizationRest(''), /E_EMPTY_AUTH/);
+    });
   });
 
   describe('buildAuthorizationRest', () => {
@@ -79,6 +83,10 @@ describe('BASIC', () => {
         }),
         'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
       );
+    });
+
+    it('should fail with nothing at all', () => {
+      assert.throws(() => BASIC.buildAuthorizationRest(), /E_NO_HASH/);
     });
 
     it('should be the inverse of parseAuthorizationRest', () => {

@@ -27,6 +27,31 @@ describe('BEARER', () => {
       );
     });
 
+    it('should work with an error', () => {
+      assert.equal(
+        BEARER.buildWWWAuthenticateRest({
+          realm: 'perlinpinpin',
+          error: 'invalid_request',
+          error_description: 'The access token expired',
+        }),
+        'realm="perlinpinpin", ' +
+          'error="invalid_request", ' +
+          'error_description="The access token expired"',
+      );
+    });
+
+    it('should fail with an unauthorized error', () => {
+      assert.throws(
+        () =>
+          BEARER.buildWWWAuthenticateRest({
+            realm: 'perlinpinpin',
+            error: 'invalid_tacos',
+            error_description: 'The tacos has been eaten yet',
+          }),
+        /E_INVALID_ERROR/,
+      );
+    });
+
     it('should be the inverse of parseWWWAuthenticateRest', () => {
       neatequal(
         BEARER.parseWWWAuthenticateRest(
@@ -47,6 +72,10 @@ describe('BEARER', () => {
         hash: 'mF_9.B5f-4.1JqM',
       });
     });
+
+    it('should fail with empty rest', () => {
+      assert.throws(() => BEARER.parseAuthorizationRest(''), /E_EMPTY_AUTH/);
+    });
   });
 
   describe('buildAuthorizationRest', () => {
@@ -57,6 +86,10 @@ describe('BEARER', () => {
         }),
         'mF_9.B5f-4.1JqM',
       );
+    });
+
+    it('should fail with nothing at all', () => {
+      assert.throws(() => BEARER.buildAuthorizationRest(), /E_NO_HASH/);
     });
 
     it('should be the inverse of parseAuthorizationRest', () => {

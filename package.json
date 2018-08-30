@@ -5,8 +5,8 @@
   "main": "dist/index.js",
   "metapak": {
     "data": {
-      "files": "src/*.js src/**/*.js",
-      "testsFiles": "src/*.mocha.js"
+      "files": "'src/**/*.js'",
+      "testsFiles": "'src/**/*.mocha.js'"
     },
     "configs": [
       "readme",
@@ -22,14 +22,14 @@
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "cli": "env NODE_ENV=${NODE_ENV:-cli}",
     "compile": "babel src --out-dir=dist",
-    "cover": "istanbul cover _mocha --report html -- --compilers js:babel-register src/*.mocha.js -R spec -t 5000",
-    "coveralls": "istanbul cover _mocha --report lcovonly -- --compilers js:babel-register src/*.mocha.js -R spec -t 5000 && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
+    "cover": "istanbul cover _mocha --report html -- --compilers js:babel-register 'src/**/*.mocha.js' -R spec -t 5000",
+    "coveralls": "istanbul cover _mocha --report lcovonly -- --compilers js:babel-register 'src/**/*.mocha.js' -R spec -t 5000 && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
     "cz": "env NODE_ENV=${NODE_ENV:-cli} git cz",
-    "doc": "mkdir -p .readme; echo \"# API\" > .readme/API.md; jsdoc2md src/*.js src/**/*.js >> .readme/API.md",
-    "lint": "eslint src/*.js src/**/*.js",
+    "doc": "mkdir -p .readme; echo \"# API\" > .readme/API.md; jsdoc2md 'src/**/*.js' >> .readme/API.md",
+    "lint": "eslint 'src/**/*.js'",
     "metapak": "metapak",
-    "mocha": "mocha --compilers js:babel-register src/*.mocha.js",
-    "prettier": "prettier --write src/*.js src/**/*.js",
+    "mocha": "mocha --compilers js:babel-register 'src/**/*.mocha.js'",
+    "prettier": "prettier --write 'src/**/*.js'",
     "preversion": "npm t && npm run lint && npm run metapak -s && npm run compile",
     "test": "npm run mocha",
     "version": "npm run changelog && git add CHANGELOG.md"

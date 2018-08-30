@@ -1,47 +1,47 @@
 import YError from 'yerror';
 
-import BASIC from './mecanisms/basic';
-import DIGEST from './mecanisms/digest';
-import BEARER from './mecanisms/bearer';
+import BASIC from './mechanisms/basic';
+import DIGEST from './mechanisms/digest';
+import BEARER from './mechanisms/bearer';
 
 /**
  * @module http-auth-utils
  */
 
 /**
- * Natively supported authentication mecanisms.
+ * Natively supported authentication mechanisms.
  * @type {Array}
  */
-const mecanisms = [BASIC, DIGEST, BEARER];
+const mechanisms = [BASIC, DIGEST, BEARER];
 
 /**
- * Basic authentication mecanism.
+ * Basic authentication mechanism.
  * @type {Object}
- * @see  {@link module:http-auth-utils/mecanisms/basic}
+ * @see  {@link module:http-auth-utils/mechanisms/basic}
  */
 BASIC;
 
 /**
- * Digest authentication mecanism.
+ * Digest authentication mechanism.
  * @type {Object}
- * @see  {@link module:http-auth-utils/mecanisms/digest}
+ * @see  {@link module:http-auth-utils/mechanisms/digest}
  */
 DIGEST;
 
 /**
- * Bearer authentication mecanism.
+ * Bearer authentication mechanism.
  * @type {Object}
- * @see  {@link module:http-auth-utils/mecanisms/digest}
+ * @see  {@link module:http-auth-utils/mechanisms/digest}
  */
 BEARER;
 
-export { BASIC, DIGEST, BEARER, mecanisms };
+export { BASIC, DIGEST, BEARER, mechanisms };
 
 /**
  * Parse HTTP WWW-Authenticate header contents.
  * @type {Function}
  * @param {string} header The WWW-Authenticate header contents
- * @param {Array} [authMecanisms=[BASIC, DIGEST]] Allow providing custom authentication mecanisms.
+ * @param {Array} [authMechanisms=[BASIC, DIGEST]] Allow providing custom authentication mechanisms.
  * @return {Object} Result of the contents parse.
  * @api public
  * @example
@@ -54,15 +54,18 @@ export { BASIC, DIGEST, BEARER, mecanisms };
  *   }
  * );
  */
-export function parseWWWAuthenticateHeader(header, authMecanisms = mecanisms) {
+export function parseWWWAuthenticateHeader(
+  header,
+  authMechanisms = mechanisms,
+) {
   let result = null;
 
-  authMecanisms.some(authMecanism => {
-    if (0 === header.indexOf(authMecanism.type + ' ')) {
+  authMechanisms.some(authMechanism => {
+    if (0 === header.indexOf(authMechanism.type + ' ')) {
       result = {
-        type: authMecanism.type,
-        data: authMecanism.parseWWWAuthenticateRest(
-          header.substr(authMecanism.type.length + 1),
+        type: authMechanism.type,
+        data: authMechanism.parseWWWAuthenticateRest(
+          header.substr(authMechanism.type.length + 1),
         ),
       };
       return true;
@@ -70,7 +73,7 @@ export function parseWWWAuthenticateHeader(header, authMecanisms = mecanisms) {
     return false;
   });
   if (!result) {
-    throw new YError('E_UNKNOWN_AUTH_MECANISM', header);
+    throw new YError('E_UNKNOWN_AUTH_MECHANISM', header);
   }
   return result;
 }
@@ -79,7 +82,7 @@ export function parseWWWAuthenticateHeader(header, authMecanisms = mecanisms) {
  * Parse HTTP Authorization header contents.
  * @type {Function}
  * @param {string} header The Authorization header contents
- * @param {Array} [authMecanisms=[BASIC, DIGEST, BEARER]] Allow custom authentication mecanisms.
+ * @param {Array} [authMechanisms=[BASIC, DIGEST, BEARER]] Allow custom authentication mechanisms.
  * @return {Object} Result of the contents parse.
  * @api public
  * @example
@@ -92,15 +95,15 @@ export function parseWWWAuthenticateHeader(header, authMecanisms = mecanisms) {
  *   }
  * );
  */
-export function parseAuthorizationHeader(header, authMecanisms = mecanisms) {
+export function parseAuthorizationHeader(header, authMechanisms = mechanisms) {
   let result = null;
 
-  authMecanisms.some(function(authMecanism) {
-    if (0 === header.indexOf(authMecanism.type + ' ')) {
+  authMechanisms.some(function(authMechanism) {
+    if (0 === header.indexOf(authMechanism.type + ' ')) {
       result = {
-        type: authMecanism.type,
-        data: authMecanism.parseAuthorizationRest(
-          header.substr(authMecanism.type.length + 1),
+        type: authMechanism.type,
+        data: authMechanism.parseAuthorizationRest(
+          header.substr(authMechanism.type.length + 1),
         ),
       };
       return true;
@@ -110,5 +113,5 @@ export function parseAuthorizationHeader(header, authMecanisms = mecanisms) {
   if (result) {
     return result;
   }
-  throw new YError('E_UNKNOWN_AUTH_MECANISM', header);
+  throw new YError('E_UNKNOWN_AUTH_MECHANISM', header);
 }

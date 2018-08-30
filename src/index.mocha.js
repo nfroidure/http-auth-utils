@@ -3,7 +3,7 @@ import neatequal from 'neatequal';
 import {
   parseWWWAuthenticateHeader,
   parseAuthorizationHeader,
-  mecanisms,
+  mechanisms,
   BASIC,
   DIGEST,
   BEARER,
@@ -19,12 +19,41 @@ describe('index', () => {
         },
       });
     });
+    it('should parse Basic headers', () => {
+      neatequal(parseWWWAuthenticateHeader('Basic realm="test"', mechanisms), {
+        type: 'Basic',
+        data: {
+          realm: 'test',
+        },
+      });
+    });
+
+    it('should fail with unknown headers', () => {
+      assert.throws(
+        () => parseWWWAuthenticateHeader('Kikoolol realm="test"'),
+        /E_UNKNOWN_AUTH_MECHANISM/,
+      );
+    });
   });
 
   describe('parseAuthorizationHeader', () => {
     it('should parse Basic headers', () => {
       neatequal(
         parseAuthorizationHeader('Basic QWxpIEJhYmE6b3BlbiBzZXNhbWU='),
+        {
+          type: 'Basic',
+          data: {
+            username: 'Ali Baba',
+            password: 'open sesame',
+            hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
+          },
+        },
+      );
+      neatequal(
+        parseAuthorizationHeader(
+          'Basic QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
+          mechanisms,
+        ),
         {
           type: 'Basic',
           data: {
@@ -59,14 +88,21 @@ describe('index', () => {
         },
       });
     });
+
+    it('should fail with unknown headers', () => {
+      assert.throws(
+        () => parseAuthorizationHeader('Kikoolol ddd'),
+        /E_UNKNOWN_AUTH_MECHANISM/,
+      );
+    });
   });
 
-  describe('mecanisms', () => {
-    it('should export bot DIGEST and BASIC  mecanisms', () => {
-      assert.equal(mecanisms.length, 3);
+  describe('mechanisms', () => {
+    it('should export bot DIGEST and BASIC  mechanisms', () => {
+      assert.equal(mechanisms.length, 3);
     });
 
-    it('should export DIGEST BASIC and BEARER mecanisms', () => {
+    it('should export DIGEST BASIC and BEARER mechanisms', () => {
       assert(BASIC);
       assert(DIGEST);
       assert(BEARER);

@@ -85,6 +85,13 @@ describe('digest', () => {
         },
       );
     });
+
+    it('should fail with empty rest', () => {
+      assert.throws(
+        () => DIGEST.parseAuthorizationRest(''),
+        /E_MALFORMED_QUOTEDKEYVALUE/,
+      );
+    });
   });
 
   describe('buildAuthorizationRest', () => {

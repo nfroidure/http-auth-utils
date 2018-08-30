@@ -1,38 +1,31 @@
-'use strict';
+/**
+ * @module http-auth-utils/mechanisms/basic
+ */
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+import YError from 'yerror';
 
-var _yerror = require('yerror');
+import {
+  parseHTTPHeadersQuotedKeyValueSet,
+  buildHTTPHeadersQuotedKeyValueSet,
+} from '../utils';
 
-var _yerror2 = _interopRequireDefault(_yerror);
-
-var _utils = require('../utils');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); } /**
-                                                                               * @module http-auth-utils/mecanisms/basic
-                                                                               */
-
-var AUTHORIZED_WWW_AUTHENTICATE_KEYS = ['realm'];
+const AUTHORIZED_WWW_AUTHENTICATE_KEYS = ['realm'];
 
 /**
- * Basic authentication mecanism.
+ * Basic authentication mechanism.
  * @type {Object}
  * @see http://tools.ietf.org/html/rfc2617#section-2
  */
-var BASIC = {
+const BASIC = {
   /**
-   * The Basic auth mecanism prefix.
+   * The Basic auth mechanism prefix.
    * @type {String}
    */
   type: 'Basic',
 
   /**
    * Parse the WWW Authenticate header rest.
-   * @param  {String} rest The header rest (string after the authentication mecanism prefix).
+   * @param  {String} rest The header rest (string after the authentication mechanism prefix).
    * @return {Object}      Object representing the result of the parse operation.
    * @example
    * assert.deepEqual(
@@ -43,7 +36,11 @@ var BASIC = {
    * @api public
    */
   parseWWWAuthenticateRest: function parseWWWAuthenticateRest(rest) {
-    return (0, _utils.parseHTTPHeadersQuotedKeyValueSet)(rest, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
+    return parseHTTPHeadersQuotedKeyValueSet(
+      rest,
+      AUTHORIZED_WWW_AUTHENTICATE_KEYS,
+      [],
+    );
   },
 
   /**
@@ -60,12 +57,16 @@ var BASIC = {
    * @api public
    */
   buildWWWAuthenticateRest: function buildWWWAuthenticateRest(data) {
-    return (0, _utils.buildHTTPHeadersQuotedKeyValueSet)(data, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
+    return buildHTTPHeadersQuotedKeyValueSet(
+      data,
+      AUTHORIZED_WWW_AUTHENTICATE_KEYS,
+      [],
+    );
   },
 
   /**
    * Parse the Authorization header rest.
-   * @param  {String} rest The header rest (string after the authentication mecanism prefix).)
+   * @param  {String} rest The header rest (string after the authentication mechanism prefix).)
    * @return {Object}      Object representing the result of the parse operation {hash}.
    * @example
    * assert.deepEqual(
@@ -79,17 +80,14 @@ var BASIC = {
    */
   parseAuthorizationRest: function parseAuthorizationRest(rest) {
     if (!rest) {
-      throw new _yerror2.default('E_EMPTY_AUTH');
+      throw new YError('E_EMPTY_AUTH');
     }
-
-    var _BASIC$decodeHash = BASIC.decodeHash(rest),
-        username = _BASIC$decodeHash.username,
-        password = _BASIC$decodeHash.password;
+    const { username, password } = BASIC.decodeHash(rest);
 
     return {
       hash: rest,
-      username: username,
-      password: password
+      username,
+      password,
     };
   },
 
@@ -106,20 +104,17 @@ var BASIC = {
    * );
    * @api public
    */
-  buildAuthorizationRest: function buildAuthorizationRest() {
-    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-        hash = _ref.hash,
-        username = _ref.username,
-        password = _ref.password;
-
+  buildAuthorizationRest: function buildAuthorizationRest(
+    { hash, username, password } = {},
+  ) {
     if (username && password) {
       return BASIC.computeHash({
-        username: username,
-        password: password
+        username,
+        password,
       });
     }
     if (!hash) {
-      throw new _yerror2.default('E_NO_HASH');
+      throw new YError('E_NO_HASH');
     }
     return hash;
   },
@@ -138,10 +133,7 @@ var BASIC = {
    * );
    * @api public
    */
-  computeHash: function computeHash(_ref2) {
-    var username = _ref2.username,
-        password = _ref2.password;
-
+  computeHash: function computeHash({ username, password }) {
     return new Buffer(username + ':' + password).toString('base64');
   },
 
@@ -159,16 +151,14 @@ var BASIC = {
    * @api public
    */
   decodeHash: function decodeHash(hash) {
-    var _toString$split = new Buffer(hash, 'base64').toString().split(':'),
-        _toString$split2 = _toArray(_toString$split),
-        username = _toString$split2[0],
-        passwordParts = _toString$split2.slice(1);
-
+    let [username, ...passwordParts] = new Buffer(hash, 'base64')
+      .toString()
+      .split(':');
     return {
-      username: username,
-      password: passwordParts.join(':')
+      username,
+      password: passwordParts.join(':'),
     };
-  }
+  },
 };
 
-exports.default = BASIC;
+export default BASIC;

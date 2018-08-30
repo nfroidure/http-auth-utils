@@ -1,40 +1,42 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _yerror = require('yerror');
-
-var _yerror2 = _interopRequireDefault(_yerror);
-
-var _utils = require('../utils');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 /**
- * @module http-auth-utils/mecanisms/bearer
+ * @module http-auth-utils/mechanisms/bearer
  */
 
-var AUTHORIZED_WWW_AUTHENTICATE_KEYS = ['realm', 'scope', 'error', 'error_description'];
+import YError from 'yerror';
 
-var AUTHORIZED_ERROR_CODES = ['invalid_request', 'invalid_token', 'insufficient_scope'];
+import {
+  parseHTTPHeadersQuotedKeyValueSet,
+  buildHTTPHeadersQuotedKeyValueSet,
+} from '../utils';
+
+const AUTHORIZED_WWW_AUTHENTICATE_KEYS = [
+  'realm',
+  'scope',
+  'error',
+  'error_description',
+];
+
+const AUTHORIZED_ERROR_CODES = [
+  'invalid_request',
+  'invalid_token',
+  'insufficient_scope',
+];
 
 /**
- * Bearer authentication mecanism.
+ * Bearer authentication mechanism.
  * @type {Object}
  * @see https://tools.ietf.org/html/rfc6750#section-3
  */
-var BEARER = {
+const BEARER = {
   /**
-   * The Digest auth mecanism prefix.
+   * The Digest auth mechanism prefix.
    * @type {String}
    */
   type: 'Bearer',
 
   /**
    * Parse the WWW Authenticate header rest.
-   * @param  {String} rest The header rest (string after the authentication mecanism prefix).
+   * @param  {String} rest The header rest (string after the authentication mechanism prefix).
    * @return {Object}      Object representing the result of the parse operation.
    * @example
    * assert.deepEqual(
@@ -49,7 +51,11 @@ var BEARER = {
    * @api public
    */
   parseWWWAuthenticateRest: function parseWWWAuthenticateRest(rest) {
-    return (0, _utils.parseHTTPHeadersQuotedKeyValueSet)(rest, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
+    return parseHTTPHeadersQuotedKeyValueSet(
+      rest,
+      AUTHORIZED_WWW_AUTHENTICATE_KEYS,
+      [],
+    );
   },
 
   /**
@@ -70,15 +76,19 @@ var BEARER = {
    * @api public
    */
   buildWWWAuthenticateRest: function buildWWWAuthenticateRest(data) {
-    if (data.error && -1 === AUTHORIZED_ERROR_CODES.indeOf(data.error)) {
-      throw new _yerror2.default('E_INVALID_ERROR', data.error, AUTHORIZED_ERROR_CODES);
+    if (data.error && -1 === AUTHORIZED_ERROR_CODES.indexOf(data.error)) {
+      throw new YError('E_INVALID_ERROR', data.error, AUTHORIZED_ERROR_CODES);
     }
-    return (0, _utils.buildHTTPHeadersQuotedKeyValueSet)(data, AUTHORIZED_WWW_AUTHENTICATE_KEYS, []);
+    return buildHTTPHeadersQuotedKeyValueSet(
+      data,
+      AUTHORIZED_WWW_AUTHENTICATE_KEYS,
+      [],
+    );
   },
 
   /**
    * Parse the Authorization header rest.
-   * @param  {String} rest The header rest (string after the authentication mecanism prefix).)
+   * @param  {String} rest The header rest (string after the authentication mechanism prefix).)
    * @return {Object}      Object representing the result of the parse operation {hash}.
    * @example
    * assert.deepEqual(
@@ -90,10 +100,10 @@ var BEARER = {
    */
   parseAuthorizationRest: function parseAuthorizationRest(rest) {
     if (!rest) {
-      throw new _yerror2.default('E_EMPTY_AUTH');
+      throw new YError('E_EMPTY_AUTH');
     }
     return {
-      hash: rest
+      hash: rest,
     };
   },
 
@@ -110,15 +120,12 @@ var BEARER = {
    * );
    * @api public
    */
-  buildAuthorizationRest: function buildAuthorizationRest() {
-    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-        hash = _ref.hash;
-
+  buildAuthorizationRest: function buildAuthorizationRest({ hash } = {}) {
     if (!hash) {
-      throw new _yerror2.default('E_NO_HASH');
+      throw new YError('E_NO_HASH');
     }
     return hash;
-  }
+  },
 };
 
-exports.default = BEARER;
+export default BEARER;
