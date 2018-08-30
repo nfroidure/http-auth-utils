@@ -104,9 +104,11 @@ const BASIC = {
    * );
    * @api public
    */
-  buildAuthorizationRest: function buildAuthorizationRest(
-    { hash, username, password } = {},
-  ) {
+  buildAuthorizationRest: function buildAuthorizationRest({
+    hash,
+    username,
+    password,
+  } = {}) {
     if (username && password) {
       return BASIC.computeHash({
         username,
