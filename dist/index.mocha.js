@@ -13,9 +13,7 @@ var _index = require('./index');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 describe('index', function () {
-
   describe('parseWWWAuthenticateHeader', function () {
-
     it('should parse Basic headers', function () {
       (0, _neatequal2.default)((0, _index.parseWWWAuthenticateHeader)('Basic realm="test"'), {
         type: 'Basic',
@@ -27,7 +25,6 @@ describe('index', function () {
   });
 
   describe('parseAuthorizationHeader', function () {
-
     it('should parse Basic headers', function () {
       (0, _neatequal2.default)((0, _index.parseAuthorizationHeader)('Basic QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
         type: 'Basic',
@@ -60,7 +57,6 @@ describe('index', function () {
   });
 
   describe('mecanisms', function () {
-
     it('should export bot DIGEST and BASIC  mecanisms', function () {
       _assert2.default.equal(_index.mecanisms.length, 3);
     });

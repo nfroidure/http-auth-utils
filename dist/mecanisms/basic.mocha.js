@@ -15,16 +15,13 @@ var _basic2 = _interopRequireDefault(_basic);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 describe('BASIC', function () {
-
   describe('type', function () {
-
     it('should be the basic auth prefix', function () {
       _assert2.default.equal(_basic2.default.type, 'Basic');
     });
   });
 
   describe('parseWWWAuthenticateRest', function () {
-
     it('should work', function () {
       (0, _neatequal2.default)(_basic2.default.parseWWWAuthenticateRest('realm="perlinpinpin"'), {
         realm: 'perlinpinpin'
@@ -33,7 +30,6 @@ describe('BASIC', function () {
   });
 
   describe('buildWWWAuthenticateRest', function () {
-
     it('should work', function () {
       _assert2.default.equal(_basic2.default.buildWWWAuthenticateRest({
         realm: 'perlinpinpin'
@@ -50,7 +46,6 @@ describe('BASIC', function () {
   });
 
   describe('parseAuthorizationRest', function () {
-
     it('should work', function () {
       (0, _neatequal2.default)(_basic2.default.parseAuthorizationRest('QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
         hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
@@ -66,7 +61,6 @@ describe('BASIC', function () {
   });
 
   describe('buildAuthorizationRest', function () {
-
     it('should work with credentials', function () {
       _assert2.default.equal(_basic2.default.buildAuthorizationRest({
         username: 'Ali Baba',
@@ -94,7 +88,6 @@ describe('BASIC', function () {
   });
 
   describe('computeHash', function () {
-
     it('should work', function () {
       _assert2.default.equal(_basic2.default.computeHash({
         username: 'Ali Baba',
@@ -104,7 +97,6 @@ describe('BASIC', function () {
   });
 
   describe('decodeHash', function () {
-
     it('should work', function () {
       (0, _neatequal2.default)(_basic2.default.decodeHash('QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
         username: 'Ali Baba',

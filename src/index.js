@@ -9,31 +9,33 @@ import BEARER from './mecanisms/bearer';
  */
 
 /**
+ * Natively supported authentication mecanisms.
+ * @type {Array}
+ */
+const mecanisms = [BASIC, DIGEST, BEARER];
+
+/**
  * Basic authentication mecanism.
  * @type {Object}
  * @see  {@link module:http-auth-utils/mecanisms/basic}
  */
-export { BASIC };
+BASIC;
 
 /**
  * Digest authentication mecanism.
  * @type {Object}
  * @see  {@link module:http-auth-utils/mecanisms/digest}
  */
-export { DIGEST };
+DIGEST;
 
 /**
  * Bearer authentication mecanism.
  * @type {Object}
  * @see  {@link module:http-auth-utils/mecanisms/digest}
  */
-export { BEARER };
+BEARER;
 
-/**
- * Natively supported authentication mecanisms.
- * @type {Array}
- */
-export const mecanisms = [BASIC, DIGEST, BEARER];
+export { BASIC, DIGEST, BEARER, mecanisms };
 
 /**
  * Parse HTTP WWW-Authenticate header contents.

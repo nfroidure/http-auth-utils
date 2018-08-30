@@ -39,16 +39,12 @@ It is intended to be framework agnostic and could be used either on
 ## http-auth-utils
 
 * [http-auth-utils](#module_http-auth-utils)
-    * [.mecanisms](#module_http-auth-utils.mecanisms) : <code>Array</code>
-    * [.parseWWWAuthenticateHeader(header, [authMecanisms])](#module_http-auth-utils.parseWWWAuthenticateHeader) ⇒ <code>Object</code>
-    * [.parseAuthorizationHeader(header, [authMecanisms])](#module_http-auth-utils.parseAuthorizationHeader) ⇒ <code>Object</code>
+    * _static_
+        * [.parseWWWAuthenticateHeader(header, [authMecanisms])](#module_http-auth-utils.parseWWWAuthenticateHeader) ⇒ <code>Object</code>
+        * [.parseAuthorizationHeader(header, [authMecanisms])](#module_http-auth-utils.parseAuthorizationHeader) ⇒ <code>Object</code>
+    * _inner_
+        * [~mecanisms](#module_http-auth-utils..mecanisms) : <code>Array</code>
 
-<a name="module_http-auth-utils.mecanisms"></a>
-
-### http-auth-utils.mecanisms : <code>Array</code>
-Natively supported authentication mecanisms.
-
-**Kind**: static constant of [<code>http-auth-utils</code>](#module_http-auth-utils)  
 <a name="module_http-auth-utils.parseWWWAuthenticateHeader"></a>
 
 ### http-auth-utils.parseWWWAuthenticateHeader(header, [authMecanisms]) ⇒ <code>Object</code>
@@ -99,6 +95,12 @@ assert.equal(
   }
 );
 ```
+<a name="module_http-auth-utils..mecanisms"></a>
+
+### http-auth-utils~mecanisms : <code>Array</code>
+Natively supported authentication mecanisms.
+
+**Kind**: inner constant of [<code>http-auth-utils</code>](#module_http-auth-utils)  
 <a name="module_http-auth-utils/mecanisms/basic"></a>
 
 ## http-auth-utils/mecanisms/basic

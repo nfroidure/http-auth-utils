@@ -26,7 +26,6 @@ var AUTHORIZED_AUTHORIZATION_KEYS = ['username', 'realm', 'nonce', 'uri', 'respo
  * @see http://tools.ietf.org/html/rfc2069#section-2
  */
 var DIGEST = {
-
   /**
    * The Digest auth mecanism prefix.
    * @type {String}

@@ -77,7 +77,7 @@ var mecanisms = exports.mecanisms = [_basic2.default, _digest2.default, _bearer2
  * );
  */
 function parseWWWAuthenticateHeader(header) {
-  var authMecanisms = arguments.length <= 1 || arguments[1] === undefined ? mecanisms : arguments[1];
+  var authMecanisms = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : mecanisms;
 
   var result = null;
 
@@ -87,12 +87,14 @@ function parseWWWAuthenticateHeader(header) {
         type: authMecanism.type,
         data: authMecanism.parseWWWAuthenticateRest(header.substr(authMecanism.type.length + 1))
       };
+      return true;
     }
+    return false;
   });
-  if (result) {
-    return result;
+  if (!result) {
+    throw new _yerror2.default('E_UNKNOWN_AUTH_MECANISM', header);
   }
-  throw new _yerror2.default('E_UNKNOWN_AUTH_MECANISM', header);
+  return result;
 }
 
 /**
@@ -113,7 +115,7 @@ function parseWWWAuthenticateHeader(header) {
  * );
  */
 function parseAuthorizationHeader(header) {
-  var authMecanisms = arguments.length <= 1 || arguments[1] === undefined ? mecanisms : arguments[1];
+  var authMecanisms = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : mecanisms;
 
   var result = null;
 
@@ -123,7 +125,9 @@ function parseAuthorizationHeader(header) {
         type: authMecanism.type,
         data: authMecanism.parseAuthorizationRest(header.substr(authMecanism.type.length + 1))
       };
+      return true;
     }
+    return false;
   });
   if (result) {
     return result;

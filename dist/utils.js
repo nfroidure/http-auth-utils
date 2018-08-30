@@ -22,7 +22,7 @@ var SEPARATOR_REGEXP = /", ?/;
 
 // FIXME: Create a real parser
 function parseHTTPHeadersQuotedKeyValueSet(contents, authorizedKeys) {
-  var requiredKeys = arguments.length <= 2 || arguments[2] === undefined ? [] : arguments[2];
+  var requiredKeys = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
 
   var data = contents.split(SEPARATOR_REGEXP).map(function (part, partPosition, parts) {
     part = parts.length - 1 === partPosition ? part : part + '"';
@@ -32,10 +32,9 @@ function parseHTTPHeadersQuotedKeyValueSet(contents, authorizedKeys) {
     }
     return pair;
   }).reduce(function (parsedValues, _ref, valuePosition) {
-    var _ref2 = _slicedToArray(_ref, 2);
-
-    var name = _ref2[0];
-    var value = _ref2[1];
+    var _ref2 = _slicedToArray(_ref, 2),
+        name = _ref2[0],
+        value = _ref2[1];
 
     if (-1 === authorizedKeys.indexOf(name)) {
       throw new _yerror2.default('E_UNAUTHORIZED_KEY', valuePosition, name);
@@ -53,7 +52,7 @@ function parseHTTPHeadersQuotedKeyValueSet(contents, authorizedKeys) {
 }
 
 function buildHTTPHeadersQuotedKeyValueSet(data, authorizedKeys) {
-  var requiredKeys = arguments.length <= 2 || arguments[2] === undefined ? [] : arguments[2];
+  var requiredKeys = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
 
   _checkRequiredKeys(requiredKeys, data);
   return authorizedKeys.reduce(function (contents, key) {

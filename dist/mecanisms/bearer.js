@@ -26,7 +26,6 @@ var AUTHORIZED_ERROR_CODES = ['invalid_request', 'invalid_token', 'insufficient_
  * @see https://tools.ietf.org/html/rfc6750#section-3
  */
 var BEARER = {
-
   /**
    * The Digest auth mecanism prefix.
    * @type {String}
@@ -112,9 +111,8 @@ var BEARER = {
    * @api public
    */
   buildAuthorizationRest: function buildAuthorizationRest() {
-    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-    var hash = _ref.hash;
+    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+        hash = _ref.hash;
 
     if (!hash) {
       throw new _yerror2.default('E_NO_HASH');
