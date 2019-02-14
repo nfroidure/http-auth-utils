@@ -1,3 +1,12 @@
+# [2.1.0](https://github.com/nfroidure/http-auth-utils/compare/v2.0.0...v2.1.0) (2019-02-14)
+
+
+### Features
+
+* **Types:** Add TypeScript types ([9f5d413](https://github.com/nfroidure/http-auth-utils/commit/9f5d413))
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/nfroidure/http-auth-utils/compare/v1.0.1...v2.0.0) (2018-08-30)
 
