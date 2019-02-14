@@ -5,7 +5,7 @@
 [//]: # (be overridden.)
 [//]: # ( )
 # http-auth-utils
-> Parse, build and deal with HTTP auth headers.
+> Parse, build and deal with HTTP authorization headers.
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/nfroidure/http-auth-utils/blob/master/LICENSE)
 [![Build status](https://secure.travis-ci.org/nfroidure/http-auth-utils.svg)](https://travis-ci.org/nfroidure/http-auth-utils)
@@ -23,7 +23,62 @@ This library provide several utilities to parse and build WWW-Authenticate and
  Authorization headers as described per the HTTP RFC.
 
 It is intended to be framework agnostic and could be used either on
- the server and the client side.
+ the server and the client side. It is also pure functions only, no
+ side effect here. The functions are synchronous since only parsing
+ headers of small size so no need for streams or anything asynchronous.
+
+The module is easily extensible with new mechanisms, one very common way to extend
+ it is to create a `FAKE_TOKEN` mechanism for development only that allows to
+ directly provide the userId that should be authenticated:
+
+```js
+import assert from 'assert';
+import {
+  parseAuthorizationHeader,
+  mechanisms,
+} from 'http-auth-utils';
+
+const FAKE_MECHANISM = {
+  type: 'Fake',
+  parseAuthorizationRest: rest => {
+    let userId;
+    let scopes;
+
+    rest.replace(/^(\d+)-((\w+,)*(\w+){1})$/, (_, rawUserId, rawScopes) => {
+      userId = parseInt(rawUserId);
+      scopes = rawScopes.split(',');
+      return '';
+    });
+
+    if ('undefined' === typeof userId || 'undefined' === typeof scopes) {
+      throw new HTTPError(400, 'E_INVALID_FAKE_TOKEN');
+    }
+
+    return {
+      hash: rest,
+      userId,
+      scopes,
+    };
+  },
+};
+
+assert.deepEqual(
+  parseAuthorizationHeader('Fake 1664-read,write', [
+    ...mechanisms,
+    // In a real world app, you would put this mechanism
+    // under the condition to be in development env of course
+    FAKE_MECHANISM,
+  ]), {
+    type: 'Fake',
+    data: {
+      hash: '1664-read,write',
+      userId: 1664,
+      scopes: ['read', 'write'],
+    }
+  }
+);
+```
+
 
 [//]: # (::contents:end)
 
@@ -68,7 +123,7 @@ Parse HTTP WWW-Authenticate header contents.
 
 **Example**  
 ```js
-assert.equal(
+assert.deepEqual(
   parseWWWAuthenticateHeader('Basic realm="test"'), {
     type: 'Basic',
     data: {
@@ -93,7 +148,7 @@ Parse HTTP Authorization header contents.
 
 **Example**  
 ```js
-assert.equal(
+assert.deepEqual(
   parseAuthorizationHeader('Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
     type: 'Basic',
     data: {

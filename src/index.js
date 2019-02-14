@@ -45,7 +45,7 @@ export { BASIC, DIGEST, BEARER, mechanisms };
  * @return {Object} Result of the contents parse.
  * @api public
  * @example
- * assert.equal(
+ * assert.deepEqual(
  *   parseWWWAuthenticateHeader('Basic realm="test"'), {
  *     type: 'Basic',
  *     data: {
@@ -86,7 +86,7 @@ export function parseWWWAuthenticateHeader(
  * @return {Object} Result of the contents parse.
  * @api public
  * @example
- * assert.equal(
+ * assert.deepEqual(
  *   parseAuthorizationHeader('Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
  *     type: 'Basic',
  *     data: {

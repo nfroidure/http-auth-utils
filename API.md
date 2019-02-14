@@ -39,7 +39,7 @@ Parse HTTP WWW-Authenticate header contents.
 
 **Example**  
 ```js
-assert.equal(
+assert.deepEqual(
   parseWWWAuthenticateHeader('Basic realm="test"'), {
     type: 'Basic',
     data: {
@@ -64,7 +64,7 @@ Parse HTTP Authorization header contents.
 
 **Example**  
 ```js
-assert.equal(
+assert.deepEqual(
   parseAuthorizationHeader('Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=='), {
     type: 'Basic',
     data: {
