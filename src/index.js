@@ -41,7 +41,8 @@ export { BASIC, DIGEST, BEARER, mechanisms };
  * Parse HTTP WWW-Authenticate header contents.
  * @type {Function}
  * @param {string} header The WWW-Authenticate header contents
- * @param {Array} [authMechanisms=[BASIC, DIGEST]] Allow providing custom authentication mechanisms.
+ * @param {Array} [authMechanisms=[BASIC, DIGEST, BEARER]]
+ * Allow providing custom authentication mechanisms.
  * @return {Object} Result of the contents parse.
  * @api public
  * @example
@@ -82,7 +83,8 @@ export function parseWWWAuthenticateHeader(
  * Parse HTTP Authorization header contents.
  * @type {Function}
  * @param {string} header The Authorization header contents
- * @param {Array} [authMechanisms=[BASIC, DIGEST, BEARER]] Allow custom authentication mechanisms.
+ * @param {Array} [authMechanisms=[BASIC, DIGEST, BEARER]]
+ * Allow custom authentication mechanisms.
  * @return {Object} Result of the contents parse.
  * @api public
  * @example

@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "description": "Parse, build and deal with HTTP authorization headers.",
   "main": "dist/index.js",
+  "types": "src/index.d.ts",
   "metapak": {
     "data": {
       "files": "'src/**/*.js'",
@@ -11,7 +12,8 @@
         "dist"
       ],
       "bundleFiles": [
-        "dist/**/*.js"
+        "dist/**/*.js",
+        "src/index.d.ts"
       ]
     },
     "configs": [
@@ -169,6 +171,7 @@
   "contributors": [],
   "files": [
     "dist/**/*.js",
+    "src/index.d.ts",
     "LICENSE",
     "README.md",
     "CHANGELOG.md"

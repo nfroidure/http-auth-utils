@@ -35,7 +35,7 @@ Parse HTTP WWW-Authenticate header contents.
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | header | <code>string</code> |  | The WWW-Authenticate header contents |
-| [authMechanisms] | <code>Array</code> | <code>[BASIC, DIGEST]</code> | Allow providing custom authentication mechanisms. |
+| [authMechanisms] | <code>Array</code> | <code>[BASIC, DIGEST, BEARER]</code> | Allow providing custom authentication mechanisms. |
 
 **Example**  
 ```js
