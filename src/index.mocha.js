@@ -4,6 +4,7 @@ import {
   parseWWWAuthenticateHeader,
   parseAuthorizationHeader,
   buildWWWAuthenticateHeader,
+  buildAuthorizationHeader,
   mechanisms,
   BASIC,
   DIGEST,
@@ -115,6 +116,28 @@ describe('index', () => {
           parseWWWAuthenticateHeader('Basic realm="test"').data,
         ),
         'Basic realm="test"',
+      );
+    });
+  });
+
+  describe('buildAuthorizationHeader', () => {
+    it('should build Basic headers', () => {
+      assert.equal(
+        buildAuthorizationHeader(BASIC, {
+          username: 'John',
+          password: 'R:U:kidding?',
+        }),
+        'Basic Sm9objpSOlU6a2lkZGluZz8=',
+      );
+    });
+
+    it('should be reentrant', () => {
+      assert.equal(
+        buildAuthorizationHeader(
+          BASIC,
+          parseAuthorizationHeader('Basic Sm9objpSOlU6a2lkZGluZz8=').data,
+        ),
+        'Basic Sm9objpSOlU6a2lkZGluZz8=',
       );
     });
   });

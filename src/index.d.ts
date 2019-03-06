@@ -31,11 +31,18 @@ declare function buildWWWAuthenticateHeader(
     [prop: string]: any;
   },
 ): string;
+declare function buildAuthorizationHeader(
+  authMechanism: Mechanism,
+  data: {
+    [prop: string]: any;
+  },
+): string;
 
 export {
   parseWWWAuthenticateHeader,
   parseAuthorizationHeader,
   buildWWWAuthenticateHeader,
+  buildAuthorizationHeader,
   BASIC,
   DIGEST,
   BEARER,

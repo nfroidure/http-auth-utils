@@ -139,3 +139,23 @@ export function buildWWWAuthenticateHeader(authMechanism, data) {
     data,
   )}`;
 }
+
+/**
+ * Build HTTP Authorization header value.
+ * @type {Function}
+ * @param {Object} authMechanism The mechanism to use
+ * @param {Object}
+ * The Authorization header contents to base the value on.
+ * @return {string} The header value.
+ * @api public
+ * @example
+ * assert.deepEqual(
+ *   buildAuthorizationHeader(BASIC, {
+ *     realm: 'test'
+ *   }),
+ *   'Basic realm="test"'
+ * );
+ */
+export function buildAuthorizationHeader(authMechanism, data) {
+  return `${authMechanism.type} ${authMechanism.buildAuthorizationRest(data)}`;
+}
