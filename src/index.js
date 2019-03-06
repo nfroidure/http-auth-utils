@@ -117,3 +117,25 @@ export function parseAuthorizationHeader(header, authMechanisms = mechanisms) {
   }
   throw new YError('E_UNKNOWN_AUTH_MECHANISM', header);
 }
+
+/**
+ * Build HTTP WWW-Authenticate header value.
+ * @type {Function}
+ * @param {Object} authMechanism The mechanism to use
+ * @param {Object}
+ * The WWW-Authenticate header contents to base the value on.
+ * @return {string} The header value.
+ * @api public
+ * @example
+ * assert.deepEqual(
+ *   buildWWWAuthenticateHeader(BASIC, {
+ *     realm: 'test'
+ *   }),
+ *   'Basic realm="test"'
+ * );
+ */
+export function buildWWWAuthenticateHeader(authMechanism, data) {
+  return `${authMechanism.type} ${authMechanism.buildWWWAuthenticateRest(
+    data,
+  )}`;
+}

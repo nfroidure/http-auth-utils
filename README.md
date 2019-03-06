@@ -104,6 +104,7 @@ assert.deepEqual(
     * _static_
         * [.parseWWWAuthenticateHeader(header, [authMechanisms])](#module_http-auth-utils.parseWWWAuthenticateHeader) ⇒ <code>Object</code>
         * [.parseAuthorizationHeader(header, [authMechanisms])](#module_http-auth-utils.parseAuthorizationHeader) ⇒ <code>Object</code>
+        * [.buildWWWAuthenticateHeader(authMechanism, The)](#module_http-auth-utils.buildWWWAuthenticateHeader) ⇒ <code>string</code>
     * _inner_
         * [~mechanisms](#module_http-auth-utils..mechanisms) : <code>Array</code>
 
@@ -155,6 +156,29 @@ assert.deepEqual(
       hash: 'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
     }
   }
+);
+```
+<a name="module_http-auth-utils.buildWWWAuthenticateHeader"></a>
+
+### http-auth-utils.buildWWWAuthenticateHeader(authMechanism, The) ⇒ <code>string</code>
+Build HTTP WWW-Authenticate header value.
+
+**Kind**: static method of [<code>http-auth-utils</code>](#module_http-auth-utils)  
+**Returns**: <code>string</code> - The header value.  
+**Api**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| authMechanism | <code>Object</code> | The mechanism to use |
+| The | <code>Object</code> | WWW-Authenticate header contents to base the value on. |
+
+**Example**  
+```js
+assert.deepEqual(
+  buildWWWAuthenticateHeader(BASIC, {
+    realm: 'test'
+  }),
+  'Basic realm="test"'
 );
 ```
 <a name="module_http-auth-utils..mechanisms"></a>

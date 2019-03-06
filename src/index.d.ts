@@ -2,10 +2,10 @@ type Mechanism = {
   type: string;
 };
 
-declare const BASIC : Mechanism;
-declare const DIGEST : Mechanism;
-declare const BEARER : Mechanism; 
-declare const mechanisms : Array<Mechanism>;
+declare const BASIC: Mechanism;
+declare const DIGEST: Mechanism;
+declare const BEARER: Mechanism;
+declare const mechanisms: Array<Mechanism>;
 
 declare function parseAuthorizationHeader(
   header: string,
@@ -25,10 +25,17 @@ declare function parseWWWAuthenticateHeader(
     [prop: string]: any;
   };
 };
+declare function buildWWWAuthenticateHeader(
+  authMechanism: Mechanism,
+  data: {
+    [prop: string]: any;
+  },
+): string;
 
 export {
   parseWWWAuthenticateHeader,
   parseAuthorizationHeader,
+  buildWWWAuthenticateHeader,
   BASIC,
   DIGEST,
   BEARER,

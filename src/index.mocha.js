@@ -3,6 +3,7 @@ import neatequal from 'neatequal';
 import {
   parseWWWAuthenticateHeader,
   parseAuthorizationHeader,
+  buildWWWAuthenticateHeader,
   mechanisms,
   BASIC,
   DIGEST,
@@ -93,6 +94,27 @@ describe('index', () => {
       assert.throws(
         () => parseAuthorizationHeader('Kikoolol ddd'),
         /E_UNKNOWN_AUTH_MECHANISM/,
+      );
+    });
+  });
+
+  describe('buildWWWAuthenticateHeader', () => {
+    it('should build Basic headers', () => {
+      assert.equal(
+        buildWWWAuthenticateHeader(BASIC, {
+          realm: 'test',
+        }),
+        'Basic realm="test"',
+      );
+    });
+
+    it('should be reentrant', () => {
+      assert.equal(
+        buildWWWAuthenticateHeader(
+          BASIC,
+          parseWWWAuthenticateHeader('Basic realm="test"').data,
+        ),
+        'Basic realm="test"',
       );
     });
   });
