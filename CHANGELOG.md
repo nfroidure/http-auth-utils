@@ -1,3 +1,13 @@
+# [2.2.0](https://github.com/nfroidure/http-auth-utils/compare/v2.1.0...v2.2.0) (2019-03-07)
+
+
+### Features
+
+* **buildAuthorizationHeader:** dd a way to build Authorization headers too ([1294584](https://github.com/nfroidure/http-auth-utils/commit/1294584))
+* **buildWWWAuthenticateHeader:** Add a way to build WWW Authenticate headers too ([cc51ac1](https://github.com/nfroidure/http-auth-utils/commit/cc51ac1))
+
+
+
 # [2.1.0](https://github.com/nfroidure/http-auth-utils/compare/v2.0.0...v2.1.0) (2019-02-14)
 
 
