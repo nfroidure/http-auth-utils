@@ -40,9 +40,14 @@ export { BASIC, DIGEST, BEARER, mechanisms };
 /**
  * Parse HTTP WWW-Authenticate header contents.
  * @type {Function}
- * @param {string} header The WWW-Authenticate header contents
+ * @param {string} header
+ * The WWW-Authenticate header contents
  * @param {Array} [authMechanisms=[BASIC, DIGEST, BEARER]]
  * Allow providing custom authentication mechanisms.
+ * @param {Object} [options]
+ * Parsing options
+ * @param {boolean} [options.strict=true]
+ * Strictly detect the mechanism type (case sensitive)
  * @return {Object} Result of the contents parse.
  * @api public
  * @example
@@ -58,11 +63,15 @@ export { BASIC, DIGEST, BEARER, mechanisms };
 export function parseWWWAuthenticateHeader(
   header,
   authMechanisms = mechanisms,
+  { strict = true } = { strict: true },
 ) {
   let result = null;
 
   authMechanisms.some(authMechanism => {
-    if (0 === header.indexOf(authMechanism.type + ' ')) {
+    if (
+      0 === header.indexOf(authMechanism.type + ' ') ||
+      (!strict && 0 === header.indexOf(authMechanism.type.toLowerCase() + ' '))
+    ) {
       result = {
         type: authMechanism.type,
         data: authMechanism.parseWWWAuthenticateRest(
@@ -85,6 +94,10 @@ export function parseWWWAuthenticateHeader(
  * @param {string} header The Authorization header contents
  * @param {Array} [authMechanisms=[BASIC, DIGEST, BEARER]]
  * Allow custom authentication mechanisms.
+ * @param {Object} [options]
+ * Parsing options
+ * @param {boolean} [options.strict=true]
+ * Strictly detect the mechanism type (case sensitive)
  * @return {Object} Result of the contents parse.
  * @api public
  * @example
@@ -97,11 +110,18 @@ export function parseWWWAuthenticateHeader(
  *   }
  * );
  */
-export function parseAuthorizationHeader(header, authMechanisms = mechanisms) {
+export function parseAuthorizationHeader(
+  header,
+  authMechanisms = mechanisms,
+  { strict = true } = { strict: true },
+) {
   let result = null;
 
   authMechanisms.some(function(authMechanism) {
-    if (0 === header.indexOf(authMechanism.type + ' ')) {
+    if (
+      0 === header.indexOf(authMechanism.type + ' ') ||
+      (!strict && 0 === header.indexOf(authMechanism.type.toLowerCase() + ' '))
+    ) {
       result = {
         type: authMechanism.type,
         data: authMechanism.parseAuthorizationRest(

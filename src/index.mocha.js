@@ -20,14 +20,36 @@ describe('index', () => {
           realm: 'test',
         },
       });
+      neatequal(
+        parseWWWAuthenticateHeader('basic realm="test"', [BASIC], {
+          strict: false,
+        }),
+        {
+          type: 'Basic',
+          data: {
+            realm: 'test',
+          },
+        },
+      );
     });
-    it('should parse Basic headers', () => {
-      neatequal(parseWWWAuthenticateHeader('Basic realm="test"', mechanisms), {
-        type: 'Basic',
+    it('should parse Bearer headers', () => {
+      neatequal(parseWWWAuthenticateHeader('Bearer realm="test"', mechanisms), {
+        type: 'Bearer',
         data: {
           realm: 'test',
         },
       });
+      neatequal(
+        parseWWWAuthenticateHeader('bearer realm="test"', mechanisms, {
+          strict: false,
+        }),
+        {
+          type: 'Bearer',
+          data: {
+            realm: 'test',
+          },
+        },
+      );
     });
 
     it('should fail with unknown headers', () => {
@@ -50,6 +72,24 @@ describe('index', () => {
             hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
           },
         },
+      );
+      neatequal(
+        parseAuthorizationHeader(
+          'basic QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
+          [BASIC],
+          {
+            strict: false,
+          },
+        ),
+        {
+          type: 'Basic',
+          data: {
+            hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
+            username: 'Ali Baba',
+            password: 'open sesame',
+          },
+        },
+        { strict: false },
       );
       neatequal(
         parseAuthorizationHeader(
@@ -95,6 +135,23 @@ describe('index', () => {
       assert.throws(
         () => parseAuthorizationHeader('Kikoolol ddd'),
         /E_UNKNOWN_AUTH_MECHANISM/,
+      );
+    });
+
+    it('should fail with basic headers in strict mode', () => {
+      assert.throws(
+        () => parseAuthorizationHeader('basic ddd'),
+        /E_UNKNOWN_AUTH_MECHANISM/,
+      );
+      assert.throws(
+        () => parseAuthorizationHeader('basic ddd'),
+        /E_UNKNOWN_AUTH_MECHANISM/,
+        {},
+      );
+      assert.throws(
+        () => parseAuthorizationHeader('basic ddd'),
+        /E_UNKNOWN_AUTH_MECHANISM/,
+        { strict: true },
       );
     });
   });

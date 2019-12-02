@@ -1,6 +1,9 @@
 type Mechanism = {
   type: string;
 };
+type Options = {
+  strict?: boolean;
+};
 
 declare const BASIC: Mechanism;
 declare const DIGEST: Mechanism;
@@ -10,6 +13,7 @@ declare const mechanisms: Array<Mechanism>;
 declare function parseAuthorizationHeader(
   header: string,
   authMechanisms?: Array<Mechanism>,
+  options?: Options
 ): {
   type: string;
   data: {
@@ -19,6 +23,7 @@ declare function parseAuthorizationHeader(
 declare function parseWWWAuthenticateHeader(
   header: string,
   authMechanisms?: Array<Mechanism>,
+  options?: Options,
 ): {
   type: string;
   data: {

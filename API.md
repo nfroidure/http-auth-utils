@@ -18,8 +18,8 @@
 
 * [http-auth-utils](#module_http-auth-utils)
     * _static_
-        * [.parseWWWAuthenticateHeader(header, [authMechanisms])](#module_http-auth-utils.parseWWWAuthenticateHeader) ⇒ <code>Object</code>
-        * [.parseAuthorizationHeader(header, [authMechanisms])](#module_http-auth-utils.parseAuthorizationHeader) ⇒ <code>Object</code>
+        * [.parseWWWAuthenticateHeader(header, [authMechanisms], [options])](#module_http-auth-utils.parseWWWAuthenticateHeader) ⇒ <code>Object</code>
+        * [.parseAuthorizationHeader(header, [authMechanisms], [options])](#module_http-auth-utils.parseAuthorizationHeader) ⇒ <code>Object</code>
         * [.buildWWWAuthenticateHeader(authMechanism, The)](#module_http-auth-utils.buildWWWAuthenticateHeader) ⇒ <code>string</code>
         * [.buildAuthorizationHeader(authMechanism, The)](#module_http-auth-utils.buildAuthorizationHeader) ⇒ <code>string</code>
     * _inner_
@@ -27,7 +27,7 @@
 
 <a name="module_http-auth-utils.parseWWWAuthenticateHeader"></a>
 
-### http-auth-utils.parseWWWAuthenticateHeader(header, [authMechanisms]) ⇒ <code>Object</code>
+### http-auth-utils.parseWWWAuthenticateHeader(header, [authMechanisms], [options]) ⇒ <code>Object</code>
 Parse HTTP WWW-Authenticate header contents.
 
 **Kind**: static method of [<code>http-auth-utils</code>](#module_http-auth-utils)  
@@ -38,6 +38,8 @@ Parse HTTP WWW-Authenticate header contents.
 | --- | --- | --- | --- |
 | header | <code>string</code> |  | The WWW-Authenticate header contents |
 | [authMechanisms] | <code>Array</code> | <code>[BASIC, DIGEST, BEARER]</code> | Allow providing custom authentication mechanisms. |
+| [options] | <code>Object</code> |  | Parsing options |
+| [options.strict] | <code>boolean</code> | <code>true</code> | Strictly detect the mechanism type (case sensitive) |
 
 **Example**  
 ```js
@@ -52,7 +54,7 @@ assert.deepEqual(
 ```
 <a name="module_http-auth-utils.parseAuthorizationHeader"></a>
 
-### http-auth-utils.parseAuthorizationHeader(header, [authMechanisms]) ⇒ <code>Object</code>
+### http-auth-utils.parseAuthorizationHeader(header, [authMechanisms], [options]) ⇒ <code>Object</code>
 Parse HTTP Authorization header contents.
 
 **Kind**: static method of [<code>http-auth-utils</code>](#module_http-auth-utils)  
@@ -63,6 +65,8 @@ Parse HTTP Authorization header contents.
 | --- | --- | --- | --- |
 | header | <code>string</code> |  | The Authorization header contents |
 | [authMechanisms] | <code>Array</code> | <code>[BASIC, DIGEST, BEARER]</code> | Allow custom authentication mechanisms. |
+| [options] | <code>Object</code> |  | Parsing options |
+| [options.strict] | <code>boolean</code> | <code>true</code> | Strictly detect the mechanism type (case sensitive) |
 
 **Example**  
 ```js
