@@ -1,3 +1,12 @@
+# [2.3.0](https://github.com/nfroidure/http-auth-utils/compare/v2.2.0...v2.3.0) (2019-12-02)
+
+
+### Features
+
+* **parsers:** allow to parse header less strictly ([060c805](https://github.com/nfroidure/http-auth-utils/commit/060c8054a9a074ec376318a9ac49771233f3a89d))
+
+
+
 # [2.2.0](https://github.com/nfroidure/http-auth-utils/compare/v2.1.0...v2.2.0) (2019-03-07)
 
 
