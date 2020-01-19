@@ -12,8 +12,8 @@
         "dist"
       ],
       "bundleFiles": [
-        "dist/**/*.js",
-        "src/index.d.ts"
+        "dist",
+        "src"
       ]
     },
     "configs": [
@@ -30,7 +30,7 @@
   "scripts": {
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
     "cli": "env NODE_ENV=${NODE_ENV:-cli}",
-    "compile": "babel src --out-dir=dist",
+    "compile": "babel src --out-dir=dist --source-maps=true",
     "cover": "nyc npm test && nyc report --reporter=html --reporter=text",
     "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls && rm -rf ./coverage",
     "cz": "env NODE_ENV=${NODE_ENV:-cli} git cz",
@@ -38,9 +38,9 @@
     "lint": "eslint 'src/**/*.js'",
     "metapak": "metapak",
     "mocha": "mocha --require '@babel/register' 'src/**/*.mocha.js'",
-    "precz": "npm t && npm run lint && npm run doc && npm run metapak -- -s",
+    "precz": "npm run compile && npm t && npm run lint && npm run doc && npm run metapak -- -s",
     "prettier": "prettier --write 'src/**/*.js'",
-    "preversion": "npm t && npm run lint && npm run compile && npm run doc && npm run metapak -- -s",
+    "preversion": "npm run compile && npm t && npm run lint && npm run doc && npm run metapak -- -s",
     "test": "npm run mocha",
     "version": "npm run changelog && git add CHANGELOG.md"
   },
@@ -69,29 +69,29 @@
   },
   "homepage": "https://github.com/nfroidure/http-auth-utils",
   "devDependencies": {
-    "@babel/cli": "^7.7.4",
-    "@babel/core": "^7.7.4",
-    "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
-    "@babel/preset-env": "^7.7.4",
-    "@babel/register": "^7.7.4",
+    "@babel/cli": "^7.8.3",
+    "@babel/core": "^7.8.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "@babel/register": "^7.8.3",
     "babel-eslint": "^10.0.3",
     "commitizen": "^4.0.3",
-    "conventional-changelog-cli": "^2.0.28",
-    "coveralls": "^3.0.5",
+    "conventional-changelog-cli": "^2.0.31",
+    "coveralls": "^3.0.9",
     "cz-conventional-changelog": "^3.0.2",
-    "eslint": "^6.7.1",
-    "eslint-plugin-prettier": "^3.1.1",
+    "eslint": "^6.8.0",
+    "eslint-plugin-prettier": "^3.1.2",
     "jsdoc-to-markdown": "^5.0.3",
     "metapak": "^3.1.6",
-    "metapak-nfroidure": "9.7.4",
-    "mocha": "^6.2.0",
+    "metapak-nfroidure": "9.8.1",
+    "mocha": "^7.0.0",
     "neatequal": "^1.0.0",
-    "nyc": "^14.1.1",
+    "nyc": "^15.0.0",
     "prettier": "^1.19.1",
-    "sinon": "^7.5.0"
+    "sinon": "^8.1.0"
   },
   "dependencies": {
-    "yerror": "^4.0.1"
+    "yerror": "^5.0.0"
   },
   "engines": {
     "node": ">=8.12.0"
@@ -170,8 +170,8 @@
   },
   "contributors": [],
   "files": [
-    "dist/**/*.js",
-    "src/index.d.ts",
+    "dist",
+    "src",
     "LICENSE",
     "README.md",
     "CHANGELOG.md"
