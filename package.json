@@ -1,6 +1,6 @@
 {
   "name": "http-auth-utils",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "description": "Parse, build and deal with HTTP authorization headers.",
   "main": "dist/index",
   "module": "dist/index.mjs",
