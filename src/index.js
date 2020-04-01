@@ -67,7 +67,7 @@ export function parseWWWAuthenticateHeader(
 ) {
   let result = null;
 
-  authMechanisms.some(authMechanism => {
+  authMechanisms.some((authMechanism) => {
     if (
       0 === header.indexOf(authMechanism.type + ' ') ||
       (!strict && 0 === header.indexOf(authMechanism.type.toLowerCase() + ' '))
@@ -117,7 +117,7 @@ export function parseAuthorizationHeader(
 ) {
   let result = null;
 
-  authMechanisms.some(function(authMechanism) {
+  authMechanisms.some(function (authMechanism) {
     if (
       0 === header.indexOf(authMechanism.type + ' ') ||
       (!strict && 0 === header.indexOf(authMechanism.type.toLowerCase() + ' '))

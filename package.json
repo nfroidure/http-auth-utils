@@ -2,7 +2,8 @@
   "name": "http-auth-utils",
   "version": "2.4.0",
   "description": "Parse, build and deal with HTTP authorization headers.",
-  "main": "dist/index.js",
+  "main": "dist/index",
+  "module": "dist/index.mjs",
   "types": "src/index.d.ts",
   "metapak": {
     "data": {
@@ -30,7 +31,9 @@
   "scripts": {
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
     "cli": "env NODE_ENV=${NODE_ENV:-cli}",
-    "compile": "babel src --out-dir=dist --source-maps=true",
+    "compile": "rimraf -f 'dist' && npm run compile:cjs && npm run compile:mjs",
+    "compile:cjs": "babel --env-name=cjs --out-dir=dist --source-maps=true src",
+    "compile:mjs": "babel --env-name=mjs --out-file-extension=.mjs --out-dir=dist --source-maps=true src",
     "cover": "nyc npm test && nyc report --reporter=html --reporter=text",
     "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls && rm -rf ./coverage",
     "cz": "env NODE_ENV=${NODE_ENV:-cli} git cz",
@@ -69,32 +72,32 @@
   },
   "homepage": "https://github.com/nfroidure/http-auth-utils",
   "devDependencies": {
-    "@babel/cli": "^7.8.3",
-    "@babel/core": "^7.8.3",
-    "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
-    "@babel/preset-env": "^7.8.3",
-    "@babel/register": "^7.8.3",
-    "babel-eslint": "^10.0.3",
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/register": "^7.9.0",
+    "babel-eslint": "^10.1.0",
     "commitizen": "^4.0.3",
     "conventional-changelog-cli": "^2.0.31",
-    "coveralls": "^3.0.9",
-    "cz-conventional-changelog": "^3.0.2",
+    "coveralls": "^3.0.11",
+    "cz-conventional-changelog": "^3.1.0",
     "eslint": "^6.8.0",
     "eslint-plugin-prettier": "^3.1.2",
     "jsdoc-to-markdown": "^5.0.3",
-    "metapak": "^3.1.6",
-    "metapak-nfroidure": "9.8.1",
-    "mocha": "^7.0.0",
+    "metapak": "^3.1.8",
+    "metapak-nfroidure": "10.1.2",
+    "mocha": "^7.1.1",
     "neatequal": "^1.0.0",
     "nyc": "^15.0.0",
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.2",
     "sinon": "^8.1.0"
   },
   "dependencies": {
     "yerror": "^5.0.0"
   },
   "engines": {
-    "node": ">=8.12.0"
+    "node": ">=10.19.0"
   },
   "config": {
     "commitizen": {
@@ -122,19 +125,50 @@
     ]
   },
   "babel": {
+    "plugins": [
+      "@babel/plugin-proposal-object-rest-spread"
+    ],
     "presets": [
       [
         "@babel/env",
         {
           "targets": {
-            "node": "8.12.0"
+            "node": "10.19.0"
           }
         }
       ]
     ],
-    "plugins": [
-      "@babel/plugin-proposal-object-rest-spread"
-    ]
+    "env": {
+      "cjs": {
+        "presets": [
+          [
+            "@babel/env",
+            {
+              "targets": {
+                "node": "10"
+              },
+              "modules": "commonjs"
+            }
+          ]
+        ],
+        "comments": true
+      },
+      "mjs": {
+        "presets": [
+          [
+            "@babel/env",
+            {
+              "targets": {
+                "node": "12"
+              },
+              "modules": "false"
+            }
+          ]
+        ],
+        "comments": false
+      }
+    },
+    "sourceMaps": true
   },
   "eslintConfig": {
     "extends": "eslint:recommended",

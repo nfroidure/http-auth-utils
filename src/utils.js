@@ -26,7 +26,7 @@ export function parseHTTPHeadersQuotedKeyValueSet(
       }
       return pair;
     })
-    .reduce(function(parsedValues, [name, value], valuePosition) {
+    .reduce(function (parsedValues, [name, value], valuePosition) {
       if (-1 === authorizedKeys.indexOf(name)) {
         throw new YError('E_UNAUTHORIZED_KEY', valuePosition, name);
       }
@@ -48,7 +48,7 @@ export function buildHTTPHeadersQuotedKeyValueSet(
   requiredKeys = [],
 ) {
   _checkRequiredKeys(requiredKeys, data);
-  return authorizedKeys.reduce(function(contents, key) {
+  return authorizedKeys.reduce(function (contents, key) {
     if (data[key]) {
       return (
         contents +
@@ -65,7 +65,7 @@ export function buildHTTPHeadersQuotedKeyValueSet(
 }
 
 function _checkRequiredKeys(requiredKeys, data) {
-  requiredKeys.forEach(name => {
+  requiredKeys.forEach((name) => {
     if ('undefined' === typeof data[name]) {
       throw new YError('E_REQUIRED_KEY', name);
     }
