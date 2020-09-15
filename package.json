@@ -3,7 +3,6 @@
   "version": "2.5.0",
   "description": "Parse, build and deal with HTTP authorization headers.",
   "main": "dist/index",
-  "module": "dist/index.mjs",
   "types": "src/index.d.ts",
   "metapak": {
     "data": {
@@ -72,25 +71,25 @@
   },
   "homepage": "https://github.com/nfroidure/http-auth-utils",
   "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.9.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.9.0",
-    "@babel/preset-env": "^7.9.0",
-    "@babel/register": "^7.9.0",
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.11.1",
+    "@babel/plugin-proposal-object-rest-spread": "^7.11.0",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/register": "^7.10.5",
     "babel-eslint": "^10.1.0",
-    "commitizen": "^4.0.3",
-    "conventional-changelog-cli": "^2.0.31",
-    "coveralls": "^3.0.11",
-    "cz-conventional-changelog": "^3.1.0",
-    "eslint": "^6.8.0",
-    "eslint-plugin-prettier": "^3.1.2",
-    "jsdoc-to-markdown": "^5.0.3",
-    "metapak": "^3.1.8",
-    "metapak-nfroidure": "10.1.2",
-    "mocha": "^7.1.1",
+    "commitizen": "^4.1.2",
+    "conventional-changelog-cli": "^2.1.0",
+    "coveralls": "^3.1.0",
+    "cz-conventional-changelog": "^3.2.0",
+    "eslint": "^7.7.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "jsdoc-to-markdown": "^6.0.1",
+    "metapak": "^3.1.10",
+    "metapak-nfroidure": "10.2.5",
+    "mocha": "^8.1.1",
     "neatequal": "^1.0.0",
-    "nyc": "^15.0.0",
-    "prettier": "^2.0.2",
+    "nyc": "^15.1.0",
+    "prettier": "^2.0.5",
     "sinon": "^8.1.0"
   },
   "dependencies": {
@@ -161,7 +160,7 @@
               "targets": {
                 "node": "12"
               },
-              "modules": "false"
+              "modules": false
             }
           ]
         ],
@@ -209,5 +208,6 @@
     "LICENSE",
     "README.md",
     "CHANGELOG.md"
-  ]
+  ],
+  "module": "dist/index.mjs"
 }
