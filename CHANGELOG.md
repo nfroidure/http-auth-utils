@@ -1,3 +1,17 @@
+# [3.0.0](https://github.com/nfroidure/http-auth-utils/compare/v2.6.0...v3.0.0) (2020-12-06)
+
+
+### Code Refactoring
+
+* **types:** convert code to typescript ([0b7f30b](https://github.com/nfroidure/http-auth-utils/commit/0b7f30be45c0e79f83115515091f85f68dc3e98d)), closes [#4](https://github.com/nfroidure/http-auth-utils/issues/4)
+
+
+### BREAKING CHANGES
+
+* **types:** Last supported LTS
+
+
+
 # [2.6.0](https://github.com/nfroidure/http-auth-utils/compare/v2.5.0...v2.6.0) (2020-09-15)
 
 
