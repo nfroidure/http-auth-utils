@@ -7,7 +7,7 @@ import {
 
 describe('utils', () => {
   describe('parseHTTPHeadersQuotedKeyValueSet', () => {
-    it('should work with good datas', () => {
+    test('should work with good datas', () => {
       neatequal(
         parseHTTPHeadersQuotedKeyValueSet(
           'realm="testrealm@host.com", ' +
@@ -26,21 +26,21 @@ describe('utils', () => {
       );
     });
 
-    it('should fail with bad quoted value pair', () => {
+    test('should fail with bad quoted value pair', () => {
       assert.throws(
-        () => parseHTTPHeadersQuotedKeyValueSet('realm'),
+        () => parseHTTPHeadersQuotedKeyValueSet('realm', []),
         /E_MALFORMED_QUOTEDKEYVALUE/,
       );
     });
 
-    it('should fail with bad quoted value pair', () => {
+    test('should fail with bad quoted value pair', () => {
       assert.throws(
         () => parseHTTPHeadersQuotedKeyValueSet('realm="dsad"', []),
         /E_UNAUTHORIZED_KEY/,
       );
     });
 
-    it('should fail with bad quoted value pair', () => {
+    test('should fail with bad quoted value pair', () => {
       assert.throws(
         () => parseHTTPHeadersQuotedKeyValueSet('realm=dsad', ['realm']),
         /E_UNQUOTED_VALUE/,
@@ -49,7 +49,7 @@ describe('utils', () => {
   });
 
   describe('buildHTTPHeadersQuotedKeyValueSet', () => {
-    it('should work with good datas', () => {
+    test('should work with good datas', () => {
       assert.equal(
         buildHTTPHeadersQuotedKeyValueSet(
           {
@@ -66,7 +66,7 @@ describe('utils', () => {
       );
     });
 
-    it('should work with unused keys', () => {
+    test('should work with unused keys', () => {
       assert.equal(
         buildHTTPHeadersQuotedKeyValueSet(
           {
@@ -83,20 +83,18 @@ describe('utils', () => {
       );
     });
 
-    it('should fail without required keys', () => {
-      assert.throws(() =>
-        buildHTTPHeadersQuotedKeyValueSet(
-          {
-            realm: 'testrealm@host.com',
-            qop: 'auth, auth-int',
-          },
-          ['realm', 'qop', 'nonce'],
-          ['realm', 'qop', 'nonce'],
-          'realm="testrealm@host.com", ' +
-            'qop="auth, auth-int", ' +
-            'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093"',
-          /E_UNQUOTED_VALUE/,
-        ),
+    test('should fail without required keys', () => {
+      assert.throws(
+        () =>
+          buildHTTPHeadersQuotedKeyValueSet(
+            {
+              realm: 'testrealm@host.com',
+              qop: 'auth, auth-int',
+            },
+            ['realm', 'qop', 'nonce'],
+            ['realm', 'qop', 'nonce'],
+          ),
+        /E_REQUIRED_KEY/,
       );
     });
   });

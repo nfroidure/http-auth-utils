@@ -47,7 +47,7 @@ describe('BEARER', () => {
             realm: 'perlinpinpin',
             error: 'invalid_tacos',
             error_description: 'The tacos has been eaten yet',
-          }),
+          } as any),
         /E_INVALID_ERROR/,
       );
     });
@@ -89,7 +89,10 @@ describe('BEARER', () => {
     });
 
     it('should fail with nothing at all', () => {
-      assert.throws(() => BEARER.buildAuthorizationRest(), /E_NO_HASH/);
+      assert.throws(
+        () => BEARER.buildAuthorizationRest({} as any),
+        /E_NO_HASH/,
+      );
     });
 
     it('should be the inverse of parseAuthorizationRest', () => {

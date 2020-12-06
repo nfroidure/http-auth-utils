@@ -9,7 +9,21 @@ import {
   buildHTTPHeadersQuotedKeyValueSet,
 } from '../utils';
 
-const AUTHORIZED_WWW_AUTHENTICATE_KEYS = ['realm'];
+const REQUIRED_WWW_AUTHENTICATE_KEYS = ['realm'];
+const AUTHORIZED_WWW_AUTHENTICATE_KEYS = REQUIRED_WWW_AUTHENTICATE_KEYS;
+type BasicWWWAuthenticateData = {
+  realm: string;
+};
+type BasicAuthorizationData = {
+  username: string;
+  password: string;
+};
+
+/* Architecture Note #1.2: Basic mechanism
+
+See the following [RFC](https://tools.ietf.org/html/rfc7617).
+
+*/
 
 /**
  * Basic authentication mechanism.
@@ -35,12 +49,14 @@ const BASIC = {
    * );
    * @api public
    */
-  parseWWWAuthenticateRest: function parseWWWAuthenticateRest(rest) {
+  parseWWWAuthenticateRest: function parseWWWAuthenticateRest(
+    rest: string,
+  ): BasicWWWAuthenticateData {
     return parseHTTPHeadersQuotedKeyValueSet(
       rest,
       AUTHORIZED_WWW_AUTHENTICATE_KEYS,
-      [],
-    );
+      REQUIRED_WWW_AUTHENTICATE_KEYS,
+    ) as BasicWWWAuthenticateData;
   },
 
   /**
@@ -56,11 +72,13 @@ const BASIC = {
    * );
    * @api public
    */
-  buildWWWAuthenticateRest: function buildWWWAuthenticateRest(data) {
+  buildWWWAuthenticateRest: function buildWWWAuthenticateRest(
+    data: BasicWWWAuthenticateData,
+  ): string {
     return buildHTTPHeadersQuotedKeyValueSet(
       data,
       AUTHORIZED_WWW_AUTHENTICATE_KEYS,
-      [],
+      REQUIRED_WWW_AUTHENTICATE_KEYS,
     );
   },
 
@@ -78,7 +96,9 @@ const BASIC = {
    * );
    * @api public
    */
-  parseAuthorizationRest: function parseAuthorizationRest(rest) {
+  parseAuthorizationRest: function parseAuthorizationRest(
+    rest: string,
+  ): BasicAuthorizationData & { hash: string } {
     if (!rest) {
       throw new YError('E_EMPTY_AUTH');
     }
@@ -108,7 +128,13 @@ const BASIC = {
     hash,
     username,
     password,
-  } = {}) {
+  }:
+    | ({
+        hash: string;
+      } & Partial<BasicAuthorizationData>)
+    | (BasicAuthorizationData & {
+        hash?: string;
+      })): string {
     if (username && password) {
       return BASIC.computeHash({
         username,
@@ -135,8 +161,11 @@ const BASIC = {
    * );
    * @api public
    */
-  computeHash: function computeHash({ username, password }) {
-    return new Buffer(username + ':' + password).toString('base64');
+  computeHash: function computeHash({
+    username,
+    password,
+  }: BasicAuthorizationData): string {
+    return Buffer.from(username + ':' + password).toString('base64');
   },
 
   /**
@@ -152,10 +181,11 @@ const BASIC = {
    * );
    * @api public
    */
-  decodeHash: function decodeHash(hash) {
-    let [username, ...passwordParts] = new Buffer(hash, 'base64')
+  decodeHash: function decodeHash(hash: string): BasicAuthorizationData {
+    const [username, ...passwordParts] = Buffer.from(hash, 'base64')
       .toString()
       .split(':');
+
     return {
       username,
       password: passwordParts.join(':'),

@@ -4,6 +4,25 @@ import BASIC from './mechanisms/basic';
 import DIGEST from './mechanisms/digest';
 import BEARER from './mechanisms/bearer';
 
+/* Architecture Note #1: Module structure
+
+Since the `WWW-Authenticate` and the `Authorization` headers parsing
+ is very similar whatever authentication mechanism is used, we export
+ a generic set of function that parse/build those headers given a
+ list of authorized mechanisms.
+
+See the following [RFC](https://tools.ietf.org/html/rfc7235).
+
+*/
+
+export type Mechanism = {
+  type: string;
+  parseWWWAuthenticateRest(rest: string): Record<string, string>;
+  buildWWWAuthenticateRest(data: Record<string, string>): string;
+  parseAuthorizationRest(rest: string): Record<string, string>;
+  buildAuthorizationRest(data: Record<string, string>): string;
+};
+
 /**
  * @module http-auth-utils
  */
@@ -12,7 +31,7 @@ import BEARER from './mechanisms/bearer';
  * Natively supported authentication mechanisms.
  * @type {Array}
  */
-const mechanisms = [BASIC, DIGEST, BEARER];
+const mechanisms: Mechanism[] = [BASIC, DIGEST, BEARER];
 
 /**
  * Basic authentication mechanism.
@@ -60,11 +79,16 @@ export { BASIC, DIGEST, BEARER, mechanisms };
  *   }
  * );
  */
-export function parseWWWAuthenticateHeader(
-  header,
-  authMechanisms = mechanisms,
-  { strict = true } = { strict: true },
-) {
+export function parseWWWAuthenticateHeader<
+  T extends Mechanism = typeof BASIC | typeof BEARER | typeof DIGEST
+>(
+  header: string,
+  authMechanisms: T[] = mechanisms as T[],
+  { strict = true }: { strict: boolean } = { strict: true },
+): {
+  type: T['type'];
+  data: ReturnType<T['parseWWWAuthenticateRest']>;
+} {
   let result = null;
 
   authMechanisms.some((authMechanism) => {
@@ -110,11 +134,16 @@ export function parseWWWAuthenticateHeader(
  *   }
  * );
  */
-export function parseAuthorizationHeader(
-  header,
-  authMechanisms = mechanisms,
-  { strict = true } = { strict: true },
-) {
+export function parseAuthorizationHeader<
+  T extends Mechanism = typeof BASIC | typeof BEARER | typeof DIGEST
+>(
+  header: string,
+  authMechanisms: T[] = mechanisms as T[],
+  { strict = true }: { strict: boolean } = { strict: true },
+): {
+  type: T['type'];
+  data: ReturnType<T['parseAuthorizationRest']>;
+} {
   let result = null;
 
   authMechanisms.some(function (authMechanism) {
@@ -154,7 +183,10 @@ export function parseAuthorizationHeader(
  *   'Basic realm="test"'
  * );
  */
-export function buildWWWAuthenticateHeader(authMechanism, data) {
+export function buildWWWAuthenticateHeader<T extends Mechanism>(
+  authMechanism: T,
+  data: Parameters<T['buildWWWAuthenticateRest']>[0],
+): string {
   return `${authMechanism.type} ${authMechanism.buildWWWAuthenticateRest(
     data,
   )}`;
@@ -176,6 +208,9 @@ export function buildWWWAuthenticateHeader(authMechanism, data) {
  *   'Basic realm="test"'
  * );
  */
-export function buildAuthorizationHeader(authMechanism, data) {
+export function buildAuthorizationHeader<T extends Mechanism>(
+  authMechanism: T,
+  data: Parameters<T['buildAuthorizationRest']>[0],
+): string {
   return `${authMechanism.type} ${authMechanism.buildAuthorizationRest(data)}`;
 }

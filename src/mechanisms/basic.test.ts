@@ -4,13 +4,13 @@ import BASIC from './basic';
 
 describe('BASIC', () => {
   describe('type', () => {
-    it('should be the basic auth prefix', () => {
+    test('should be the basic auth prefix', () => {
       assert.equal(BASIC.type, 'Basic');
     });
   });
 
   describe('parseWWWAuthenticateRest', () => {
-    it('should work', () => {
+    test('should work', () => {
       neatequal(BASIC.parseWWWAuthenticateRest('realm="perlinpinpin"'), {
         realm: 'perlinpinpin',
       });
@@ -18,7 +18,7 @@ describe('BASIC', () => {
   });
 
   describe('buildWWWAuthenticateRest', () => {
-    it('should work', () => {
+    test('should work', () => {
       assert.equal(
         BASIC.buildWWWAuthenticateRest({
           realm: 'perlinpinpin',
@@ -27,7 +27,7 @@ describe('BASIC', () => {
       );
     });
 
-    it('should be the inverse of parseWWWAuthenticateRest', () => {
+    test('should be the inverse of parseWWWAuthenticateRest', () => {
       neatequal(
         BASIC.parseWWWAuthenticateRest(
           BASIC.buildWWWAuthenticateRest({
@@ -42,7 +42,7 @@ describe('BASIC', () => {
   });
 
   describe('parseAuthorizationRest', () => {
-    it('should work', () => {
+    test('should work', () => {
       neatequal(BASIC.parseAuthorizationRest('QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
         hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
         username: 'Ali Baba',
@@ -60,13 +60,13 @@ describe('BASIC', () => {
       );
     });
 
-    it('should fail with empty rest', () => {
+    test('should fail with empty rest', () => {
       assert.throws(() => BASIC.parseAuthorizationRest(''), /E_EMPTY_AUTH/);
     });
   });
 
   describe('buildAuthorizationRest', () => {
-    it('should work with credentials', () => {
+    test('should work with credentials', () => {
       assert.equal(
         BASIC.buildAuthorizationRest({
           username: 'Ali Baba',
@@ -76,7 +76,7 @@ describe('BASIC', () => {
       );
     });
 
-    it('should work with just the hash', () => {
+    test('should work with just the hash', () => {
       assert.equal(
         BASIC.buildAuthorizationRest({
           hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
@@ -85,11 +85,11 @@ describe('BASIC', () => {
       );
     });
 
-    it('should fail with nothing at all', () => {
-      assert.throws(() => BASIC.buildAuthorizationRest(), /E_NO_HASH/);
+    test('should fail with nothing at all', () => {
+      assert.throws(() => BASIC.buildAuthorizationRest({} as any), /E_NO_HASH/);
     });
 
-    it('should be the inverse of parseAuthorizationRest', () => {
+    test('should be the inverse of parseAuthorizationRest', () => {
       neatequal(
         BASIC.parseAuthorizationRest(
           BASIC.buildAuthorizationRest({
@@ -108,7 +108,7 @@ describe('BASIC', () => {
   });
 
   describe('computeHash', () => {
-    it('should work', () => {
+    test('should work', () => {
       assert.equal(
         BASIC.computeHash({
           username: 'Ali Baba',
@@ -120,7 +120,7 @@ describe('BASIC', () => {
   });
 
   describe('decodeHash', () => {
-    it('should work', () => {
+    test('should work', () => {
       neatequal(BASIC.decodeHash('QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
         username: 'Ali Baba',
         password: 'open sesame',

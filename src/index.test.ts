@@ -146,12 +146,10 @@ describe('index', () => {
       assert.throws(
         () => parseAuthorizationHeader('basic ddd'),
         /E_UNKNOWN_AUTH_MECHANISM/,
-        {},
       );
       assert.throws(
         () => parseAuthorizationHeader('basic ddd'),
         /E_UNKNOWN_AUTH_MECHANISM/,
-        { strict: true },
       );
     });
   });
@@ -192,7 +190,8 @@ describe('index', () => {
       assert.equal(
         buildAuthorizationHeader(
           BASIC,
-          parseAuthorizationHeader('Basic Sm9objpSOlU6a2lkZGluZz8=').data,
+          parseAuthorizationHeader('Basic Sm9objpSOlU6a2lkZGluZz8=', [BASIC])
+            .data,
         ),
         'Basic Sm9objpSOlU6a2lkZGluZz8=',
       );

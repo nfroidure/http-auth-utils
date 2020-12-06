@@ -7,15 +7,16 @@ const SEPARATOR_REGEXP = /", ?/;
 
 // FIXME: Create a real parser
 export function parseHTTPHeadersQuotedKeyValueSet(
-  contents,
-  authorizedKeys,
+  contents: string,
+  authorizedKeys: string[],
   requiredKeys = [],
-) {
+): Record<string, string> {
   const data = contents
     .split(SEPARATOR_REGEXP)
     .map((part, partPosition, parts) => {
       part = parts.length - 1 === partPosition ? part : part + '"';
-      let pair = part.split(EQUAL);
+      const pair = part.split(EQUAL);
+
       if (2 !== pair.length) {
         throw new YError(
           'E_MALFORMED_QUOTEDKEYVALUE',
@@ -43,10 +44,10 @@ export function parseHTTPHeadersQuotedKeyValueSet(
 }
 
 export function buildHTTPHeadersQuotedKeyValueSet(
-  data,
-  authorizedKeys,
-  requiredKeys = [],
-) {
+  data: Record<string, string>,
+  authorizedKeys: string[],
+  requiredKeys: string[] = [],
+): string {
   _checkRequiredKeys(requiredKeys, data);
   return authorizedKeys.reduce(function (contents, key) {
     if (data[key]) {
@@ -64,7 +65,10 @@ export function buildHTTPHeadersQuotedKeyValueSet(
   }, '');
 }
 
-function _checkRequiredKeys(requiredKeys, data) {
+function _checkRequiredKeys(
+  requiredKeys: string[],
+  data: Record<string, string>,
+): void {
   requiredKeys.forEach((name) => {
     if ('undefined' === typeof data[name]) {
       throw new YError('E_REQUIRED_KEY', name);

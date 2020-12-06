@@ -9,18 +9,35 @@ import {
   buildHTTPHeadersQuotedKeyValueSet,
 } from '../utils';
 
-const AUTHORIZED_WWW_AUTHENTICATE_KEYS = [
-  'realm',
-  'scope',
-  'error',
-  'error_description',
-];
-
 const AUTHORIZED_ERROR_CODES = [
   'invalid_request',
   'invalid_token',
   'insufficient_scope',
+] as const;
+const REQUIRED_WWW_AUTHENTICATE_KEYS = ['realm'];
+const AUTHORIZED_WWW_AUTHENTICATE_KEYS = [
+  ...REQUIRED_WWW_AUTHENTICATE_KEYS,
+  'scope',
+  'error',
+  'error_description',
 ];
+type BearerWWWAuthenticateData = {
+  realm: string;
+  scope?: string;
+  error?: typeof AUTHORIZED_ERROR_CODES[number];
+  error_description?: string;
+};
+type BearerAuthorizationData = {
+  hash: string;
+};
+
+type BearerAuthorizedErrorCodes = typeof AUTHORIZED_ERROR_CODES[number];
+
+/* Architecture Note #1.1: Bearer mechanism
+
+See the following [RFC](https://tools.ietf.org/html/rfc6750).
+
+*/
 
 /**
  * Bearer authentication mechanism.
@@ -29,7 +46,7 @@ const AUTHORIZED_ERROR_CODES = [
  */
 const BEARER = {
   /**
-   * The Digest auth mechanism prefix.
+   * The Bearer auth mechanism prefix.
    * @type {String}
    */
   type: 'Bearer',
@@ -50,12 +67,14 @@ const BEARER = {
    * );
    * @api public
    */
-  parseWWWAuthenticateRest: function parseWWWAuthenticateRest(rest) {
+  parseWWWAuthenticateRest: function parseWWWAuthenticateRest(
+    rest: string,
+  ): BearerWWWAuthenticateData {
     return parseHTTPHeadersQuotedKeyValueSet(
       rest,
-      AUTHORIZED_WWW_AUTHENTICATE_KEYS,
+      (AUTHORIZED_WWW_AUTHENTICATE_KEYS as unknown) as string[],
       [],
-    );
+    ) as BearerWWWAuthenticateData;
   },
 
   /**
@@ -75,13 +94,21 @@ const BEARER = {
    * );
    * @api public
    */
-  buildWWWAuthenticateRest: function buildWWWAuthenticateRest(data) {
-    if (data.error && -1 === AUTHORIZED_ERROR_CODES.indexOf(data.error)) {
+  buildWWWAuthenticateRest: function buildWWWAuthenticateRest(
+    data: BearerWWWAuthenticateData,
+  ): string {
+    if (
+      data.error &&
+      -1 ===
+        AUTHORIZED_ERROR_CODES.indexOf(
+          (data.error as unknown) as BearerAuthorizedErrorCodes,
+        )
+    ) {
       throw new YError('E_INVALID_ERROR', data.error, AUTHORIZED_ERROR_CODES);
     }
     return buildHTTPHeadersQuotedKeyValueSet(
       data,
-      AUTHORIZED_WWW_AUTHENTICATE_KEYS,
+      (AUTHORIZED_WWW_AUTHENTICATE_KEYS as unknown) as string[],
       [],
     );
   },
@@ -98,7 +125,9 @@ const BEARER = {
    * );
    * @api public
    */
-  parseAuthorizationRest: function parseAuthorizationRest(rest) {
+  parseAuthorizationRest: function parseAuthorizationRest(
+    rest: string,
+  ): BearerAuthorizationData {
     if (!rest) {
       throw new YError('E_EMPTY_AUTH');
     }
@@ -120,7 +149,9 @@ const BEARER = {
    * );
    * @api public
    */
-  buildAuthorizationRest: function buildAuthorizationRest({ hash } = {}) {
+  buildAuthorizationRest: function buildAuthorizationRest({
+    hash,
+  }: BearerAuthorizationData): string {
     if (!hash) {
       throw new YError('E_NO_HASH');
     }

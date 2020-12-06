@@ -20,65 +20,18 @@
 [//]: # (::contents:start)
 
 This library provide several utilities to parse and build WWW-Authenticate and
- Authorization headers as described per the HTTP RFC.
+Authorization headers as described per the HTTP RFC.
 
-It is intended to be framework agnostic and could be used either on
- the server and the client side. It is also pure functions only, no
- side effect here. The functions are synchronous since only parsing
- headers of small size so no need for streams or anything asynchronous.
+It is intended to be framework agnostic and could be used either on the server
+and the client side. It is also pure functions only, no side effect here. The
+functions are synchronous since only parsing headers of small size so no need
+for streams or anything asynchronous.
 
-The module is easily extensible with new mechanisms, one very common way to extend
- it is to create a `FAKE_TOKEN` mechanism for development only that allows to
- directly provide the userId that should be authenticated:
-
-```js
-import assert from 'assert';
-import {
-  parseAuthorizationHeader,
-  mechanisms,
-} from 'http-auth-utils';
-
-const FAKE_MECHANISM = {
-  type: 'Fake',
-  parseAuthorizationRest: rest => {
-    let userId;
-    let scopes;
-
-    rest.replace(/^(\d+)-((\w+,)*(\w+){1})$/, (_, rawUserId, rawScopes) => {
-      userId = parseInt(rawUserId);
-      scopes = rawScopes.split(',');
-      return '';
-    });
-
-    if ('undefined' === typeof userId || 'undefined' === typeof scopes) {
-      throw new HTTPError(400, 'E_INVALID_FAKE_TOKEN');
-    }
-
-    return {
-      hash: rest,
-      userId,
-      scopes,
-    };
-  },
-};
-
-assert.deepEqual(
-  parseAuthorizationHeader('Fake 1664-read,write', [
-    ...mechanisms,
-    // In a real world app, you would put this mechanism
-    // under the condition to be in development env of course
-    FAKE_MECHANISM,
-  ]), {
-    type: 'Fake',
-    data: {
-      hash: '1664-read,write',
-      userId: 1664,
-      scopes: ['read', 'write'],
-    }
-  }
-);
-```
-
+The module is easily extensible with new mechanisms, one very common way to
+extend it is to create a `FAKE_TOKEN` mechanism for development only that allows
+to directly provide the userId that should be authenticated. You can find
+[an sample implementation](https://github.com/nfroidure/whook/blob/master/packages/whook-example/src/services/MECHANISMS.ts)
+in the Whook's framework repository.
 
 [//]: # (::contents:end)
 
@@ -102,19 +55,33 @@ assert.deepEqual(
 
 * [http-auth-utils](#module_http-auth-utils)
     * _static_
-        * [.parseWWWAuthenticateHeader(header, [authMechanisms], [options])](#module_http-auth-utils.parseWWWAuthenticateHeader) ⇒ <code>Object</code>
-        * [.parseAuthorizationHeader(header, [authMechanisms], [options])](#module_http-auth-utils.parseAuthorizationHeader) ⇒ <code>Object</code>
-        * [.buildWWWAuthenticateHeader(authMechanism, The)](#module_http-auth-utils.buildWWWAuthenticateHeader) ⇒ <code>string</code>
-        * [.buildAuthorizationHeader(authMechanism, The)](#module_http-auth-utils.buildAuthorizationHeader) ⇒ <code>string</code>
+        * [.mechanisms](#module_http-auth-utils.mechanisms) : <code>Object</code>
     * _inner_
         * [~mechanisms](#module_http-auth-utils..mechanisms) : <code>Array</code>
+        * [~parseWWWAuthenticateHeader(header, [authMechanisms], [options])](#module_http-auth-utils..parseWWWAuthenticateHeader) ⇒ <code>Object</code>
+        * [~parseAuthorizationHeader(header, [authMechanisms], [options])](#module_http-auth-utils..parseAuthorizationHeader) ⇒ <code>Object</code>
+        * [~buildWWWAuthenticateHeader(authMechanism, The)](#module_http-auth-utils..buildWWWAuthenticateHeader) ⇒ <code>string</code>
+        * [~buildAuthorizationHeader(authMechanism, The)](#module_http-auth-utils..buildAuthorizationHeader) ⇒ <code>string</code>
 
-<a name="module_http-auth-utils.parseWWWAuthenticateHeader"></a>
+<a name="module_http-auth-utils.mechanisms"></a>
 
-### http-auth-utils.parseWWWAuthenticateHeader(header, [authMechanisms], [options]) ⇒ <code>Object</code>
+### http-auth-utils.mechanisms : <code>Object</code>
+Basic authentication mechanism.
+
+**Kind**: static property of [<code>http-auth-utils</code>](#module_http-auth-utils)  
+**See**: [http-auth-utils/mechanisms/basic](#module_http-auth-utils/mechanisms/basic)  
+<a name="module_http-auth-utils..mechanisms"></a>
+
+### http-auth-utils~mechanisms : <code>Array</code>
+Natively supported authentication mechanisms.
+
+**Kind**: inner constant of [<code>http-auth-utils</code>](#module_http-auth-utils)  
+<a name="module_http-auth-utils..parseWWWAuthenticateHeader"></a>
+
+### http-auth-utils~parseWWWAuthenticateHeader(header, [authMechanisms], [options]) ⇒ <code>Object</code>
 Parse HTTP WWW-Authenticate header contents.
 
-**Kind**: static method of [<code>http-auth-utils</code>](#module_http-auth-utils)  
+**Kind**: inner method of [<code>http-auth-utils</code>](#module_http-auth-utils)  
 **Returns**: <code>Object</code> - Result of the contents parse.  
 **Api**: public  
 
@@ -136,12 +103,12 @@ assert.deepEqual(
   }
 );
 ```
-<a name="module_http-auth-utils.parseAuthorizationHeader"></a>
+<a name="module_http-auth-utils..parseAuthorizationHeader"></a>
 
-### http-auth-utils.parseAuthorizationHeader(header, [authMechanisms], [options]) ⇒ <code>Object</code>
+### http-auth-utils~parseAuthorizationHeader(header, [authMechanisms], [options]) ⇒ <code>Object</code>
 Parse HTTP Authorization header contents.
 
-**Kind**: static method of [<code>http-auth-utils</code>](#module_http-auth-utils)  
+**Kind**: inner method of [<code>http-auth-utils</code>](#module_http-auth-utils)  
 **Returns**: <code>Object</code> - Result of the contents parse.  
 **Api**: public  
 
@@ -163,12 +130,12 @@ assert.deepEqual(
   }
 );
 ```
-<a name="module_http-auth-utils.buildWWWAuthenticateHeader"></a>
+<a name="module_http-auth-utils..buildWWWAuthenticateHeader"></a>
 
-### http-auth-utils.buildWWWAuthenticateHeader(authMechanism, The) ⇒ <code>string</code>
+### http-auth-utils~buildWWWAuthenticateHeader(authMechanism, The) ⇒ <code>string</code>
 Build HTTP WWW-Authenticate header value.
 
-**Kind**: static method of [<code>http-auth-utils</code>](#module_http-auth-utils)  
+**Kind**: inner method of [<code>http-auth-utils</code>](#module_http-auth-utils)  
 **Returns**: <code>string</code> - The header value.  
 **Api**: public  
 
@@ -186,12 +153,12 @@ assert.deepEqual(
   'Basic realm="test"'
 );
 ```
-<a name="module_http-auth-utils.buildAuthorizationHeader"></a>
+<a name="module_http-auth-utils..buildAuthorizationHeader"></a>
 
-### http-auth-utils.buildAuthorizationHeader(authMechanism, The) ⇒ <code>string</code>
+### http-auth-utils~buildAuthorizationHeader(authMechanism, The) ⇒ <code>string</code>
 Build HTTP Authorization header value.
 
-**Kind**: static method of [<code>http-auth-utils</code>](#module_http-auth-utils)  
+**Kind**: inner method of [<code>http-auth-utils</code>](#module_http-auth-utils)  
 **Returns**: <code>string</code> - The header value.  
 **Api**: public  
 
@@ -209,12 +176,6 @@ assert.deepEqual(
   'Basic realm="test"'
 );
 ```
-<a name="module_http-auth-utils..mechanisms"></a>
-
-### http-auth-utils~mechanisms : <code>Array</code>
-Natively supported authentication mechanisms.
-
-**Kind**: inner constant of [<code>http-auth-utils</code>](#module_http-auth-utils)  
 <a name="module_http-auth-utils/mechanisms/basic"></a>
 
 ## http-auth-utils/mechanisms/basic
@@ -415,7 +376,7 @@ Bearer authentication mechanism.
 <a name="module_http-auth-utils/mechanisms/bearer..BEARER.type"></a>
 
 #### BEARER.type : <code>String</code>
-The Digest auth mechanism prefix.
+The Bearer auth mechanism prefix.
 
 **Kind**: static property of [<code>BEARER</code>](#module_http-auth-utils/mechanisms/bearer..BEARER)  
 <a name="module_http-auth-utils/mechanisms/bearer..BEARER.parseWWWAuthenticateRest"></a>
@@ -718,7 +679,7 @@ assert.equal(
 ```
 
 # Authors
-- [Nicolas Froidure](http://insertafter.com/en/index.html)
+- [Nicolas Froidure](https://insertafter.com/en/index.html)
 
 # License
 [MIT](https://github.com/nfroidure/http-auth-utils/blob/master/LICENSE)

@@ -9,27 +9,57 @@ import {
 
 import crypto from 'crypto';
 
+const REQUIRED_WWW_AUTHENTICATE_KEYS = ['realm', 'nonce'];
 const AUTHORIZED_WWW_AUTHENTICATE_KEYS = [
-  'realm',
+  ...REQUIRED_WWW_AUTHENTICATE_KEYS,
   'domain',
-  'qop',
-  'nonce',
   'opaque',
   'stale',
   'algorithm',
+  'qop',
 ];
-const AUTHORIZED_AUTHORIZATION_KEYS = [
+type DigestWWWAuthenticateData = {
+  realm: string;
+  domain?: string;
+  nonce: string;
+  opaque?: string;
+  stale?: 'true' | 'false';
+  algorithm?: 'MD5' | 'MD5-sess' | 'token';
+  qop?: 'auth' | 'auth-int' | string;
+};
+const REQUIRED_AUTHORIZATION_KEYS = [
   'username',
   'realm',
   'nonce',
   'uri',
   'response',
+];
+const AUTHORIZED_AUTHORIZATION_KEYS = [
+  ...REQUIRED_AUTHORIZATION_KEYS,
   'algorithm',
   'cnonce',
   'opaque',
   'qop',
   'nc',
 ];
+
+type DigestAuthorizationData = {
+  username: string;
+  realm: string;
+  nonce: string;
+  uri: string;
+  response: string;
+  algorithm?: string;
+  cnonce?: string;
+  opaque?: string;
+  qop?: string;
+  nc?: string;
+};
+/* Architecture Note #1.3: Digest mechanism
+
+See the following [RFC](https://tools.ietf.org/html/rfc2617).
+
+*/
 
 /**
  * Digest authentication mechanism.
@@ -64,12 +94,14 @@ const DIGEST = {
    * );
    * @api public
    */
-  parseWWWAuthenticateRest: function parseWWWAuthenticateRest(rest) {
+  parseWWWAuthenticateRest: function parseWWWAuthenticateRest(
+    rest: string,
+  ): DigestWWWAuthenticateData {
     return parseHTTPHeadersQuotedKeyValueSet(
       rest,
       AUTHORIZED_WWW_AUTHENTICATE_KEYS,
-      [],
-    );
+      REQUIRED_WWW_AUTHENTICATE_KEYS,
+    ) as DigestWWWAuthenticateData;
   },
 
   /**
@@ -91,11 +123,13 @@ const DIGEST = {
    * );
    * @api public
    */
-  buildWWWAuthenticateRest: function buildWWWAuthenticateRest(data) {
+  buildWWWAuthenticateRest: function buildWWWAuthenticateRest(
+    data: DigestWWWAuthenticateData,
+  ): string {
     return buildHTTPHeadersQuotedKeyValueSet(
       data,
       AUTHORIZED_WWW_AUTHENTICATE_KEYS,
-      [],
+      REQUIRED_WWW_AUTHENTICATE_KEYS,
     );
   },
 
@@ -129,12 +163,14 @@ const DIGEST = {
    * );
    * @api public
    */
-  parseAuthorizationRest: function parseAuthorizationRest(rest) {
+  parseAuthorizationRest: function parseAuthorizationRest(
+    rest: string,
+  ): DigestAuthorizationData {
     return parseHTTPHeadersQuotedKeyValueSet(
       rest,
       AUTHORIZED_AUTHORIZATION_KEYS,
-      [],
-    );
+      REQUIRED_AUTHORIZATION_KEYS,
+    ) as DigestAuthorizationData;
   },
 
   /**
@@ -166,11 +202,13 @@ const DIGEST = {
    * );
    * @api public
    */
-  buildAuthorizationRest: function buildAuthorizationRest(data) {
+  buildAuthorizationRest: function buildAuthorizationRest(
+    data: DigestAuthorizationData,
+  ): string {
     return buildHTTPHeadersQuotedKeyValueSet(
       data,
       AUTHORIZED_AUTHORIZATION_KEYS,
-      [],
+      REQUIRED_AUTHORIZATION_KEYS,
     );
   },
 
@@ -196,7 +234,19 @@ const DIGEST = {
    * );
    * @api public
    */
-  computeHash: function computeHash(data) {
+  computeHash: function computeHash(data: {
+    ha1?: string;
+    algorithm: string;
+    method: string;
+    uri: string;
+    realm: string;
+    username: string;
+    password: string;
+    nonce: string;
+    nc: string;
+    cnonce: string;
+    qop: string;
+  }): string {
     const ha1 =
       data.ha1 ||
       _computeHash(
@@ -212,7 +262,7 @@ const DIGEST = {
   },
 };
 
-function _computeHash(algorithm, str) {
+function _computeHash(algorithm: string, str: string): string {
   const hashsum = crypto.createHash(algorithm);
 
   hashsum.update(str);
