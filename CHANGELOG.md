@@ -1,3 +1,7 @@
+## [3.0.1](https://github.com/nfroidure/http-auth-utils/compare/v3.0.0...v3.0.1) (2021-04-09)
+
+
+
 # [3.0.0](https://github.com/nfroidure/http-auth-utils/compare/v2.6.0...v3.0.0) (2020-12-06)
 
 
