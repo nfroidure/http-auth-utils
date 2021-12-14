@@ -140,7 +140,7 @@
       "jsarch"
     ]
   },
-  "contributors": [],
+  "contributors": ["Jake Pruitt <jake.pruitt@datadoghq.com>"],
   "files": [
     "dist",
     "src",
