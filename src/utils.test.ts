@@ -26,9 +26,35 @@ describe('utils', () => {
       );
     });
 
+    test('should work with parse-able non-quoted data', () => {
+      neatequal(
+        parseHTTPHeadersQuotedKeyValueSet(
+          'realm="testrealm@host.com", ' +
+            'qop=auth, ' +
+            'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' +
+            'opaque="5ccc069c403ebaf9f0171e9517f40e41"',
+          ['realm', 'qop', 'nonce', 'opaque'],
+          ['realm', 'qop', 'nonce', 'opaque'],
+        ),
+        {
+          realm: 'testrealm@host.com',
+          qop: 'auth',
+          nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
+          opaque: '5ccc069c403ebaf9f0171e9517f40e41',
+        },
+      );
+    });
+
     test('should fail with bad quoted value pair', () => {
       assert.throws(
         () => parseHTTPHeadersQuotedKeyValueSet('realm', []),
+        /E_MALFORMED_QUOTEDKEYVALUE/,
+      );
+    });
+
+    test('should fail with half-quoted value pair', () => {
+      assert.throws(
+        () => parseHTTPHeadersQuotedKeyValueSet('realm="uneven', ['realm']),
         /E_MALFORMED_QUOTEDKEYVALUE/,
       );
     });
@@ -40,11 +66,10 @@ describe('utils', () => {
       );
     });
 
-    test('should fail with bad quoted value pair', () => {
-      assert.throws(
-        () => parseHTTPHeadersQuotedKeyValueSet('realm=dsad', ['realm']),
-        /E_UNQUOTED_VALUE/,
-      );
+    test('should pass with non-quoted value pair', () => {
+      neatequal(parseHTTPHeadersQuotedKeyValueSet('realm=dsad', ['realm']), {
+        realm: 'dsad',
+      });
     });
   });
 
