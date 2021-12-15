@@ -1,3 +1,12 @@
+## [3.0.2](https://github.com/nfroidure/http-auth-utils/compare/v3.0.1...v3.0.2) (2021-12-15)
+
+
+### Bug Fixes
+
+* **src/utils.ts:** handle parsing non-quoted values in authenticate header ([772608e](https://github.com/nfroidure/http-auth-utils/commit/772608e037da2385e1f6ba5035146ab4d945af6b)), closes [#10](https://github.com/nfroidure/http-auth-utils/issues/10)
+
+
+
 ## [3.0.1](https://github.com/nfroidure/http-auth-utils/compare/v3.0.0...v3.0.1) (2021-04-09)
 
 
