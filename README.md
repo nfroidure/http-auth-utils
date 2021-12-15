@@ -680,6 +680,7 @@ assert.equal(
 
 # Authors
 - [Nicolas Froidure](https://insertafter.com/en/index.html)
+- [Jake Pruitt](https://github.com/jakepruitt)
 
 # License
 [MIT](https://github.com/nfroidure/http-auth-utils/blob/master/LICENSE)

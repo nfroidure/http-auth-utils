@@ -3,7 +3,18 @@ import YError from 'yerror';
 const QUOTE = '"';
 const EQUAL = '=';
 const SEPARATOR = ', ';
-const SEPARATOR_REGEXP = /", ?/;
+
+/*
+ * Regular expression for matching the key-value pairs
+ * \w+     = The key
+ * =       = The equal sign
+ * ".*?"   = Value option 1: A double-quoted value (using the non-greedy *? to stop at the first doublequote)
+ * [^",]+  = Value option 2: A string without commas or double-quotes
+ * (?=,|$) = Zero-width (as in not captured) positive lookahead assertion.
+ *           The previous match will only be valid if it's followed by a " literal
+ *           or the end of the string
+ */
+const KEYVALUE_REGEXP = /\w+=(".*?"|[^",]+)(?=,|$)/g;
 
 // FIXME: Create a real parser
 export function parseHTTPHeadersQuotedKeyValueSet(
@@ -11,10 +22,11 @@ export function parseHTTPHeadersQuotedKeyValueSet(
   authorizedKeys: string[],
   requiredKeys = [],
 ): Record<string, string> {
-  const data = contents
-    .split(SEPARATOR_REGEXP)
-    .map((part, partPosition, parts) => {
-      part = parts.length - 1 === partPosition ? part : part + '"';
+  const matches = contents.trim().match(KEYVALUE_REGEXP);
+  if (!matches) throw new YError('E_MALFORMED_QUOTEDKEYVALUE', contents);
+
+  const data = matches
+    .map((part, partPosition) => {
       const pair = part.split(EQUAL);
 
       if (2 !== pair.length) {
@@ -31,10 +43,18 @@ export function parseHTTPHeadersQuotedKeyValueSet(
       if (-1 === authorizedKeys.indexOf(name)) {
         throw new YError('E_UNAUTHORIZED_KEY', valuePosition, name);
       }
-      if (QUOTE !== value[0] || QUOTE !== value[value.length - 1]) {
-        throw new YError('E_UNQUOTED_VALUE', valuePosition, name, value);
-      }
-      parsedValues[name] = value.substr(1, value.length - 2);
+      /*
+       * Regular expression for stripping paired starting and ending double quotes off the value:
+       * ^      = The beginning of the string
+       * "      = The first double quote
+       * .+     = One or more characters of any kind
+       * (?="$) = Zero-width (as in not captured) positive lookahead assertion.
+       *          The previous match will only be valid if it's followed by a " literal
+       *          or the end of the string
+       * "      = The ending double quote
+       * $      = The end of the string
+       */
+      parsedValues[name] = value.replace(/^"(.+(?="$))"$/, '$1');
       return parsedValues;
     }, {});
 

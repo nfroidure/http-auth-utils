@@ -26,6 +26,23 @@ describe('digest', () => {
         },
       );
     });
+
+    it('should handle non-quoted fields', () => {
+      neatequal(
+        DIGEST.parseWWWAuthenticateRest(
+          'realm="testrealm@host.com", ' +
+            'qop=auth, ' +
+            'algorithm=MD5, ' +
+            'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093"',
+        ),
+        {
+          realm: 'testrealm@host.com',
+          qop: 'auth',
+          algorithm: 'MD5',
+          nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
+        },
+      );
+    });
   });
 
   describe('buildWWWAuthenticateRest', () => {
