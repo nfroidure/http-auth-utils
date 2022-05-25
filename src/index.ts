@@ -80,7 +80,7 @@ export { BASIC, DIGEST, BEARER, mechanisms };
  * );
  */
 export function parseWWWAuthenticateHeader<
-  T extends Mechanism = typeof BASIC | typeof BEARER | typeof DIGEST
+  T extends Mechanism = typeof BASIC | typeof BEARER | typeof DIGEST,
 >(
   header: string,
   authMechanisms: T[] = mechanisms as T[],
@@ -89,7 +89,10 @@ export function parseWWWAuthenticateHeader<
   type: T['type'];
   data: ReturnType<T['parseWWWAuthenticateRest']>;
 } {
-  let result = null;
+  let result: {
+    type: T['type'];
+    data: ReturnType<T['parseWWWAuthenticateRest']>;
+  } | null = null;
 
   authMechanisms.some((authMechanism) => {
     if (
@@ -100,7 +103,7 @@ export function parseWWWAuthenticateHeader<
         type: authMechanism.type,
         data: authMechanism.parseWWWAuthenticateRest(
           header.substr(authMechanism.type.length + 1),
-        ),
+        ) as ReturnType<T['parseWWWAuthenticateRest']>,
       };
       return true;
     }
@@ -135,7 +138,7 @@ export function parseWWWAuthenticateHeader<
  * );
  */
 export function parseAuthorizationHeader<
-  T extends Mechanism = typeof BASIC | typeof BEARER | typeof DIGEST
+  T extends Mechanism = typeof BASIC | typeof BEARER | typeof DIGEST,
 >(
   header: string,
   authMechanisms: T[] = mechanisms as T[],
@@ -144,7 +147,10 @@ export function parseAuthorizationHeader<
   type: T['type'];
   data: ReturnType<T['parseAuthorizationRest']>;
 } {
-  let result = null;
+  let result: {
+    type: T['type'];
+    data: ReturnType<T['parseAuthorizationRest']>;
+  } | null = null;
 
   authMechanisms.some(function (authMechanism) {
     if (
@@ -155,7 +161,7 @@ export function parseAuthorizationHeader<
         type: authMechanism.type,
         data: authMechanism.parseAuthorizationRest(
           header.substr(authMechanism.type.length + 1),
-        ),
+        ) as ReturnType<T['parseAuthorizationRest']>,
       };
       return true;
     }

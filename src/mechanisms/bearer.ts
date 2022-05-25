@@ -72,7 +72,7 @@ const BEARER = {
   ): BearerWWWAuthenticateData {
     return parseHTTPHeadersQuotedKeyValueSet(
       rest,
-      (AUTHORIZED_WWW_AUTHENTICATE_KEYS as unknown) as string[],
+      AUTHORIZED_WWW_AUTHENTICATE_KEYS as unknown as string[],
       [],
     ) as BearerWWWAuthenticateData;
   },
@@ -101,14 +101,14 @@ const BEARER = {
       data.error &&
       -1 ===
         AUTHORIZED_ERROR_CODES.indexOf(
-          (data.error as unknown) as BearerAuthorizedErrorCodes,
+          data.error as unknown as BearerAuthorizedErrorCodes,
         )
     ) {
       throw new YError('E_INVALID_ERROR', data.error, AUTHORIZED_ERROR_CODES);
     }
     return buildHTTPHeadersQuotedKeyValueSet(
       data,
-      (AUTHORIZED_WWW_AUTHENTICATE_KEYS as unknown) as string[],
+      AUTHORIZED_WWW_AUTHENTICATE_KEYS as unknown as string[],
       [],
     );
   },

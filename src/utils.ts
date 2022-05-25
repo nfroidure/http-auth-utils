@@ -20,7 +20,7 @@ const KEYVALUE_REGEXP = /\w+=(".*?"|[^",]+)(?=,|$)/g;
 export function parseHTTPHeadersQuotedKeyValueSet(
   contents: string,
   authorizedKeys: string[],
-  requiredKeys = [],
+  requiredKeys: string[] = [],
 ): Record<string, string> {
   const matches = contents.trim().match(KEYVALUE_REGEXP);
   if (!matches) throw new YError('E_MALFORMED_QUOTEDKEYVALUE', contents);

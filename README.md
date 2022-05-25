@@ -10,11 +10,6 @@
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/nfroidure/http-auth-utils/blob/master/LICENSE)
 [![Build status](https://travis-ci.com/nfroidure/http-auth-utils.svg?branch=master)](https://travis-ci.com/github/nfroidure/http-auth-utils)
 [![Coverage Status](https://coveralls.io/repos/github/nfroidure/http-auth-utils/badge.svg?branch=master)](https://coveralls.io/github/nfroidure/http-auth-utils?branch=master)
-[![NPM version](https://badge.fury.io/js/http-auth-utils.svg)](https://npmjs.org/package/http-auth-utils)
-[![Dependency Status](https://david-dm.org/nfroidure/http-auth-utils.svg)](https://david-dm.org/nfroidure/http-auth-utils)
-[![devDependency Status](https://david-dm.org/nfroidure/http-auth-utils/dev-status.svg)](https://david-dm.org/nfroidure/http-auth-utils#info=devDependencies)
-[![Package Quality](https://npm.packagequality.com/shield/http-auth-utils.svg)](https://packagequality.com/#?package=http-auth-utils)
-[![Code Climate](https://codeclimate.com/github/nfroidure/http-auth-utils.svg)](https://codeclimate.com/github/nfroidure/http-auth-utils)
 
 
 [//]: # (::contents:start)

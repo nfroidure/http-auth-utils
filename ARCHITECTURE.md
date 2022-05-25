@@ -5,9 +5,15 @@
 [//]: # ( )
 # Architecture Notes
 
+## Summary
+
+1. [Module structure](#1-module-structure)
+   1. [Bearer mechanism](#11-bearer-mechanism)
+   2. [Basic mechanism](#12-basic-mechanism)
+   3. [Digest mechanism](#13-digest-mechanism)
 
 
-## Module structure
+## 1. Module structure
 
 Since the `WWW-Authenticate` and the `Authorization` headers parsing
  is very similar whatever authentication mechanism is used, we export
@@ -20,7 +26,7 @@ See the following [RFC](https://tools.ietf.org/html/rfc7235).
 
 
 
-### Bearer mechanism
+### 1.1. Bearer mechanism
 
 See the following [RFC](https://tools.ietf.org/html/rfc6750).
 
@@ -28,7 +34,7 @@ See the following [RFC](https://tools.ietf.org/html/rfc6750).
 
 
 
-### Basic mechanism
+### 1.2. Basic mechanism
 
 See the following [RFC](https://tools.ietf.org/html/rfc7617).
 
@@ -36,7 +42,7 @@ See the following [RFC](https://tools.ietf.org/html/rfc7617).
 
 
 
-### Digest mechanism
+### 1.3. Digest mechanism
 
 See the following [RFC](https://tools.ietf.org/html/rfc2617).
 
