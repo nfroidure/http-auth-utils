@@ -1,4 +1,5 @@
 import YError from 'yerror';
+import splitn from '@sciactive/splitn';
 
 const QUOTE = '"';
 const EQUAL = '=';
@@ -26,19 +27,7 @@ export function parseHTTPHeadersQuotedKeyValueSet(
   if (!matches) throw new YError('E_MALFORMED_QUOTEDKEYVALUE', contents);
 
   const data = matches
-    .map((part, partPosition) => {
-      const pair = part.split(EQUAL);
-
-      if (2 !== pair.length) {
-        throw new YError(
-          'E_MALFORMED_QUOTEDKEYVALUE',
-          partPosition,
-          part,
-          pair.length,
-        );
-      }
-      return pair;
-    })
+    .map((part) => splitn(part, EQUAL, 2))
     .reduce(function (parsedValues, [name, value], valuePosition) {
       if (-1 === authorizedKeys.indexOf(name)) {
         throw new YError('E_UNAUTHORIZED_KEY', valuePosition, name);
