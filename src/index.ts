@@ -1,8 +1,8 @@
-import YError from 'yerror';
+import { YError } from 'yerror';
 
-import BASIC from './mechanisms/basic';
-import DIGEST from './mechanisms/digest';
-import BEARER from './mechanisms/bearer';
+import BASIC from './mechanisms/basic.js';
+import DIGEST from './mechanisms/digest.js';
+import BEARER from './mechanisms/bearer.js';
 
 /* Architecture Note #1: Module structure
 

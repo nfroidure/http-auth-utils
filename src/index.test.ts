@@ -1,3 +1,4 @@
+import { describe, test } from '@jest/globals';
 import assert from 'assert';
 import neatequal from 'neatequal';
 import {
@@ -9,11 +10,11 @@ import {
   BASIC,
   DIGEST,
   BEARER,
-} from './index';
+} from './index.js';
 
 describe('index', () => {
   describe('parseWWWAuthenticateHeader', () => {
-    it('should parse Basic headers', () => {
+    test('should parse Basic headers', () => {
       neatequal(parseWWWAuthenticateHeader('Basic realm="test"'), {
         type: 'Basic',
         data: {
@@ -32,7 +33,7 @@ describe('index', () => {
         },
       );
     });
-    it('should parse Bearer headers', () => {
+    test('should parse Bearer headers', () => {
       neatequal(parseWWWAuthenticateHeader('Bearer realm="test"', mechanisms), {
         type: 'Bearer',
         data: {
@@ -52,7 +53,7 @@ describe('index', () => {
       );
     });
 
-    it('should fail with unknown headers', () => {
+    test('should fail with unknown headers', () => {
       assert.throws(
         () => parseWWWAuthenticateHeader('Kikoolol realm="test"'),
         /E_UNKNOWN_AUTH_MECHANISM/,
@@ -61,7 +62,7 @@ describe('index', () => {
   });
 
   describe('parseAuthorizationHeader', () => {
-    it('should parse Basic headers', () => {
+    test('should parse Basic headers', () => {
       neatequal(
         parseAuthorizationHeader('Basic QWxpIEJhYmE6b3BlbiBzZXNhbWU='),
         {
@@ -120,7 +121,7 @@ describe('index', () => {
       );
     });
 
-    it('should parse Basic headers with a ":" char in the password', () => {
+    test('should parse Basic headers with a ":" char in the password', () => {
       neatequal(parseAuthorizationHeader('Basic Sm9objpSOlU6a2lkZGluZz8='), {
         type: 'Basic',
         data: {
@@ -131,14 +132,14 @@ describe('index', () => {
       });
     });
 
-    it('should fail with unknown headers', () => {
+    test('should fail with unknown headers', () => {
       assert.throws(
         () => parseAuthorizationHeader('Kikoolol ddd'),
         /E_UNKNOWN_AUTH_MECHANISM/,
       );
     });
 
-    it('should fail with basic headers in strict mode', () => {
+    test('should fail with basic headers in strict mode', () => {
       assert.throws(
         () => parseAuthorizationHeader('basic ddd'),
         /E_UNKNOWN_AUTH_MECHANISM/,
@@ -155,7 +156,7 @@ describe('index', () => {
   });
 
   describe('buildWWWAuthenticateHeader', () => {
-    it('should build Basic headers', () => {
+    test('should build Basic headers', () => {
       assert.equal(
         buildWWWAuthenticateHeader(BASIC, {
           realm: 'test',
@@ -164,7 +165,7 @@ describe('index', () => {
       );
     });
 
-    it('should be reentrant', () => {
+    test('should be reentrant', () => {
       assert.equal(
         buildWWWAuthenticateHeader(
           BASIC,
@@ -176,7 +177,7 @@ describe('index', () => {
   });
 
   describe('buildAuthorizationHeader', () => {
-    it('should build Basic headers', () => {
+    test('should build Basic headers', () => {
       assert.equal(
         buildAuthorizationHeader(BASIC, {
           username: 'John',
@@ -186,7 +187,7 @@ describe('index', () => {
       );
     });
 
-    it('should be reentrant', () => {
+    test('should be reentrant', () => {
       assert.equal(
         buildAuthorizationHeader(
           BASIC,
@@ -199,11 +200,11 @@ describe('index', () => {
   });
 
   describe('mechanisms', () => {
-    it('should export bot DIGEST and BASIC  mechanisms', () => {
+    test('should export bot DIGEST and BASIC  mechanisms', () => {
       assert.equal(mechanisms.length, 3);
     });
 
-    it('should export DIGEST BASIC and BEARER mechanisms', () => {
+    test('should export DIGEST BASIC and BEARER mechanisms', () => {
       assert(BASIC);
       assert(DIGEST);
       assert(BEARER);

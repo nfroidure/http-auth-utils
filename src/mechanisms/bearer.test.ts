@@ -1,16 +1,17 @@
+import { describe, test } from '@jest/globals';
 import assert from 'assert';
 import neatequal from 'neatequal';
-import BEARER from './bearer';
+import BEARER from './bearer.js';
 
 describe('BEARER', () => {
   describe('type', () => {
-    it('should be the basic auth prefix', () => {
+    test('should be the basic auth prefix', () => {
       assert.equal(BEARER.type, 'Bearer');
     });
   });
 
   describe('parseWWWAuthenticateRest', () => {
-    it('should work', () => {
+    test('should work', () => {
       neatequal(BEARER.parseWWWAuthenticateRest('realm="perlinpinpin"'), {
         realm: 'perlinpinpin',
       });
@@ -18,7 +19,7 @@ describe('BEARER', () => {
   });
 
   describe('buildWWWAuthenticateRest', () => {
-    it('should work', () => {
+    test('should work', () => {
       assert.equal(
         BEARER.buildWWWAuthenticateRest({
           realm: 'perlinpinpin',
@@ -27,7 +28,7 @@ describe('BEARER', () => {
       );
     });
 
-    it('should work with an error', () => {
+    test('should work with an error', () => {
       assert.equal(
         BEARER.buildWWWAuthenticateRest({
           realm: 'perlinpinpin',
@@ -40,7 +41,7 @@ describe('BEARER', () => {
       );
     });
 
-    it('should fail with an unauthorized error', () => {
+    test('should fail with an unauthorized error', () => {
       assert.throws(
         () =>
           BEARER.buildWWWAuthenticateRest({
@@ -52,7 +53,7 @@ describe('BEARER', () => {
       );
     });
 
-    it('should be the inverse of parseWWWAuthenticateRest', () => {
+    test('should be the inverse of parseWWWAuthenticateRest', () => {
       neatequal(
         BEARER.parseWWWAuthenticateRest(
           BEARER.buildWWWAuthenticateRest({
@@ -67,19 +68,19 @@ describe('BEARER', () => {
   });
 
   describe('parseAuthorizationRest', () => {
-    it('should work', () => {
+    test('should work', () => {
       neatequal(BEARER.parseAuthorizationRest('mF_9.B5f-4.1JqM'), {
         hash: 'mF_9.B5f-4.1JqM',
       });
     });
 
-    it('should fail with empty rest', () => {
+    test('should fail with empty rest', () => {
       assert.throws(() => BEARER.parseAuthorizationRest(''), /E_EMPTY_AUTH/);
     });
   });
 
   describe('buildAuthorizationRest', () => {
-    it('should work', () => {
+    test('should work', () => {
       assert.equal(
         BEARER.buildAuthorizationRest({
           hash: 'mF_9.B5f-4.1JqM',
@@ -88,14 +89,14 @@ describe('BEARER', () => {
       );
     });
 
-    it('should fail with nothing at all', () => {
+    test('should fail with nothing at all', () => {
       assert.throws(
         () => BEARER.buildAuthorizationRest({} as any),
         /E_NO_HASH/,
       );
     });
 
-    it('should be the inverse of parseAuthorizationRest', () => {
+    test('should be the inverse of parseAuthorizationRest', () => {
       neatequal(
         BEARER.parseAuthorizationRest(
           BEARER.buildAuthorizationRest({

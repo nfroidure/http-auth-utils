@@ -2,12 +2,12 @@
  * @module http-auth-utils/mechanisms/basic
  */
 
-import YError from 'yerror';
+import { YError } from 'yerror';
 
 import {
   parseHTTPHeadersQuotedKeyValueSet,
   buildHTTPHeadersQuotedKeyValueSet,
-} from '../utils';
+} from '../utils.js';
 
 const REQUIRED_WWW_AUTHENTICATE_KEYS = ['realm'];
 const AUTHORIZED_WWW_AUTHENTICATE_KEYS = REQUIRED_WWW_AUTHENTICATE_KEYS;

@@ -1,6 +1,7 @@
+import { describe, test } from '@jest/globals';
 import assert from 'assert';
 import neatequal from 'neatequal';
-import BASIC from './basic';
+import BASIC from './basic.js';
 
 describe('BASIC', () => {
   describe('type', () => {

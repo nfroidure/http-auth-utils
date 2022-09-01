@@ -2,12 +2,12 @@
  * @module http-auth-utils/mechanisms/bearer
  */
 
-import YError from 'yerror';
+import { YError } from 'yerror';
 
 import {
   parseHTTPHeadersQuotedKeyValueSet,
   buildHTTPHeadersQuotedKeyValueSet,
-} from '../utils';
+} from '../utils.js';
 
 const AUTHORIZED_ERROR_CODES = [
   'invalid_request',

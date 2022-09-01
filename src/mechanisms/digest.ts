@@ -5,7 +5,7 @@
 import {
   parseHTTPHeadersQuotedKeyValueSet,
   buildHTTPHeadersQuotedKeyValueSet,
-} from '../utils';
+} from '../utils.js';
 
 import crypto from 'crypto';
 

@@ -1,9 +1,10 @@
+import { describe, test } from '@jest/globals';
 import assert from 'assert';
 import neatequal from 'neatequal';
 import {
   parseHTTPHeadersQuotedKeyValueSet,
   buildHTTPHeadersQuotedKeyValueSet,
-} from './utils';
+} from './utils.js';
 
 describe('utils', () => {
   describe('parseHTTPHeadersQuotedKeyValueSet', () => {

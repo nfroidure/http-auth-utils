@@ -2,8 +2,7 @@
   "name": "http-auth-utils",
   "version": "3.0.3",
   "description": "Parse, build and deal with HTTP authorization headers.",
-  "main": "dist/index",
-  "module": "dist/index.mjs",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "metapak": {
     "data": {
@@ -22,34 +21,30 @@
       "main",
       "readme",
       "eslint",
-      "babel",
-      "typescript",
+      "tsesm",
       "jest",
       "jsdocs",
       "jsarch",
       "codeclimate",
-      "travis"
+      "ghactions"
     ]
   },
   "scripts": {
     "architecture": "jsarch 'src/**/*.ts' > ARCHITECTURE.md && git add ARCHITECTURE.md",
+    "build": "rimraf -f 'dist' && tsc --outDir dist",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
     "cli": "env NODE_ENV=${NODE_ENV:-cli}",
-    "compile": "rimraf -f 'dist' && npm run compile:cjs && npm run compile:mjs",
-    "compile:cjs": "babel --env-name=cjs --out-dir=dist --extensions '.ts,.js' --source-maps=true src",
-    "compile:mjs": "babel --env-name=mjs --out-file-extension=.mjs --out-dir=dist --extensions '.ts,.js' --source-maps=true src",
     "cover": "npm run jest -- --coverage",
     "coveralls": "npm run cover && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
     "cz": "env NODE_ENV=${NODE_ENV:-cli} git cz",
     "doc": "echo \"# API\" > API.md; jsdoc2md 'dist/**/*.js' >> API.md && git add API.md",
-    "jest": "NODE_ENV=test jest",
+    "jest": "NODE_OPTIONS=--experimental-vm-modules NODE_ENV=test jest",
     "lint": "eslint 'src/**/*.ts'",
     "metapak": "metapak",
-    "precz": "npm run compile && npm run types && npm t && npm run lint && npm run metapak -- -s && npm run doc && npm run architecture",
+    "precz": "npm run build && npm t && npm run lint && npm run doc && npm run architecture && npm run metapak -- -s",
     "prettier": "prettier --write 'src/**/*.ts'",
-    "preversion": "npm run compile && npm run types && npm t && npm run lint && npm run metapak -- -s && npm run doc && npm run architecture",
+    "preversion": "npm run build && npm t && npm run lint && npm run doc && npm run architecture && npm run metapak -- -s",
     "test": "npm run jest",
-    "types": "rimraf -f 'dist/**/*.d.ts' && tsc --project . --declaration --emitDeclarationOnly --outDir dist",
     "version": "npm run changelog"
   },
   "keywords": [
@@ -77,38 +72,32 @@
   },
   "homepage": "https://github.com/nfroidure/http-auth-utils",
   "devDependencies": {
-    "@babel/cli": "^7.17.10",
-    "@babel/core": "^7.18.2",
-    "@babel/eslint-parser": "^7.18.2",
-    "@babel/plugin-proposal-class-properties": "^7.17.12",
-    "@babel/plugin-proposal-object-rest-spread": "^7.18.0",
-    "@babel/preset-env": "^7.18.2",
-    "@babel/preset-typescript": "^7.17.12",
-    "@babel/register": "^7.17.7",
-    "@types/jest": "^27.0.2",
-    "@typescript-eslint/eslint-plugin": "^5.26.0",
-    "@typescript-eslint/parser": "^5.26.0",
-    "commitizen": "^4.2.4",
+    "@typescript-eslint/eslint-plugin": "^5.36.0",
+    "@typescript-eslint/parser": "^5.36.0",
+    "commitizen": "^4.2.5",
     "conventional-changelog-cli": "^2.2.2",
     "coveralls": "^3.1.1",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^8.16.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "jest": "^28.1.0",
-    "jsarch": "^5.0.1",
+    "esbuild": "^0.15.6",
+    "esbuild-jest": "^0.5.0",
+    "eslint": "^8.23.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^29.0.1",
+    "jsarch": "^6.0.0",
     "jsdoc-to-markdown": "^7.1.1",
-    "metapak": "^4.0.3",
-    "metapak-nfroidure": "11.2.1",
+    "metapak": "^4.0.4",
+    "metapak-nfroidure": "12.3.0",
     "neatequal": "^1.0.0",
-    "prettier": "^2.6.2",
+    "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
-    "typescript": "^4.7.2"
+    "typescript": "^4.8.2"
   },
   "dependencies": {
-    "yerror": "^6.0.2"
+    "yerror": "^6.1.1"
   },
   "engines": {
-    "node": ">=12.19.0"
+    "node": ">=16.15.0"
   },
   "config": {
     "commitizen": {
@@ -122,18 +111,12 @@
       "conventional-changelog-cli",
       "eslint",
       "eslint-config-prettier",
+      "eslint-plugin-prettier",
       "prettier",
+      "@typescript-eslint/eslint-plugin",
       "@typescript-eslint/parser",
-      "@babel/cli",
-      "@babel/core",
-      "@babel/register",
-      "@babel/preset-env",
-      "@babel/plugin-proposal-object-rest-spread",
-      "@babel/preset-typescript",
-      "@babel/plugin-proposal-class-properties",
-      "babel-eslint",
-      "babel-core",
       "typescript",
+      "rimraf",
       "jest",
       "coveralls",
       "jsdoc-to-markdown",
@@ -157,12 +140,13 @@
   "eslintConfig": {
     "extends": [
       "eslint:recommended",
+      "plugin:prettier/recommended",
       "plugin:@typescript-eslint/eslint-recommended",
       "plugin:@typescript-eslint/recommended"
     ],
     "parserOptions": {
       "ecmaVersion": 2018,
-      "sourceType": "module",
+      "sourceType": "script",
       "modules": true
     },
     "env": {
@@ -200,7 +184,7 @@
         "@babel/env",
         {
           "targets": {
-            "node": "12.19.0"
+            "node": "16.15.0"
           }
         }
       ]
@@ -246,6 +230,22 @@
     ],
     "roots": [
       "<rootDir>/src"
+    ],
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.tsx?$": [
+        "esbuild-jest",
+        {
+          "sourcemap": true,
+          "format": "esm"
+        }
+      ]
+    },
+    "moduleNameMapper": {
+      "(.+)\\.js": "$1"
+    },
+    "extensionsToTreatAsEsm": [
+      ".ts"
     ]
   },
   "jsarch": {
@@ -254,5 +254,6 @@
         "typescript"
       ]
     }
-  }
+  },
+  "type": "module"
 }

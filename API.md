@@ -18,33 +18,19 @@
 
 * [http-auth-utils](#module_http-auth-utils)
     * _static_
-        * [.mechanisms](#module_http-auth-utils.mechanisms) : <code>Object</code>
+        * [.parseWWWAuthenticateHeader(header, [authMechanisms], [options])](#module_http-auth-utils.parseWWWAuthenticateHeader) ⇒ <code>Object</code>
+        * [.parseAuthorizationHeader(header, [authMechanisms], [options])](#module_http-auth-utils.parseAuthorizationHeader) ⇒ <code>Object</code>
+        * [.buildWWWAuthenticateHeader(authMechanism, The)](#module_http-auth-utils.buildWWWAuthenticateHeader) ⇒ <code>string</code>
+        * [.buildAuthorizationHeader(authMechanism, The)](#module_http-auth-utils.buildAuthorizationHeader) ⇒ <code>string</code>
     * _inner_
         * [~mechanisms](#module_http-auth-utils..mechanisms) : <code>Array</code>
-        * [~parseWWWAuthenticateHeader(header, [authMechanisms], [options])](#module_http-auth-utils..parseWWWAuthenticateHeader) ⇒ <code>Object</code>
-        * [~parseAuthorizationHeader(header, [authMechanisms], [options])](#module_http-auth-utils..parseAuthorizationHeader) ⇒ <code>Object</code>
-        * [~buildWWWAuthenticateHeader(authMechanism, The)](#module_http-auth-utils..buildWWWAuthenticateHeader) ⇒ <code>string</code>
-        * [~buildAuthorizationHeader(authMechanism, The)](#module_http-auth-utils..buildAuthorizationHeader) ⇒ <code>string</code>
 
-<a name="module_http-auth-utils.mechanisms"></a>
+<a name="module_http-auth-utils.parseWWWAuthenticateHeader"></a>
 
-### http-auth-utils.mechanisms : <code>Object</code>
-Basic authentication mechanism.
-
-**Kind**: static property of [<code>http-auth-utils</code>](#module_http-auth-utils)  
-**See**: [http-auth-utils/mechanisms/basic](#module_http-auth-utils/mechanisms/basic)  
-<a name="module_http-auth-utils..mechanisms"></a>
-
-### http-auth-utils~mechanisms : <code>Array</code>
-Natively supported authentication mechanisms.
-
-**Kind**: inner constant of [<code>http-auth-utils</code>](#module_http-auth-utils)  
-<a name="module_http-auth-utils..parseWWWAuthenticateHeader"></a>
-
-### http-auth-utils~parseWWWAuthenticateHeader(header, [authMechanisms], [options]) ⇒ <code>Object</code>
+### http-auth-utils.parseWWWAuthenticateHeader(header, [authMechanisms], [options]) ⇒ <code>Object</code>
 Parse HTTP WWW-Authenticate header contents.
 
-**Kind**: inner method of [<code>http-auth-utils</code>](#module_http-auth-utils)  
+**Kind**: static method of [<code>http-auth-utils</code>](#module_http-auth-utils)  
 **Returns**: <code>Object</code> - Result of the contents parse.  
 **Api**: public  
 
@@ -66,12 +52,12 @@ assert.deepEqual(
   }
 );
 ```
-<a name="module_http-auth-utils..parseAuthorizationHeader"></a>
+<a name="module_http-auth-utils.parseAuthorizationHeader"></a>
 
-### http-auth-utils~parseAuthorizationHeader(header, [authMechanisms], [options]) ⇒ <code>Object</code>
+### http-auth-utils.parseAuthorizationHeader(header, [authMechanisms], [options]) ⇒ <code>Object</code>
 Parse HTTP Authorization header contents.
 
-**Kind**: inner method of [<code>http-auth-utils</code>](#module_http-auth-utils)  
+**Kind**: static method of [<code>http-auth-utils</code>](#module_http-auth-utils)  
 **Returns**: <code>Object</code> - Result of the contents parse.  
 **Api**: public  
 
@@ -93,12 +79,12 @@ assert.deepEqual(
   }
 );
 ```
-<a name="module_http-auth-utils..buildWWWAuthenticateHeader"></a>
+<a name="module_http-auth-utils.buildWWWAuthenticateHeader"></a>
 
-### http-auth-utils~buildWWWAuthenticateHeader(authMechanism, The) ⇒ <code>string</code>
+### http-auth-utils.buildWWWAuthenticateHeader(authMechanism, The) ⇒ <code>string</code>
 Build HTTP WWW-Authenticate header value.
 
-**Kind**: inner method of [<code>http-auth-utils</code>](#module_http-auth-utils)  
+**Kind**: static method of [<code>http-auth-utils</code>](#module_http-auth-utils)  
 **Returns**: <code>string</code> - The header value.  
 **Api**: public  
 
@@ -116,12 +102,12 @@ assert.deepEqual(
   'Basic realm="test"'
 );
 ```
-<a name="module_http-auth-utils..buildAuthorizationHeader"></a>
+<a name="module_http-auth-utils.buildAuthorizationHeader"></a>
 
-### http-auth-utils~buildAuthorizationHeader(authMechanism, The) ⇒ <code>string</code>
+### http-auth-utils.buildAuthorizationHeader(authMechanism, The) ⇒ <code>string</code>
 Build HTTP Authorization header value.
 
-**Kind**: inner method of [<code>http-auth-utils</code>](#module_http-auth-utils)  
+**Kind**: static method of [<code>http-auth-utils</code>](#module_http-auth-utils)  
 **Returns**: <code>string</code> - The header value.  
 **Api**: public  
 
@@ -139,6 +125,12 @@ assert.deepEqual(
   'Basic realm="test"'
 );
 ```
+<a name="module_http-auth-utils..mechanisms"></a>
+
+### http-auth-utils~mechanisms : <code>Array</code>
+Natively supported authentication mechanisms.
+
+**Kind**: inner constant of [<code>http-auth-utils</code>](#module_http-auth-utils)  
 <a name="module_http-auth-utils/mechanisms/basic"></a>
 
 ## http-auth-utils/mechanisms/basic

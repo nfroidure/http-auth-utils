@@ -1,16 +1,17 @@
+import { describe, test } from '@jest/globals';
 import assert from 'assert';
 import neatequal from 'neatequal';
-import DIGEST from './digest';
+import DIGEST from './digest.js';
 
 describe('digest', () => {
   describe('type', () => {
-    it('should be the digest auth prefix', () => {
+    test('should be the digest auth prefix', () => {
       assert.equal(DIGEST.type, 'Digest');
     });
   });
 
   describe('parseWWWAuthenticateRest', () => {
-    it('should work', () => {
+    test('should work', () => {
       neatequal(
         DIGEST.parseWWWAuthenticateRest(
           'realm="testrealm@host.com", ' +
@@ -27,7 +28,7 @@ describe('digest', () => {
       );
     });
 
-    it('should handle non-quoted fields', () => {
+    test('should handle non-quoted fields', () => {
       neatequal(
         DIGEST.parseWWWAuthenticateRest(
           'realm="testrealm@host.com", ' +
@@ -46,7 +47,7 @@ describe('digest', () => {
   });
 
   describe('buildWWWAuthenticateRest', () => {
-    it('should work', () => {
+    test('should work', () => {
       assert.equal(
         DIGEST.buildWWWAuthenticateRest({
           realm: 'testrealm@host.com',
@@ -61,7 +62,7 @@ describe('digest', () => {
       );
     });
 
-    it('should be the inverse of parseWWWAuthenticateRest', () => {
+    test('should be the inverse of parseWWWAuthenticateRest', () => {
       neatequal(
         DIGEST.parseWWWAuthenticateRest(
           DIGEST.buildWWWAuthenticateRest({
@@ -78,7 +79,7 @@ describe('digest', () => {
   });
 
   describe('parseAuthorizationRest', () => {
-    it('should work', () => {
+    test('should work', () => {
       neatequal(
         DIGEST.parseAuthorizationRest(
           'username="Mufasa",' +
@@ -105,7 +106,7 @@ describe('digest', () => {
       );
     });
 
-    it('should fail with empty rest', () => {
+    test('should fail with empty rest', () => {
       assert.throws(
         () => DIGEST.parseAuthorizationRest(''),
         /E_MALFORMED_QUOTEDKEYVALUE/,
@@ -114,7 +115,7 @@ describe('digest', () => {
   });
 
   describe('buildAuthorizationRest', () => {
-    it('should work', () => {
+    test('should work', () => {
       assert.equal(
         DIGEST.buildAuthorizationRest({
           username: 'Mufasa',
@@ -139,7 +140,7 @@ describe('digest', () => {
       );
     });
 
-    it('should be the inverse of parseAuthorizationRest', () => {
+    test('should be the inverse of parseAuthorizationRest', () => {
       neatequal(
         DIGEST.parseAuthorizationRest(
           DIGEST.buildAuthorizationRest({
@@ -170,7 +171,7 @@ describe('digest', () => {
   });
 
   describe('computeHash', () => {
-    it('should work', () => {
+    test('should work', () => {
       assert.equal(
         DIGEST.computeHash({
           username: 'Mufasa',
