@@ -27,6 +27,25 @@ describe('utils', () => {
       );
     });
 
+    test('should work with equals in key values', () => {
+      neatequal(
+        parseHTTPHeadersQuotedKeyValueSet(
+          'realm="testrealm@host.com", ' +
+            'qop="auth, auth-int", ' +
+            'nonce="dGVzdCBzdHJpbmc=", ' +
+            'opaque="5ccc069c403ebaf9f0171e9517f40e41"',
+          ['realm', 'qop', 'nonce', 'opaque'],
+          ['realm', 'qop', 'nonce', 'opaque'],
+        ),
+        {
+          realm: 'testrealm@host.com',
+          qop: 'auth, auth-int',
+          nonce: 'dGVzdCBzdHJpbmc=',
+          opaque: '5ccc069c403ebaf9f0171e9517f40e41',
+        },
+      );
+    });
+
     test('should work with parse-able non-quoted data', () => {
       neatequal(
         parseHTTPHeadersQuotedKeyValueSet(

@@ -27,17 +27,12 @@ export function parseHTTPHeadersQuotedKeyValueSet(
 
   const data = matches
     .map((part, partPosition) => {
-      const pair = part.split(EQUAL);
-
-      if (2 !== pair.length) {
-        throw new YError(
-          'E_MALFORMED_QUOTEDKEYVALUE',
-          partPosition,
-          part,
-          pair.length,
-        );
+      const [key, ...rest] = part.split(EQUAL);
+      const value = rest.join(EQUAL);
+      if (0 === rest.length) {
+        throw new YError('E_MALFORMED_QUOTEDKEYVALUE', partPosition, part);
       }
-      return pair;
+      return [key, value];
     })
     .reduce(function (parsedValues, [name, value], valuePosition) {
       if (-1 === authorizedKeys.indexOf(name)) {
