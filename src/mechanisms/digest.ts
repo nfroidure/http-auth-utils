@@ -18,6 +18,7 @@ const AUTHORIZED_WWW_AUTHENTICATE_KEYS = [
   'algorithm',
   'qop',
 ];
+const WWW_AUTHENTICATE_KEYS_TO_NORMALIZE = ['stale'];
 type DigestWWWAuthenticateData = {
   realm: string;
   domain?: string;
@@ -101,12 +102,13 @@ const DIGEST = {
       rest,
       AUTHORIZED_WWW_AUTHENTICATE_KEYS,
       REQUIRED_WWW_AUTHENTICATE_KEYS,
+      WWW_AUTHENTICATE_KEYS_TO_NORMALIZE,
     ) as DigestWWWAuthenticateData;
   },
 
   /**
    * Build the WWW Authenticate header rest.
-   * @param  {Object} data The content from wich to build the rest.
+   * @param  {Object} data The content from which to build the rest.
    * @return {String}         The built rest.
    * @example
    * assert.equal(
@@ -175,7 +177,7 @@ const DIGEST = {
 
   /**
    * Build the Authorization header rest.
-   * @param  {Object} data The content from wich to build the rest.
+   * @param  {Object} data The content from which to build the rest.
    * @return {String}         The rest built.
    * @example
    * assert.equal(

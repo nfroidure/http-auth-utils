@@ -86,6 +86,28 @@ describe('utils', () => {
       );
     });
 
+    test('should normalize values to lowercase for given keys', () => {
+      neatequal(
+        parseHTTPHeadersQuotedKeyValueSet(
+          'realm="testrealm-UPPERCASE@host.com", ' +
+            'qop="auth, auth-int", ' +
+            'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' +
+            'opaque="5ccc069c403ebaf9f0171e9517f40e41", ' +
+            'stale=TRUE',
+          ['realm', 'qop', 'nonce', 'opaque', 'stale'],
+          ['realm', 'qop', 'nonce', 'opaque', 'stale'],
+          ['stale'],
+        ),
+        {
+          realm: 'testrealm-UPPERCASE@host.com', // should not be changed
+          qop: 'auth, auth-int',
+          nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
+          opaque: '5ccc069c403ebaf9f0171e9517f40e41',
+          stale: 'true',
+        },
+      );
+    });
+
     test('should fail with bad quoted value pair', () => {
       assert.throws(
         () => parseHTTPHeadersQuotedKeyValueSet('realm', []),
