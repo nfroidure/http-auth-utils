@@ -18,7 +18,7 @@ const AUTHORIZED_WWW_AUTHENTICATE_KEYS = [
   'algorithm',
   'qop',
 ];
-const WWW_AUTHENTICATE_KEYS_TO_NORMALIZE = ['stale'];
+const CASE_INSENSITIVE_WWW_AUTHENTICATE_VALUES = ['stale'];
 type DigestWWWAuthenticateData = {
   realm: string;
   domain?: string;
@@ -102,7 +102,7 @@ const DIGEST = {
       rest,
       AUTHORIZED_WWW_AUTHENTICATE_KEYS,
       REQUIRED_WWW_AUTHENTICATE_KEYS,
-      WWW_AUTHENTICATE_KEYS_TO_NORMALIZE,
+      CASE_INSENSITIVE_WWW_AUTHENTICATE_VALUES,
     ) as DigestWWWAuthenticateData;
   },
 
