@@ -538,7 +538,7 @@ Build the WWW Authenticate header rest.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| data | <code>Object</code> | The content from wich to build the rest. |
+| data | <code>Object</code> | The content from which to build the rest. |
 
 **Example**  
 ```js
@@ -605,7 +605,7 @@ Build the Authorization header rest.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| data | <code>Object</code> | The content from wich to build the rest. |
+| data | <code>Object</code> | The content from which to build the rest. |
 
 **Example**  
 ```js
