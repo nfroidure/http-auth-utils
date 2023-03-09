@@ -35,8 +35,9 @@ export function parseHTTPHeadersQuotedKeyValueSet(
       return [key, value];
     })
     .reduce(function (parsedValues, [name, value], valuePosition) {
-      if (-1 === authorizedKeys.indexOf(name)) {
-        throw new YError('E_UNAUTHORIZED_KEY', valuePosition, name);
+      const normalizedName = name.toLowerCase();
+      if (-1 === authorizedKeys.indexOf(normalizedName)) {
+        throw new YError('E_UNAUTHORIZED_KEY', valuePosition, normalizedName);
       }
       /*
        * Regular expression for stripping paired starting and ending double quotes off the value:
@@ -49,7 +50,7 @@ export function parseHTTPHeadersQuotedKeyValueSet(
        * "      = The ending double quote
        * $      = The end of the string
        */
-      parsedValues[name] = value.replace(/^"(.+(?="$))"$/, '$1');
+      parsedValues[normalizedName] = value.replace(/^"(.+(?="$))"$/, '$1');
       return parsedValues;
     }, {});
 

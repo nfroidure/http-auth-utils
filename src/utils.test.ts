@@ -65,6 +65,27 @@ describe('utils', () => {
       );
     });
 
+    test('should normalize all keys to lowercase', () => {
+      neatequal(
+        parseHTTPHeadersQuotedKeyValueSet(
+          'Realm="testrealm@host.com", ' +
+            'qop="auth, auth-int", ' +
+            'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' +
+            'opaque="5ccc069c403ebaf9f0171e9517f40e41", ' +
+            'Stale="false"',
+          ['realm', 'qop', 'nonce', 'opaque', 'stale'],
+          ['realm', 'qop', 'nonce', 'opaque', 'stale'],
+        ),
+        {
+          realm: 'testrealm@host.com',
+          qop: 'auth, auth-int',
+          nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
+          opaque: '5ccc069c403ebaf9f0171e9517f40e41',
+          stale: 'false',
+        },
+      );
+    });
+
     test('should fail with bad quoted value pair', () => {
       assert.throws(
         () => parseHTTPHeadersQuotedKeyValueSet('realm', []),
