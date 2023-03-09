@@ -1,3 +1,14 @@
+# [4.0.0](https://github.com/nfroidure/http-auth-utils/compare/v3.0.5...v4.0.0) (2023-03-09)
+
+
+### Bug Fixes
+
+* **src/utils.ts:** handle parsing values with equal signs ([e640f21](https://github.com/nfroidure/http-auth-utils/commit/e640f21e9cd4115831eb968aabbe4c384c0f03ce)), closes [#17](https://github.com/nfroidure/http-auth-utils/issues/17)
+* **src/utils.ts:** normalize keys to lowercase ([bfb33f4](https://github.com/nfroidure/http-auth-utils/commit/bfb33f4c22f6596258343505ecdd5205d9a75309))
+* **src/utils.ts:** normalize stale value to lowercase ([8d10f8c](https://github.com/nfroidure/http-auth-utils/commit/8d10f8c0da0599eb48df746ebfadb9092760c93b))
+
+
+
 ## [3.0.5](https://github.com/nfroidure/http-auth-utils/compare/v3.0.4...v3.0.5) (2023-01-05)
 
 
