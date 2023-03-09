@@ -54,12 +54,9 @@ export function parseHTTPHeadersQuotedKeyValueSet(
        */
       const strippedValue = value.replace(/^"(.+(?="$))"$/, '$1');
 
-      if (-1 === valuesToNormalize.indexOf(normalizedName)) {
-        parsedValues[normalizedName] = strippedValue;
-      } else {
-        const normalizedValue = strippedValue.toLowerCase();
-        parsedValues[normalizedName] = normalizedValue;
-      }
+      parsedValues[normalizedName] = valuesToNormalize.includes(normalizedName)
+        ? strippedValue.toLowerCase()
+        : strippedValue;
 
       return parsedValues;
     }, {});
