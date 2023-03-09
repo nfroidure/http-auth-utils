@@ -24,14 +24,14 @@ const AUTHORIZED_WWW_AUTHENTICATE_KEYS = [
 type BearerWWWAuthenticateData = {
   realm: string;
   scope?: string;
-  error?: typeof AUTHORIZED_ERROR_CODES[number];
+  error?: (typeof AUTHORIZED_ERROR_CODES)[number];
   error_description?: string;
 };
 type BearerAuthorizationData = {
   hash: string;
 };
 
-type BearerAuthorizedErrorCodes = typeof AUTHORIZED_ERROR_CODES[number];
+type BearerAuthorizedErrorCodes = (typeof AUTHORIZED_ERROR_CODES)[number];
 
 /* Architecture Note #1.1: Bearer mechanism
 
