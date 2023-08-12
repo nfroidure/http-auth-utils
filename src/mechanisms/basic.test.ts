@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, test } from '@jest/globals';
 import assert from 'assert';
 import neatequal from 'neatequal';
