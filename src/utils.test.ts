@@ -27,6 +27,29 @@ describe('utils', () => {
       );
     });
 
+    test('should work with empty opaque', () => {
+      neatequal(
+        parseHTTPHeadersQuotedKeyValueSet(
+          'qop="auth", ' +
+            'realm="DS-DD8D92DB", ' +
+            'nonce="NzhiYWNkMGY3ZmVjZGZkNjA1NzE0NzcxYzA4MTBmNjM=", ' +
+            'stale="false", ' +
+            'opaque="", ' +
+            'domain="::"',
+          ['realm', 'qop', 'nonce', 'opaque', 'stale', 'domain'],
+          ['realm', 'qop', 'nonce', 'opaque', 'stale', 'domain'],
+        ),
+        {
+          realm: 'DS-DD8D92DB',
+          qop: 'auth',
+          nonce: 'NzhiYWNkMGY3ZmVjZGZkNjA1NzE0NzcxYzA4MTBmNjM=',
+          opaque: '',
+          stale: 'false',
+          domain: '::',
+        },
+      );
+    });
+
     test('should work with equals in key values', () => {
       neatequal(
         parseHTTPHeadersQuotedKeyValueSet(
@@ -151,6 +174,21 @@ describe('utils', () => {
         'realm="testrealm@host.com", ' +
           'qop="auth, auth-int", ' +
           'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093"',
+      );
+    });
+
+    test('should work with empty value', () => {
+      assert.equal(
+        buildHTTPHeadersQuotedKeyValueSet(
+          {
+            realm: 'testrealm@host.com',
+            qop: 'auth, auth-int',
+            opaque: '',
+          },
+          ['realm', 'qop', 'nonce', 'opaque'],
+          ['realm', 'qop', 'opaque'],
+        ),
+        'realm="testrealm@host.com", ' + 'qop="auth, auth-int", ' + 'opaque=""',
       );
     });
 
