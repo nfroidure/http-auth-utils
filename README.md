@@ -668,6 +668,7 @@ assert.equal(
 - [Nicolas Froidure](https://insertafter.com/en/index.html)
 - [Jake Pruitt](https://github.com/jakepruitt)
 - [Corentin Girard](https://github.com/Drarig29)
+- [Roman Sokolov](https://github.com/Stillness-2)
 
 # License
 [MIT](https://github.com/nfroidure/http-auth-utils/blob/main/LICENSE)
