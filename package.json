@@ -25,7 +25,7 @@
     ]
   },
   "name": "http-auth-utils",
-  "version": "5.0.1",
+  "version": "6.0.0",
   "description": "Parse, build and deal with HTTP authorization headers.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

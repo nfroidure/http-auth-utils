@@ -1,3 +1,12 @@
+# [6.0.0](https://github.com/nfroidure/http-auth-utils/compare/v5.0.1...v6.0.0) (2024-01-14)
+
+
+### Bug Fixes
+
+* **src/utils.ts:** add the ability to use empty values ([cd2cd54](https://github.com/nfroidure/http-auth-utils/commit/cd2cd54abeecd8a881db2ed3f00a2099b0ed4b49))
+
+
+
 ## [5.0.1](https://github.com/nfroidure/http-auth-utils/compare/v5.0.0...v5.0.1) (2023-08-16)
 
 
