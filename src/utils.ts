@@ -45,14 +45,14 @@ export function parseHTTPHeadersQuotedKeyValueSet(
        * Regular expression for stripping paired starting and ending double quotes off the value:
        * ^      = The beginning of the string
        * "      = The first double quote
-       * .+     = One or more characters of any kind
+       * .*     = Characters of any kind
        * (?="$) = Zero-width (as in not captured) positive lookahead assertion.
        *          The previous match will only be valid if it's followed by a " literal
        *          or the end of the string
        * "      = The ending double quote
        * $      = The end of the string
        */
-      const strippedValue = value.replace(/^"(.+(?="$))"$/, '$1');
+      const strippedValue = value.replace(/^"(.*(?="$))"$/, '$1');
 
       parsedValues[normalizedName] = valuesToNormalize.includes(normalizedName)
         ? strippedValue.toLowerCase()
@@ -73,7 +73,7 @@ export function buildHTTPHeadersQuotedKeyValueSet(
 ): string {
   _checkRequiredKeys(requiredKeys, data);
   return authorizedKeys.reduce(function (contents, key) {
-    if (data[key]) {
+    if (data[key] !== undefined) {
       return (
         contents +
         (contents ? SEPARATOR : '') +
