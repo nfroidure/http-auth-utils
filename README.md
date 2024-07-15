@@ -8,7 +8,6 @@
 > Parse, build and deal with HTTP authorization headers.
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/nfroidure/http-auth-utils/blob/main/LICENSE)
-[![Coverage Status](https://coveralls.io/repos/github/nfroidure/http-auth-utils/badge.svg?branch=main)](https://coveralls.io/github/nfroidure/http-auth-utils?branch=main)
 
 
 [//]: # (::contents:start)
