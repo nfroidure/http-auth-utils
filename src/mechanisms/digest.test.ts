@@ -1,60 +1,57 @@
-import { describe, test } from '@jest/globals';
-import assert from 'assert';
-import neatequal from 'neatequal';
+import { describe, test, expect } from '@jest/globals';
 import DIGEST from './digest.js';
 
 describe('digest', () => {
   describe('type', () => {
     test('should be the digest auth prefix', () => {
-      assert.equal(DIGEST.type, 'Digest');
+      expect(DIGEST.type).toEqual('Digest');
     });
   });
 
   describe('parseWWWAuthenticateRest', () => {
     test('should work', () => {
-      neatequal(
+      expect(
         DIGEST.parseWWWAuthenticateRest(
           'realm="testrealm@host.com", ' +
             'qop="auth, auth-int", ' +
             'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' +
             'opaque="5ccc069c403ebaf9f0171e9517f40e41"',
         ),
-        {
-          realm: 'testrealm@host.com',
-          qop: 'auth, auth-int',
-          nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
-          opaque: '5ccc069c403ebaf9f0171e9517f40e41',
-        },
-      );
+      ).toEqual({
+        realm: 'testrealm@host.com',
+        qop: 'auth, auth-int',
+        nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
+        opaque: '5ccc069c403ebaf9f0171e9517f40e41',
+      });
     });
 
     test('should handle non-quoted fields', () => {
-      neatequal(
+      expect(
         DIGEST.parseWWWAuthenticateRest(
           'realm="testrealm@host.com", ' +
             'qop=auth, ' +
             'algorithm=MD5, ' +
             'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093"',
         ),
-        {
-          realm: 'testrealm@host.com',
-          qop: 'auth',
-          algorithm: 'MD5',
-          nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
-        },
-      );
+      ).toEqual({
+        realm: 'testrealm@host.com',
+        qop: 'auth',
+        algorithm: 'MD5',
+        nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
+      });
     });
   });
 
   describe('buildWWWAuthenticateRest', () => {
     test('should work', () => {
-      assert.equal(
+      expect(
         DIGEST.buildWWWAuthenticateRest({
           realm: 'testrealm@host.com',
           qop: 'auth, auth-int',
           nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
           opaque: '5ccc069c403ebaf9f0171e9517f40e41',
         }),
+      ).toEqual(
         'realm="testrealm@host.com", ' +
           'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' +
           'opaque="5ccc069c403ebaf9f0171e9517f40e41", ' +
@@ -63,24 +60,23 @@ describe('digest', () => {
     });
 
     test('should be the inverse of parseWWWAuthenticateRest', () => {
-      neatequal(
+      expect(
         DIGEST.parseWWWAuthenticateRest(
           DIGEST.buildWWWAuthenticateRest({
             realm: 'perlinpinpin',
             nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
           }),
         ),
-        {
-          realm: 'perlinpinpin',
-          nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
-        },
-      );
+      ).toEqual({
+        realm: 'perlinpinpin',
+        nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
+      });
     });
   });
 
   describe('parseAuthorizationRest', () => {
     test('should work', () => {
-      neatequal(
+      expect(
         DIGEST.parseAuthorizationRest(
           'username="Mufasa",' +
             'realm="testrealm@host.com",' +
@@ -92,23 +88,21 @@ describe('digest', () => {
             'response="6629fae49393a05397450978507c4ef1",' +
             'opaque="5ccc069c403ebaf9f0171e9517f40e41"',
         ),
-        {
-          username: 'Mufasa',
-          realm: 'testrealm@host.com',
-          nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
-          uri: '/dir/index.html',
-          qop: 'auth',
-          nc: '00000001',
-          cnonce: '0a4f113b',
-          response: '6629fae49393a05397450978507c4ef1',
-          opaque: '5ccc069c403ebaf9f0171e9517f40e41',
-        },
-      );
+      ).toEqual({
+        username: 'Mufasa',
+        realm: 'testrealm@host.com',
+        nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
+        uri: '/dir/index.html',
+        qop: 'auth',
+        nc: '00000001',
+        cnonce: '0a4f113b',
+        response: '6629fae49393a05397450978507c4ef1',
+        opaque: '5ccc069c403ebaf9f0171e9517f40e41',
+      });
     });
 
     test('should fail with empty rest', () => {
-      assert.throws(
-        () => DIGEST.parseAuthorizationRest(''),
+      expect(() => DIGEST.parseAuthorizationRest('')).toThrow(
         /E_MALFORMED_QUOTEDKEYVALUE/,
       );
     });
@@ -116,7 +110,7 @@ describe('digest', () => {
 
   describe('buildAuthorizationRest', () => {
     test('should work', () => {
-      assert.equal(
+      expect(
         DIGEST.buildAuthorizationRest({
           username: 'Mufasa',
           realm: 'testrealm@host.com',
@@ -128,6 +122,7 @@ describe('digest', () => {
           response: '6629fae49393a05397450978507c4ef1',
           opaque: '5ccc069c403ebaf9f0171e9517f40e41',
         }),
+      ).toEqual(
         'username="Mufasa", ' +
           'realm="testrealm@host.com", ' +
           'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' +
@@ -141,7 +136,7 @@ describe('digest', () => {
     });
 
     test('should be the inverse of parseAuthorizationRest', () => {
-      neatequal(
+      expect(
         DIGEST.parseAuthorizationRest(
           DIGEST.buildAuthorizationRest({
             username: 'Mufasa',
@@ -155,24 +150,23 @@ describe('digest', () => {
             opaque: '5ccc069c403ebaf9f0171e9517f40e41',
           }),
         ),
-        {
-          username: 'Mufasa',
-          realm: 'testrealm@host.com',
-          nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
-          uri: '/dir/index.html',
-          qop: 'auth',
-          nc: '00000001',
-          cnonce: '0a4f113b',
-          response: '6629fae49393a05397450978507c4ef1',
-          opaque: '5ccc069c403ebaf9f0171e9517f40e41',
-        },
-      );
+      ).toEqual({
+        username: 'Mufasa',
+        realm: 'testrealm@host.com',
+        nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
+        uri: '/dir/index.html',
+        qop: 'auth',
+        nc: '00000001',
+        cnonce: '0a4f113b',
+        response: '6629fae49393a05397450978507c4ef1',
+        opaque: '5ccc069c403ebaf9f0171e9517f40e41',
+      });
     });
   });
 
   describe('computeHash', () => {
     test('should work', () => {
-      assert.equal(
+      expect(
         DIGEST.computeHash({
           username: 'Mufasa',
           realm: 'testrealm@host.com',
@@ -185,8 +179,7 @@ describe('digest', () => {
           qop: 'auth',
           algorithm: 'md5',
         }),
-        '6629fae49393a05397450978507c4ef1',
-      );
+      ).toEqual('6629fae49393a05397450978507c4ef1');
     });
   });
 });

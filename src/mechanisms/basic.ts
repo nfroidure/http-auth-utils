@@ -11,10 +11,11 @@ import {
 
 const REQUIRED_WWW_AUTHENTICATE_KEYS = ['realm'];
 const AUTHORIZED_WWW_AUTHENTICATE_KEYS = REQUIRED_WWW_AUTHENTICATE_KEYS;
-type BasicWWWAuthenticateData = {
+
+export interface BasicWWWAuthenticateData {
   realm: string;
 };
-type BasicAuthorizationData = {
+export interface BasicAuthorizationData {
   username: string;
   password: string;
 };
@@ -56,7 +57,7 @@ const BASIC = {
       rest,
       AUTHORIZED_WWW_AUTHENTICATE_KEYS,
       REQUIRED_WWW_AUTHENTICATE_KEYS,
-    ) as BasicWWWAuthenticateData;
+    ) as unknown as BasicWWWAuthenticateData;
   },
 
   /**
@@ -76,7 +77,7 @@ const BASIC = {
     data: BasicWWWAuthenticateData,
   ): string {
     return buildHTTPHeadersQuotedKeyValueSet(
-      data,
+      data as unknown as Record<string, string>,
       AUTHORIZED_WWW_AUTHENTICATE_KEYS,
       REQUIRED_WWW_AUTHENTICATE_KEYS,
     );

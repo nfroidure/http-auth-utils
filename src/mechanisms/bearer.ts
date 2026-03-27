@@ -21,13 +21,13 @@ const AUTHORIZED_WWW_AUTHENTICATE_KEYS = [
   'error',
   'error_description',
 ];
-type BearerWWWAuthenticateData = {
+export interface BearerWWWAuthenticateData {
   realm: string;
   scope?: string;
   error?: (typeof AUTHORIZED_ERROR_CODES)[number];
   error_description?: string;
 };
-type BearerAuthorizationData = {
+export interface BearerAuthorizationData {
   hash: string;
 };
 
@@ -74,7 +74,7 @@ const BEARER = {
       rest,
       AUTHORIZED_WWW_AUTHENTICATE_KEYS as unknown as string[],
       [],
-    ) as BearerWWWAuthenticateData;
+    ) as unknown as BearerWWWAuthenticateData;
   },
 
   /**
@@ -104,10 +104,10 @@ const BEARER = {
           data.error as unknown as BearerAuthorizedErrorCodes,
         )
     ) {
-      throw new YError('E_INVALID_ERROR', data.error, AUTHORIZED_ERROR_CODES);
+      throw new YError('E_INVALID_ERROR', [data.error, AUTHORIZED_ERROR_CODES]);
     }
     return buildHTTPHeadersQuotedKeyValueSet(
-      data,
+      data as unknown as Record<string, string>,
       AUTHORIZED_WWW_AUTHENTICATE_KEYS as unknown as string[],
       [],
     );

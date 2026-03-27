@@ -1,6 +1,4 @@
-import { describe, test } from '@jest/globals';
-import assert from 'assert';
-import neatequal from 'neatequal';
+import { describe, test, expect } from '@jest/globals';
 import {
   parseHTTPHeadersQuotedKeyValueSet,
   buildHTTPHeadersQuotedKeyValueSet,
@@ -9,7 +7,7 @@ import {
 describe('utils', () => {
   describe('parseHTTPHeadersQuotedKeyValueSet', () => {
     test('should work with good datas', () => {
-      neatequal(
+      expect(
         parseHTTPHeadersQuotedKeyValueSet(
           'realm="testrealm@host.com", ' +
             'qop="auth, auth-int", ' +
@@ -18,17 +16,16 @@ describe('utils', () => {
           ['realm', 'qop', 'nonce', 'opaque'],
           ['realm', 'qop', 'nonce', 'opaque'],
         ),
-        {
-          realm: 'testrealm@host.com',
-          qop: 'auth, auth-int',
-          nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
-          opaque: '5ccc069c403ebaf9f0171e9517f40e41',
-        },
-      );
+      ).toEqual({
+        realm: 'testrealm@host.com',
+        qop: 'auth, auth-int',
+        nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
+        opaque: '5ccc069c403ebaf9f0171e9517f40e41',
+      });
     });
 
     test('should work with empty opaque', () => {
-      neatequal(
+      expect(
         parseHTTPHeadersQuotedKeyValueSet(
           'qop="auth", ' +
             'realm="DS-DD8D92DB", ' +
@@ -39,19 +36,18 @@ describe('utils', () => {
           ['realm', 'qop', 'nonce', 'opaque', 'stale', 'domain'],
           ['realm', 'qop', 'nonce', 'opaque', 'stale', 'domain'],
         ),
-        {
-          realm: 'DS-DD8D92DB',
-          qop: 'auth',
-          nonce: 'NzhiYWNkMGY3ZmVjZGZkNjA1NzE0NzcxYzA4MTBmNjM=',
-          opaque: '',
-          stale: 'false',
-          domain: '::',
-        },
-      );
+      ).toEqual({
+        realm: 'DS-DD8D92DB',
+        qop: 'auth',
+        nonce: 'NzhiYWNkMGY3ZmVjZGZkNjA1NzE0NzcxYzA4MTBmNjM=',
+        opaque: '',
+        stale: 'false',
+        domain: '::',
+      });
     });
 
     test('should work with equals in key values', () => {
-      neatequal(
+      expect(
         parseHTTPHeadersQuotedKeyValueSet(
           'realm="testrealm@host.com", ' +
             'qop="auth, auth-int", ' +
@@ -60,17 +56,16 @@ describe('utils', () => {
           ['realm', 'qop', 'nonce', 'opaque'],
           ['realm', 'qop', 'nonce', 'opaque'],
         ),
-        {
-          realm: 'testrealm@host.com',
-          qop: 'auth, auth-int',
-          nonce: 'dGVzdCBzdHJpbmc=',
-          opaque: '5ccc069c403ebaf9f0171e9517f40e41',
-        },
-      );
+      ).toEqual({
+        realm: 'testrealm@host.com',
+        qop: 'auth, auth-int',
+        nonce: 'dGVzdCBzdHJpbmc=',
+        opaque: '5ccc069c403ebaf9f0171e9517f40e41',
+      });
     });
 
     test('should work with parse-able non-quoted data', () => {
-      neatequal(
+      expect(
         parseHTTPHeadersQuotedKeyValueSet(
           'realm="testrealm@host.com", ' +
             'qop=auth, ' +
@@ -79,17 +74,16 @@ describe('utils', () => {
           ['realm', 'qop', 'nonce', 'opaque'],
           ['realm', 'qop', 'nonce', 'opaque'],
         ),
-        {
-          realm: 'testrealm@host.com',
-          qop: 'auth',
-          nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
-          opaque: '5ccc069c403ebaf9f0171e9517f40e41',
-        },
-      );
+      ).toEqual({
+        realm: 'testrealm@host.com',
+        qop: 'auth',
+        nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
+        opaque: '5ccc069c403ebaf9f0171e9517f40e41',
+      });
     });
 
     test('should normalize all keys to lowercase', () => {
-      neatequal(
+      expect(
         parseHTTPHeadersQuotedKeyValueSet(
           'Realm="testrealm@host.com", ' +
             'qop="auth, auth-int", ' +
@@ -99,18 +93,17 @@ describe('utils', () => {
           ['realm', 'qop', 'nonce', 'opaque', 'stale'],
           ['realm', 'qop', 'nonce', 'opaque', 'stale'],
         ),
-        {
-          realm: 'testrealm@host.com',
-          qop: 'auth, auth-int',
-          nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
-          opaque: '5ccc069c403ebaf9f0171e9517f40e41',
-          stale: 'false',
-        },
-      );
+      ).toEqual({
+        realm: 'testrealm@host.com',
+        qop: 'auth, auth-int',
+        nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
+        opaque: '5ccc069c403ebaf9f0171e9517f40e41',
+        stale: 'false',
+      });
     });
 
     test('should normalize values to lowercase for given keys', () => {
-      neatequal(
+      expect(
         parseHTTPHeadersQuotedKeyValueSet(
           'realm="testrealm-UPPERCASE@host.com", ' +
             'qop="auth, auth-int", ' +
@@ -121,39 +114,37 @@ describe('utils', () => {
           ['realm', 'qop', 'nonce', 'opaque', 'stale'],
           ['stale'],
         ),
-        {
-          realm: 'testrealm-UPPERCASE@host.com', // should not be changed
-          qop: 'auth, auth-int',
-          nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
-          opaque: '5ccc069c403ebaf9f0171e9517f40e41',
-          stale: 'true',
-        },
-      );
+      ).toEqual({
+        realm: 'testrealm-UPPERCASE@host.com', // should not be changed
+        qop: 'auth, auth-int',
+        nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
+        opaque: '5ccc069c403ebaf9f0171e9517f40e41',
+        stale: 'true',
+      });
     });
 
     test('should fail with bad quoted value pair', () => {
-      assert.throws(
-        () => parseHTTPHeadersQuotedKeyValueSet('realm', []),
+      expect(() => parseHTTPHeadersQuotedKeyValueSet('realm', [])).toThrow(
         /E_MALFORMED_QUOTEDKEYVALUE/,
       );
     });
 
     test('should fail with half-quoted value pair', () => {
-      assert.throws(
-        () => parseHTTPHeadersQuotedKeyValueSet('realm="uneven', ['realm']),
-        /E_MALFORMED_QUOTEDKEYVALUE/,
-      );
+      expect(() =>
+        parseHTTPHeadersQuotedKeyValueSet('realm="uneven', ['realm']),
+      ).toThrow(/E_MALFORMED_QUOTEDKEYVALUE/);
     });
 
     test('should fail with bad quoted value pair', () => {
-      assert.throws(
-        () => parseHTTPHeadersQuotedKeyValueSet('realm="dsad"', []),
-        /E_UNAUTHORIZED_KEY/,
-      );
+      expect(() =>
+        parseHTTPHeadersQuotedKeyValueSet('realm="dsad"', []),
+      ).toThrow(/E_UNAUTHORIZED_KEY/);
     });
 
     test('should pass with non-quoted value pair', () => {
-      neatequal(parseHTTPHeadersQuotedKeyValueSet('realm=dsad', ['realm']), {
+      expect(
+        parseHTTPHeadersQuotedKeyValueSet('realm=dsad', ['realm']),
+      ).toEqual({
         realm: 'dsad',
       });
     });
@@ -161,7 +152,7 @@ describe('utils', () => {
 
   describe('buildHTTPHeadersQuotedKeyValueSet', () => {
     test('should work with good datas', () => {
-      assert.equal(
+      expect(
         buildHTTPHeadersQuotedKeyValueSet(
           {
             realm: 'testrealm@host.com',
@@ -171,6 +162,7 @@ describe('utils', () => {
           ['realm', 'qop', 'nonce', 'opaque'],
           ['realm', 'qop', 'nonce'],
         ),
+      ).toEqual(
         'realm="testrealm@host.com", ' +
           'qop="auth, auth-int", ' +
           'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093"',
@@ -178,7 +170,7 @@ describe('utils', () => {
     });
 
     test('should work with empty value', () => {
-      assert.equal(
+      expect(
         buildHTTPHeadersQuotedKeyValueSet(
           {
             realm: 'testrealm@host.com',
@@ -188,12 +180,13 @@ describe('utils', () => {
           ['realm', 'qop', 'nonce', 'opaque'],
           ['realm', 'qop', 'opaque'],
         ),
+      ).toEqual(
         'realm="testrealm@host.com", ' + 'qop="auth, auth-int", ' + 'opaque=""',
       );
     });
 
     test('should work with unused keys', () => {
-      assert.equal(
+      expect(
         buildHTTPHeadersQuotedKeyValueSet(
           {
             realm: 'testrealm@host.com',
@@ -203,6 +196,7 @@ describe('utils', () => {
           },
           ['realm', 'qop', 'nonce'],
         ),
+      ).toEqual(
         'realm="testrealm@host.com", ' +
           'qop="auth, auth-int", ' +
           'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093"',
@@ -210,18 +204,16 @@ describe('utils', () => {
     });
 
     test('should fail without required keys', () => {
-      assert.throws(
-        () =>
-          buildHTTPHeadersQuotedKeyValueSet(
-            {
-              realm: 'testrealm@host.com',
-              qop: 'auth, auth-int',
-            },
-            ['realm', 'qop', 'nonce'],
-            ['realm', 'qop', 'nonce'],
-          ),
-        /E_REQUIRED_KEY/,
-      );
+      expect(() =>
+        buildHTTPHeadersQuotedKeyValueSet(
+          {
+            realm: 'testrealm@host.com',
+            qop: 'auth, auth-int',
+          },
+          ['realm', 'qop', 'nonce'],
+          ['realm', 'qop', 'nonce'],
+        ),
+      ).toThrow(/E_REQUIRED_KEY/);
     });
   });
 });

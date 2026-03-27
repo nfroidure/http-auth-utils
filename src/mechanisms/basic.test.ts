@@ -1,19 +1,16 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { describe, test } from '@jest/globals';
-import assert from 'assert';
-import neatequal from 'neatequal';
-import BASIC from './basic.js';
+import { describe, test, expect } from '@jest/globals';
+import BASIC, { BasicAuthorizationData } from './basic.js';
 
 describe('BASIC', () => {
   describe('type', () => {
     test('should be the basic auth prefix', () => {
-      assert.equal(BASIC.type, 'Basic');
+      expect(BASIC.type).toEqual('Basic');
     });
   });
 
   describe('parseWWWAuthenticateRest', () => {
     test('should work', () => {
-      neatequal(BASIC.parseWWWAuthenticateRest('realm="perlinpinpin"'), {
+      expect(BASIC.parseWWWAuthenticateRest('realm="perlinpinpin"')).toEqual({
         realm: 'perlinpinpin',
       });
     });
@@ -21,78 +18,77 @@ describe('BASIC', () => {
 
   describe('buildWWWAuthenticateRest', () => {
     test('should work', () => {
-      assert.equal(
+      expect(
         BASIC.buildWWWAuthenticateRest({
           realm: 'perlinpinpin',
         }),
-        'realm="perlinpinpin"',
-      );
+      ).toEqual('realm="perlinpinpin"');
     });
 
     test('should be the inverse of parseWWWAuthenticateRest', () => {
-      neatequal(
+      expect(
         BASIC.parseWWWAuthenticateRest(
           BASIC.buildWWWAuthenticateRest({
             realm: 'perlinpinpin',
           }),
         ),
-        {
-          realm: 'perlinpinpin',
-        },
-      );
+      ).toEqual({
+        realm: 'perlinpinpin',
+      });
     });
   });
 
   describe('parseAuthorizationRest', () => {
     test('should work', () => {
-      neatequal(BASIC.parseAuthorizationRest('QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
+      expect(
+        BASIC.parseAuthorizationRest('QWxpIEJhYmE6b3BlbiBzZXNhbWU='),
+      ).toEqual({
         hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
         username: 'Ali Baba',
         password: 'open sesame',
       });
-      neatequal(
+      expect(
         BASIC.parseAuthorizationRest(
           'bmljb2xhcy5mcm9pZHVyZUBzaW1wbGlmaWVsZC5jb206dGVzdA==',
         ),
-        {
-          hash: 'bmljb2xhcy5mcm9pZHVyZUBzaW1wbGlmaWVsZC5jb206dGVzdA==',
-          username: 'nicolas.froidure@simplifield.com',
-          password: 'test',
-        },
-      );
+      ).toEqual({
+        hash: 'bmljb2xhcy5mcm9pZHVyZUBzaW1wbGlmaWVsZC5jb206dGVzdA==',
+        username: 'nicolas.froidure@simplifield.com',
+        password: 'test',
+      });
     });
 
     test('should fail with empty rest', () => {
-      assert.throws(() => BASIC.parseAuthorizationRest(''), /E_EMPTY_AUTH/);
+      expect(() => BASIC.parseAuthorizationRest('')).toThrow(/E_EMPTY_AUTH/);
     });
   });
 
   describe('buildAuthorizationRest', () => {
     test('should work with credentials', () => {
-      assert.equal(
+      expect(
         BASIC.buildAuthorizationRest({
           username: 'Ali Baba',
           password: 'open sesame',
         }),
-        'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
-      );
+      ).toEqual('QWxpIEJhYmE6b3BlbiBzZXNhbWU=');
     });
 
     test('should work with just the hash', () => {
-      assert.equal(
+      expect(
         BASIC.buildAuthorizationRest({
           hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
         }),
-        'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
-      );
+      ).toEqual('QWxpIEJhYmE6b3BlbiBzZXNhbWU=');
     });
 
     test('should fail with nothing at all', () => {
-      assert.throws(() => BASIC.buildAuthorizationRest({} as any), /E_NO_HASH/);
+      expect(() =>
+        BASIC.buildAuthorizationRest({} as unknown as BasicAuthorizationData),
+      ).toThrow(/E_NO_HASH/);
     });
 
     test('should be the inverse of parseAuthorizationRest', () => {
-      neatequal(
+      expect(
         BASIC.parseAuthorizationRest(
           BASIC.buildAuthorizationRest({
             hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
@@ -100,30 +96,28 @@ describe('BASIC', () => {
             password: 'open sesame',
           }),
         ),
-        {
-          hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
-          username: 'Ali Baba',
-          password: 'open sesame',
-        },
-      );
+      ).toEqual({
+        hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
+        username: 'Ali Baba',
+        password: 'open sesame',
+      });
     });
   });
 
   describe('computeHash', () => {
     test('should work', () => {
-      assert.equal(
+      expect(
         BASIC.computeHash({
           username: 'Ali Baba',
           password: 'open sesame',
         }),
-        'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
-      );
+      ).toEqual('QWxpIEJhYmE6b3BlbiBzZXNhbWU=');
     });
   });
 
   describe('decodeHash', () => {
     test('should work', () => {
-      neatequal(BASIC.decodeHash('QWxpIEJhYmE6b3BlbiBzZXNhbWU='), {
+      expect(BASIC.decodeHash('QWxpIEJhYmE6b3BlbiBzZXNhbWU=')).toEqual({
         username: 'Ali Baba',
         password: 'open sesame',
       });

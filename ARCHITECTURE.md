@@ -38,7 +38,7 @@ See the following [RFC](https://tools.ietf.org/html/rfc6750).
 
 See the following [RFC](https://tools.ietf.org/html/rfc7617).
 
-[See in context](./src/mechanisms/basic.ts#L22-L26)
+[See in context](./src/mechanisms/basic.ts#L23-L27)
 
 
 
@@ -46,5 +46,5 @@ See the following [RFC](https://tools.ietf.org/html/rfc7617).
 
 See the following [RFC](https://tools.ietf.org/html/rfc2617).
 
-[See in context](./src/mechanisms/digest.ts#L59-L63)
+[See in context](./src/mechanisms/digest.ts#L61-L65)
 

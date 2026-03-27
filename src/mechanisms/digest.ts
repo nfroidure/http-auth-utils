@@ -19,7 +19,8 @@ const AUTHORIZED_WWW_AUTHENTICATE_KEYS = [
   'qop',
 ];
 const CASE_INSENSITIVE_WWW_AUTHENTICATE_VALUES = ['stale'];
-type DigestWWWAuthenticateData = {
+
+export interface DigestWWWAuthenticateData {
   realm: string;
   domain?: string;
   nonce: string;
@@ -27,7 +28,7 @@ type DigestWWWAuthenticateData = {
   stale?: 'true' | 'false';
   algorithm?: 'MD5' | 'MD5-sess' | 'token';
   qop?: 'auth' | 'auth-int' | string;
-};
+}
 const REQUIRED_AUTHORIZATION_KEYS = [
   'username',
   'realm',
@@ -44,7 +45,7 @@ const AUTHORIZED_AUTHORIZATION_KEYS = [
   'nc',
 ];
 
-type DigestAuthorizationData = {
+export interface DigestAuthorizationData {
   username: string;
   realm: string;
   nonce: string;
@@ -55,7 +56,8 @@ type DigestAuthorizationData = {
   opaque?: string;
   qop?: string;
   nc?: string;
-};
+}
+
 /* Architecture Note #1.3: Digest mechanism
 
 See the following [RFC](https://tools.ietf.org/html/rfc2617).
@@ -103,7 +105,7 @@ const DIGEST = {
       AUTHORIZED_WWW_AUTHENTICATE_KEYS,
       REQUIRED_WWW_AUTHENTICATE_KEYS,
       CASE_INSENSITIVE_WWW_AUTHENTICATE_VALUES,
-    ) as DigestWWWAuthenticateData;
+    ) as unknown as DigestWWWAuthenticateData;
   },
 
   /**
@@ -129,7 +131,7 @@ const DIGEST = {
     data: DigestWWWAuthenticateData,
   ): string {
     return buildHTTPHeadersQuotedKeyValueSet(
-      data,
+      data as unknown as Record<string, string>,
       AUTHORIZED_WWW_AUTHENTICATE_KEYS,
       REQUIRED_WWW_AUTHENTICATE_KEYS,
     );
@@ -172,7 +174,7 @@ const DIGEST = {
       rest,
       AUTHORIZED_AUTHORIZATION_KEYS,
       REQUIRED_AUTHORIZATION_KEYS,
-    ) as DigestAuthorizationData;
+    ) as unknown as DigestAuthorizationData;
   },
 
   /**
@@ -208,7 +210,7 @@ const DIGEST = {
     data: DigestAuthorizationData,
   ): string {
     return buildHTTPHeadersQuotedKeyValueSet(
-      data,
+      data as unknown as Record<string, string>,
       AUTHORIZED_AUTHORIZATION_KEYS,
       REQUIRED_AUTHORIZATION_KEYS,
     );

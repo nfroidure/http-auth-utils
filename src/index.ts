@@ -15,13 +15,13 @@ See the following [RFC](https://tools.ietf.org/html/rfc7235).
 
 */
 
-export type Mechanism = {
+export interface Mechanism {
   type: string;
   parseWWWAuthenticateRest(rest: string): Record<string, string>;
   buildWWWAuthenticateRest(data: Record<string, string>): string;
   parseAuthorizationRest(rest: string): Record<string, string>;
   buildAuthorizationRest(data: Record<string, string>): string;
-};
+}
 
 /**
  * @module http-auth-utils
@@ -31,30 +31,34 @@ export type Mechanism = {
  * Natively supported authentication mechanisms.
  * @type {Array}
  */
-const mechanisms: Mechanism[] = [BASIC, DIGEST, BEARER];
+const mechanisms: Mechanism[] = [
+  BASIC as unknown as Mechanism,
+  DIGEST as unknown as Mechanism,
+  BEARER as unknown as Mechanism,
+];
 
 /**
  * Basic authentication mechanism.
  * @type {Object}
  * @see  {@link module:http-auth-utils/mechanisms/basic}
  */
-BASIC;
+export { BASIC };
 
 /**
  * Digest authentication mechanism.
  * @type {Object}
  * @see  {@link module:http-auth-utils/mechanisms/digest}
  */
-DIGEST;
+export { DIGEST };
 
 /**
  * Bearer authentication mechanism.
  * @type {Object}
  * @see  {@link module:http-auth-utils/mechanisms/digest}
  */
-BEARER;
+export { BEARER };
 
-export { BASIC, DIGEST, BEARER, mechanisms };
+export { mechanisms };
 
 /**
  * Parse HTTP WWW-Authenticate header contents.
@@ -79,9 +83,7 @@ export { BASIC, DIGEST, BEARER, mechanisms };
  *   }
  * );
  */
-export function parseWWWAuthenticateHeader<
-  T extends Mechanism = typeof BASIC | typeof BEARER | typeof DIGEST,
->(
+export function parseWWWAuthenticateHeader<T extends Mechanism>(
   header: string,
   authMechanisms: T[] = mechanisms as T[],
   { strict = true }: { strict: boolean } = { strict: true },
@@ -110,7 +112,7 @@ export function parseWWWAuthenticateHeader<
     return false;
   });
   if (!result) {
-    throw new YError('E_UNKNOWN_AUTH_MECHANISM', header);
+    throw new YError('E_UNKNOWN_AUTH_MECHANISM', [header]);
   }
   return result;
 }
@@ -137,9 +139,7 @@ export function parseWWWAuthenticateHeader<
  *   }
  * );
  */
-export function parseAuthorizationHeader<
-  T extends Mechanism = typeof BASIC | typeof BEARER | typeof DIGEST,
->(
+export function parseAuthorizationHeader<T extends Mechanism>(
   header: string,
   authMechanisms: T[] = mechanisms as T[],
   { strict = true }: { strict: boolean } = { strict: true },
@@ -160,7 +160,7 @@ export function parseAuthorizationHeader<
       result = {
         type: authMechanism.type,
         data: authMechanism.parseAuthorizationRest(
-          header.substr(authMechanism.type.length + 1),
+          header.substring(authMechanism.type.length + 1),
         ) as ReturnType<T['parseAuthorizationRest']>,
       };
       return true;
@@ -170,7 +170,7 @@ export function parseAuthorizationHeader<
   if (result) {
     return result;
   }
-  throw new YError('E_UNKNOWN_AUTH_MECHANISM', header);
+  throw new YError('E_UNKNOWN_AUTH_MECHANISM', [header]);
 }
 
 /**

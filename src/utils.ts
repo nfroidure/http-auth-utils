@@ -24,42 +24,50 @@ export function parseHTTPHeadersQuotedKeyValueSet(
   valuesToNormalize: string[] = [],
 ): Record<string, string> {
   const matches = contents.trim().match(KEYVALUE_REGEXP);
-  if (!matches) throw new YError('E_MALFORMED_QUOTEDKEYVALUE', contents);
+  if (!matches) throw new YError('E_MALFORMED_QUOTEDKEYVALUE', [contents]);
 
   const data = matches
     .map((part, partPosition) => {
       const [key, ...rest] = part.split(EQUAL);
       const value = rest.join(EQUAL);
       if (0 === rest.length) {
-        throw new YError('E_MALFORMED_QUOTEDKEYVALUE', partPosition, part);
+        throw new YError('E_MALFORMED_QUOTEDKEYVALUE', [partPosition, part]);
       }
       return [key, value];
     })
-    .reduce(function (parsedValues, [name, value], valuePosition) {
-      const normalizedName = name.toLowerCase();
-      if (-1 === authorizedKeys.indexOf(normalizedName)) {
-        throw new YError('E_UNAUTHORIZED_KEY', valuePosition, normalizedName);
-      }
+    .reduce(
+      function (parsedValues, [name, value], valuePosition) {
+        const normalizedName = name.toLowerCase();
+        if (-1 === authorizedKeys.indexOf(normalizedName)) {
+          throw new YError('E_UNAUTHORIZED_KEY', [
+            valuePosition,
+            normalizedName,
+          ]);
+        }
 
-      /*
-       * Regular expression for stripping paired starting and ending double quotes off the value:
-       * ^      = The beginning of the string
-       * "      = The first double quote
-       * .*     = Characters of any kind
-       * (?="$) = Zero-width (as in not captured) positive lookahead assertion.
-       *          The previous match will only be valid if it's followed by a " literal
-       *          or the end of the string
-       * "      = The ending double quote
-       * $      = The end of the string
-       */
-      const strippedValue = value.replace(/^"(.*(?="$))"$/, '$1');
+        /*
+         * Regular expression for stripping paired starting and ending double quotes off the value:
+         * ^      = The beginning of the string
+         * "      = The first double quote
+         * .*     = Characters of any kind
+         * (?="$) = Zero-width (as in not captured) positive lookahead assertion.
+         *          The previous match will only be valid if it's followed by a " literal
+         *          or the end of the string
+         * "      = The ending double quote
+         * $      = The end of the string
+         */
+        const strippedValue = value.replace(/^"(.*(?="$))"$/, '$1');
 
-      parsedValues[normalizedName] = valuesToNormalize.includes(normalizedName)
-        ? strippedValue.toLowerCase()
-        : strippedValue;
+        parsedValues[normalizedName] = valuesToNormalize.includes(
+          normalizedName,
+        )
+          ? strippedValue.toLowerCase()
+          : strippedValue;
 
-      return parsedValues;
-    }, {});
+        return parsedValues;
+      },
+      {} as Record<string, string>,
+    );
 
   _checkRequiredKeys(requiredKeys, data);
 
@@ -94,7 +102,7 @@ function _checkRequiredKeys(
 ): void {
   requiredKeys.forEach((name) => {
     if ('undefined' === typeof data[name]) {
-      throw new YError('E_REQUIRED_KEY', name);
+      throw new YError('E_REQUIRED_KEY', [name]);
     }
   });
 }

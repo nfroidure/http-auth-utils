@@ -1,6 +1,4 @@
-import { describe, test } from '@jest/globals';
-import assert from 'assert';
-import neatequal from 'neatequal';
+import { describe, test, expect } from '@jest/globals';
 import {
   parseWWWAuthenticateHeader,
   parseAuthorizationHeader,
@@ -10,52 +8,56 @@ import {
   BASIC,
   DIGEST,
   BEARER,
+  Mechanism,
 } from './index.js';
 
 describe('index', () => {
   describe('parseWWWAuthenticateHeader', () => {
     test('should parse Basic headers', () => {
-      neatequal(parseWWWAuthenticateHeader('Basic realm="test"'), {
+      expect(parseWWWAuthenticateHeader('Basic realm="test"')).toEqual({
         type: 'Basic',
         data: {
           realm: 'test',
         },
       });
-      neatequal(
-        parseWWWAuthenticateHeader('basic realm="test"', [BASIC], {
-          strict: false,
-        }),
-        {
-          type: 'Basic',
-          data: {
-            realm: 'test',
+      expect(
+        parseWWWAuthenticateHeader(
+          'basic realm="test"',
+          [BASIC] as unknown as Mechanism[],
+          {
+            strict: false,
           },
+        ),
+      ).toEqual({
+        type: 'Basic',
+        data: {
+          realm: 'test',
         },
-      );
+      });
     });
     test('should parse Bearer headers', () => {
-      neatequal(parseWWWAuthenticateHeader('Bearer realm="test"', mechanisms), {
+      expect(
+        parseWWWAuthenticateHeader('Bearer realm="test"', mechanisms),
+      ).toEqual({
         type: 'Bearer',
         data: {
           realm: 'test',
         },
       });
-      neatequal(
+      expect(
         parseWWWAuthenticateHeader('bearer realm="test"', mechanisms, {
           strict: false,
         }),
-        {
-          type: 'Bearer',
-          data: {
-            realm: 'test',
-          },
+      ).toEqual({
+        type: 'Bearer',
+        data: {
+          realm: 'test',
         },
-      );
+      });
     });
 
     test('should fail with unknown headers', () => {
-      assert.throws(
-        () => parseWWWAuthenticateHeader('Kikoolol realm="test"'),
+      expect(() => parseWWWAuthenticateHeader('Kikoolol realm="test"')).toThrow(
         /E_UNKNOWN_AUTH_MECHANISM/,
       );
     });
@@ -63,66 +65,63 @@ describe('index', () => {
 
   describe('parseAuthorizationHeader', () => {
     test('should parse Basic headers', () => {
-      neatequal(
+      expect(
         parseAuthorizationHeader('Basic QWxpIEJhYmE6b3BlbiBzZXNhbWU='),
-        {
-          type: 'Basic',
-          data: {
-            username: 'Ali Baba',
-            password: 'open sesame',
-            hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
-          },
+      ).toEqual({
+        type: 'Basic',
+        data: {
+          username: 'Ali Baba',
+          password: 'open sesame',
+          hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
         },
-      );
-      neatequal(
+      });
+      expect(
         parseAuthorizationHeader(
           'basic QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
-          [BASIC],
+          [BASIC] as unknown as Mechanism[],
           {
             strict: false,
           },
         ),
-        {
-          type: 'Basic',
-          data: {
-            hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
-            username: 'Ali Baba',
-            password: 'open sesame',
-          },
+      ).toEqual({
+        type: 'Basic',
+        data: {
+          hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
+          username: 'Ali Baba',
+          password: 'open sesame',
         },
-        { strict: false },
-      );
-      neatequal(
+      });
+      expect(
         parseAuthorizationHeader(
           'Basic QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
           mechanisms,
         ),
-        {
-          type: 'Basic',
-          data: {
-            username: 'Ali Baba',
-            password: 'open sesame',
-            hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
-          },
+      ).toEqual({
+        type: 'Basic',
+        data: {
+          username: 'Ali Baba',
+          password: 'open sesame',
+          hash: 'QWxpIEJhYmE6b3BlbiBzZXNhbWU=',
         },
-      );
-      neatequal(
+      });
+      expect(
         parseAuthorizationHeader(
           'Basic bmljb2xhcy5mcm9pZHVyZUBzaW1wbGlmaWVsZC5jb206dGVzdA==',
         ),
-        {
-          type: 'Basic',
-          data: {
-            username: 'nicolas.froidure@simplifield.com',
-            password: 'test',
-            hash: 'bmljb2xhcy5mcm9pZHVyZUBzaW1wbGlmaWVsZC5jb206dGVzdA==',
-          },
+      ).toEqual({
+        type: 'Basic',
+        data: {
+          username: 'nicolas.froidure@simplifield.com',
+          password: 'test',
+          hash: 'bmljb2xhcy5mcm9pZHVyZUBzaW1wbGlmaWVsZC5jb206dGVzdA==',
         },
-      );
+      });
     });
 
     test('should parse Basic headers with a ":" char in the password', () => {
-      neatequal(parseAuthorizationHeader('Basic Sm9objpSOlU6a2lkZGluZz8='), {
+      expect(
+        parseAuthorizationHeader('Basic Sm9objpSOlU6a2lkZGluZz8='),
+      ).toEqual({
         type: 'Basic',
         data: {
           username: 'John',
@@ -133,23 +132,19 @@ describe('index', () => {
     });
 
     test('should fail with unknown headers', () => {
-      assert.throws(
-        () => parseAuthorizationHeader('Kikoolol ddd'),
+      expect(() => parseAuthorizationHeader('Kikoolol ddd')).toThrow(
         /E_UNKNOWN_AUTH_MECHANISM/,
       );
     });
 
     test('should fail with basic headers in strict mode', () => {
-      assert.throws(
-        () => parseAuthorizationHeader('basic ddd'),
+      expect(() => parseAuthorizationHeader('basic ddd')).toThrow(
         /E_UNKNOWN_AUTH_MECHANISM/,
       );
-      assert.throws(
-        () => parseAuthorizationHeader('basic ddd'),
+      expect(() => parseAuthorizationHeader('basic ddd')).toThrow(
         /E_UNKNOWN_AUTH_MECHANISM/,
       );
-      assert.throws(
-        () => parseAuthorizationHeader('basic ddd'),
+      expect(() => parseAuthorizationHeader('basic ddd')).toThrow(
         /E_UNKNOWN_AUTH_MECHANISM/,
       );
     });
@@ -157,57 +152,54 @@ describe('index', () => {
 
   describe('buildWWWAuthenticateHeader', () => {
     test('should build Basic headers', () => {
-      assert.equal(
-        buildWWWAuthenticateHeader(BASIC, {
+      expect(
+        buildWWWAuthenticateHeader(BASIC as unknown as Mechanism, {
           realm: 'test',
         }),
-        'Basic realm="test"',
-      );
+      ).toEqual('Basic realm="test"');
     });
 
     test('should be reentrant', () => {
-      assert.equal(
+      expect(
         buildWWWAuthenticateHeader(
-          BASIC,
+          BASIC as unknown as Mechanism,
           parseWWWAuthenticateHeader('Basic realm="test"').data,
         ),
-        'Basic realm="test"',
-      );
+      ).toEqual('Basic realm="test"');
     });
   });
 
   describe('buildAuthorizationHeader', () => {
     test('should build Basic headers', () => {
-      assert.equal(
-        buildAuthorizationHeader(BASIC, {
+      expect(
+        buildAuthorizationHeader(BASIC as unknown as Mechanism, {
           username: 'John',
           password: 'R:U:kidding?',
         }),
-        'Basic Sm9objpSOlU6a2lkZGluZz8=',
-      );
+      ).toEqual('Basic Sm9objpSOlU6a2lkZGluZz8=');
     });
 
     test('should be reentrant', () => {
-      assert.equal(
+      expect(
         buildAuthorizationHeader(
-          BASIC,
-          parseAuthorizationHeader('Basic Sm9objpSOlU6a2lkZGluZz8=', [BASIC])
-            .data,
+          BASIC as unknown as Mechanism,
+          parseAuthorizationHeader('Basic Sm9objpSOlU6a2lkZGluZz8=', [
+            BASIC,
+          ] as unknown as Mechanism[]).data,
         ),
-        'Basic Sm9objpSOlU6a2lkZGluZz8=',
-      );
+      ).toEqual('Basic Sm9objpSOlU6a2lkZGluZz8=');
     });
   });
 
   describe('mechanisms', () => {
     test('should export bot DIGEST and BASIC  mechanisms', () => {
-      assert.equal(mechanisms.length, 3);
+      expect(mechanisms.length).toEqual(3);
     });
 
     test('should export DIGEST BASIC and BEARER mechanisms', () => {
-      assert(BASIC);
-      assert(DIGEST);
-      assert(BEARER);
+      expect(BASIC).toBeDefined();
+      expect(DIGEST).toBeDefined();
+      expect(BEARER).toBeDefined();
     });
   });
 });
