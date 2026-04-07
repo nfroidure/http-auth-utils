@@ -1,3 +1,5 @@
+## [7.0.1](https://github.com/nfroidure/http-auth-utils/compare/v7.0.0...v7.0.1) (2026-04-07)
+
 # [7.0.0](https://github.com/nfroidure/http-auth-utils/compare/v6.0.1...v7.0.0) (2026-03-27)
 
 ## [6.0.1](https://github.com/nfroidure/http-auth-utils/compare/v6.0.0...v6.0.1) (2024-07-15)
