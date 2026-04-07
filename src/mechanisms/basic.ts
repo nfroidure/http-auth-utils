@@ -14,11 +14,11 @@ const AUTHORIZED_WWW_AUTHENTICATE_KEYS = REQUIRED_WWW_AUTHENTICATE_KEYS;
 
 export interface BasicWWWAuthenticateData {
   realm: string;
-};
+}
 export interface BasicAuthorizationData {
   username: string;
   password: string;
-};
+}
 
 /* Architecture Note #1.2: Basic mechanism
 

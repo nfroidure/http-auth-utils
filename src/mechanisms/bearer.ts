@@ -26,10 +26,10 @@ export interface BearerWWWAuthenticateData {
   scope?: string;
   error?: (typeof AUTHORIZED_ERROR_CODES)[number];
   error_description?: string;
-};
+}
 export interface BearerAuthorizationData {
   hash: string;
-};
+}
 
 type BearerAuthorizedErrorCodes = (typeof AUTHORIZED_ERROR_CODES)[number];
 
@@ -104,7 +104,10 @@ const BEARER = {
           data.error as unknown as BearerAuthorizedErrorCodes,
         )
     ) {
-      throw new YError('E_INVALID_ERROR', [data.error, AUTHORIZED_ERROR_CODES]);
+      throw new YError('E_INVALID_ERROR', [
+        data.error,
+        AUTHORIZED_ERROR_CODES as unknown as string[],
+      ]);
     }
     return buildHTTPHeadersQuotedKeyValueSet(
       data as unknown as Record<string, string>,

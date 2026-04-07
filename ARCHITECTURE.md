@@ -22,7 +22,7 @@ Since the `WWW-Authenticate` and the `Authorization` headers parsing
 
 See the following [RFC](https://tools.ietf.org/html/rfc7235).
 
-[See in context](./src/index.ts#L7-L16)
+[See in context](./src/index.ts#L9-L18)
 
 
 

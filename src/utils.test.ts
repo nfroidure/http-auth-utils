@@ -6,7 +6,7 @@ import {
 
 describe('utils', () => {
   describe('parseHTTPHeadersQuotedKeyValueSet', () => {
-    test('should work with good datas', () => {
+    test('should work with good data', () => {
       expect(
         parseHTTPHeadersQuotedKeyValueSet(
           'realm="testrealm@host.com", ' +
@@ -137,21 +137,21 @@ describe('utils', () => {
 
     test('should fail with bad quoted value pair', () => {
       expect(() =>
-        parseHTTPHeadersQuotedKeyValueSet('realm="dsad"', []),
+        parseHTTPHeadersQuotedKeyValueSet('realm="a_realm"', []),
       ).toThrow(/E_UNAUTHORIZED_KEY/);
     });
 
     test('should pass with non-quoted value pair', () => {
       expect(
-        parseHTTPHeadersQuotedKeyValueSet('realm=dsad', ['realm']),
+        parseHTTPHeadersQuotedKeyValueSet('realm=a_realm', ['realm']),
       ).toEqual({
-        realm: 'dsad',
+        realm: 'a_realm',
       });
     });
   });
 
   describe('buildHTTPHeadersQuotedKeyValueSet', () => {
-    test('should work with good datas', () => {
+    test('should work with good data', () => {
       expect(
         buildHTTPHeadersQuotedKeyValueSet(
           {

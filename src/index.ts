@@ -4,6 +4,8 @@ import BASIC from './mechanisms/basic.js';
 import DIGEST from './mechanisms/digest.js';
 import BEARER from './mechanisms/bearer.js';
 
+import './errors.js';
+
 /* Architecture Note #1: Module structure
 
 Since the `WWW-Authenticate` and the `Authorization` headers parsing
