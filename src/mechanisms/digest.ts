@@ -17,8 +17,16 @@ const AUTHORIZED_WWW_AUTHENTICATE_KEYS = [
   'stale',
   'algorithm',
   'qop',
+  'charset',
+  'userhash',
 ];
-const CASE_INSENSITIVE_WWW_AUTHENTICATE_VALUES = ['stale'];
+const CASE_INSENSITIVE_WWW_AUTHENTICATE_VALUES = ['stale', 'userhash'];
+const UNQUOTED_WWW_AUTHENTICATE_KEYS = [
+  'stale',
+  'algorithm',
+  'charset',
+  'userhash',
+];
 
 export interface DigestWWWAuthenticateData {
   realm: string;
@@ -28,6 +36,8 @@ export interface DigestWWWAuthenticateData {
   stale?: 'true' | 'false';
   algorithm?: 'MD5' | 'MD5-sess' | 'token';
   qop?: 'auth' | 'auth-int' | string;
+  charset?: 'UTF-8';
+  userhash?: 'true' | 'false';
 }
 const REQUIRED_AUTHORIZATION_KEYS = [
   'username',
@@ -43,7 +53,10 @@ const AUTHORIZED_AUTHORIZATION_KEYS = [
   'opaque',
   'qop',
   'nc',
+  'userhash',
 ];
+const UNQUOTED_AUTHORIZATION_KEYS = ['algorithm', 'qop', 'nc', 'userhash'];
+const CASE_INSENSITIVE_AUTHORIZATION_VALUES = ['userhash'];
 
 export interface DigestAuthorizationData {
   username: string;
@@ -56,6 +69,7 @@ export interface DigestAuthorizationData {
   opaque?: string;
   qop?: string;
   nc?: string;
+  userhash?: 'true' | 'false';
 }
 
 /* Architecture Note #1.3: Digest mechanism
@@ -118,12 +132,16 @@ const DIGEST = {
    *     realm: 'testrealm@host.com',
    *     qop: 'auth, auth-int',
    *     nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
-   *     opaque: '5ccc069c403ebaf9f0171e9517f40e41'
+   *     opaque: '5ccc069c403ebaf9f0171e9517f40e41',
+   *     stale: 'false',
+   *     algorithm: 'MD5'
    *   }),
    *   'realm="testrealm@host.com", ' +
-   *   'qop="auth, auth-int", ' +
    *   'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' +
-   *   'opaque="5ccc069c403ebaf9f0171e9517f40e41"'
+   *   'opaque="5ccc069c403ebaf9f0171e9517f40e41", ' +
+   *   'stale=false, ' +
+   *   'algorithm=MD5, ' +
+   *   'qop="auth, auth-int"'
    * );
    * @api public
    */
@@ -134,6 +152,7 @@ const DIGEST = {
       data as unknown as Record<string, string>,
       AUTHORIZED_WWW_AUTHENTICATE_KEYS,
       REQUIRED_WWW_AUTHENTICATE_KEYS,
+      UNQUOTED_WWW_AUTHENTICATE_KEYS,
     );
   },
 
@@ -148,8 +167,9 @@ const DIGEST = {
    *     'realm="testrealm@host.com",' +
    *     'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093",' +
    *     'uri="/dir/index.html",' +
-   *     'qop="auth",' +
-   *     'nc="00000001",' +
+   *     'algorithm=MD5,' +
+   *     'qop=auth,' +
+   *     'nc=00000001,' +
    *     'cnonce="0a4f113b",' +
    *     'response="6629fae49393a05397450978507c4ef1",' +
    *     'opaque="5ccc069c403ebaf9f0171e9517f40e41"'
@@ -158,6 +178,7 @@ const DIGEST = {
    *     realm: 'testrealm@host.com',
    *     nonce: "dcd98b7102dd2f0e8b11d0f600bfb0c093",
    *     uri: "/dir/index.html",
+   *     algorithm: 'MD5',
    *     qop: 'auth',
    *     nc: '00000001',
    *     cnonce: "0a4f113b",
@@ -174,6 +195,7 @@ const DIGEST = {
       rest,
       AUTHORIZED_AUTHORIZATION_KEYS,
       REQUIRED_AUTHORIZATION_KEYS,
+      CASE_INSENSITIVE_AUTHORIZATION_VALUES,
     ) as unknown as DigestAuthorizationData;
   },
 
@@ -188,6 +210,7 @@ const DIGEST = {
    *     realm: 'testrealm@host.com',
    *     nonce: "dcd98b7102dd2f0e8b11d0f600bfb0c093",
    *     uri: "/dir/index.html",
+   *     algorithm: 'MD5',
    *     qop: 'auth',
    *     nc: '00000001',
    *     cnonce: "0a4f113b",
@@ -199,10 +222,11 @@ const DIGEST = {
    *   'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' +
    *   'uri="/dir/index.html", ' +
    *   'response="6629fae49393a05397450978507c4ef1", ' +
+   *   'algorithm=MD5, ' +
    *   'cnonce="0a4f113b", ' +
    *   'opaque="5ccc069c403ebaf9f0171e9517f40e41", ' +
-   *   'qop="auth", ' +
-   *   'nc="00000001"'
+   *   'qop=auth, ' +
+   *   'nc=00000001'
    * );
    * @api public
    */
@@ -213,6 +237,7 @@ const DIGEST = {
       data as unknown as Record<string, string>,
       AUTHORIZED_AUTHORIZATION_KEYS,
       REQUIRED_AUTHORIZATION_KEYS,
+      UNQUOTED_AUTHORIZATION_KEYS,
     );
   },
 

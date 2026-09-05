@@ -203,6 +203,59 @@ describe('utils', () => {
       );
     });
 
+    test('should work with unquoted keys', () => {
+      expect(
+        buildHTTPHeadersQuotedKeyValueSet(
+          {
+            realm: 'testrealm@host.com',
+            qop: 'auth',
+            nc: '00000001',
+          },
+          ['realm', 'qop', 'nc'],
+          ['realm', 'qop', 'nc'],
+          ['qop', 'nc'],
+        ),
+      ).toEqual('realm="testrealm@host.com", qop=auth, nc=00000001');
+    });
+
+    test('should allow all valid HTTP token characters in unquoted values', () => {
+      expect(
+        buildHTTPHeadersQuotedKeyValueSet(
+          {
+            algorithm: "!#$%&'*+-.^_`|~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+          },
+          ['algorithm'],
+          [],
+          ['algorithm'],
+        ),
+      ).toEqual(
+        "algorithm=!#$%&'*+-.^_`|~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+      );
+    });
+
+    test.each(['auth, auth-int', 'auth int', 'auth\r\nInjected: true'])(
+      'should reject invalid unquoted token value %p',
+      (value) => {
+        expect(() =>
+          buildHTTPHeadersQuotedKeyValueSet(
+            { qop: value },
+            ['qop'],
+            [],
+            ['qop'],
+          ),
+        ).toThrow(/E_MALFORMED_TOKEN/);
+      },
+    );
+
+    test('should continue allowing separators in quoted values', () => {
+      expect(
+        buildHTTPHeadersQuotedKeyValueSet(
+          { qop: 'auth, auth-int' },
+          ['qop'],
+        ),
+      ).toEqual('qop="auth, auth-int"');
+    });
+
     test('should fail without required keys', () => {
       expect(() =>
         buildHTTPHeadersQuotedKeyValueSet(

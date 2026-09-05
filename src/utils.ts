@@ -3,6 +3,7 @@ import { YError } from 'yerror';
 const QUOTE = '"';
 const EQUAL = '=';
 const SEPARATOR = ', ';
+const TOKEN_REGEXP = /^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/;
 
 /*
  * Regular expression for matching the key-value pairs
@@ -78,18 +79,24 @@ export function buildHTTPHeadersQuotedKeyValueSet(
   data: Record<string, string>,
   authorizedKeys: string[],
   requiredKeys: string[] = [],
+  unquotedKeys: string[] = [],
 ): string {
   _checkRequiredKeys(requiredKeys, data);
   return authorizedKeys.reduce(function (contents, key) {
     if (data[key] !== undefined) {
+      const unquoted = unquotedKeys.includes(key);
+      if (unquoted && !TOKEN_REGEXP.test(data[key])) {
+        throw new YError('E_MALFORMED_TOKEN', [key, data[key]]);
+      }
+      const quote = unquoted ? '' : QUOTE;
       return (
         contents +
         (contents ? SEPARATOR : '') +
         key +
         EQUAL +
-        QUOTE +
+        quote +
         data[key] +
-        QUOTE
+        quote
       );
     }
     return contents;
