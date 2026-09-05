@@ -35,7 +35,7 @@ type BearerAuthorizedErrorCodes = (typeof AUTHORIZED_ERROR_CODES)[number];
 
 /* Architecture Note #1.1: Bearer mechanism
 
-See the following [RFC](https://tools.ietf.org/html/rfc6750).
+See the following [RFC 6750](https://tools.ietf.org/html/rfc6750).
 
 */
 

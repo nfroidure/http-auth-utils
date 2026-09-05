@@ -22,7 +22,7 @@ export interface BasicAuthorizationData {
 
 /* Architecture Note #1.2: Basic mechanism
 
-See the following [RFC](https://tools.ietf.org/html/rfc7617).
+See the following [RFC 7617](https://tools.ietf.org/html/rfc7617).
 
 */
 

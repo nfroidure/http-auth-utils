@@ -20,7 +20,7 @@ Since the `WWW-Authenticate` and the `Authorization` headers parsing
  a generic set of function that parse/build those headers given a
  list of authorized mechanisms.
 
-See the following [RFC](https://tools.ietf.org/html/rfc7235).
+See the following [RFC 7235](https://tools.ietf.org/html/rfc7235).
 
 [See in context](./src/index.ts#L9-L18)
 
@@ -28,7 +28,7 @@ See the following [RFC](https://tools.ietf.org/html/rfc7235).
 
 ### 1.1. Bearer mechanism
 
-See the following [RFC](https://tools.ietf.org/html/rfc6750).
+See the following [RFC 6750](https://tools.ietf.org/html/rfc6750).
 
 [See in context](./src/mechanisms/bearer.ts#L36-L40)
 
@@ -36,7 +36,7 @@ See the following [RFC](https://tools.ietf.org/html/rfc6750).
 
 ### 1.2. Basic mechanism
 
-See the following [RFC](https://tools.ietf.org/html/rfc7617).
+See the following [RFC 7617](https://tools.ietf.org/html/rfc7617).
 
 [See in context](./src/mechanisms/basic.ts#L23-L27)
 
@@ -44,7 +44,8 @@ See the following [RFC](https://tools.ietf.org/html/rfc7617).
 
 ### 1.3. Digest mechanism
 
-See the following [RFC](https://tools.ietf.org/html/rfc2617).
+See [RFC 2617](https://tools.ietf.org/html/rfc2617) and
+[RFC 7616](https://httpwg.org/specs/rfc7616.html)].
 
-[See in context](./src/mechanisms/digest.ts#L61-L65)
+[See in context](./src/mechanisms/digest.ts#L101-L106)
 

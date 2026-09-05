@@ -546,12 +546,16 @@ assert.equal(
     realm: 'testrealm@host.com',
     qop: 'auth, auth-int',
     nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
-    opaque: '5ccc069c403ebaf9f0171e9517f40e41'
+    opaque: '5ccc069c403ebaf9f0171e9517f40e41',
+    stale: 'false',
+    algorithm: 'MD5'
   }),
   'realm="testrealm@host.com", ' +
-  'qop="auth, auth-int", ' +
   'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' +
-  'opaque="5ccc069c403ebaf9f0171e9517f40e41"'
+  'opaque="5ccc069c403ebaf9f0171e9517f40e41", ' +
+  'stale=false, ' +
+  'algorithm=MD5, ' +
+  'qop="auth, auth-int"'
 );
 ```
 <a name="module_http-auth-utils/mechanisms/digest..DIGEST.parseAuthorizationRest"></a>
@@ -575,8 +579,9 @@ assert.deepEqual(
     'realm="testrealm@host.com",' +
     'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093",' +
     'uri="/dir/index.html",' +
-    'qop="auth",' +
-    'nc="00000001",' +
+    'algorithm=MD5,' +
+    'qop=auth,' +
+    'nc=00000001,' +
     'cnonce="0a4f113b",' +
     'response="6629fae49393a05397450978507c4ef1",' +
     'opaque="5ccc069c403ebaf9f0171e9517f40e41"'
@@ -585,6 +590,7 @@ assert.deepEqual(
     realm: 'testrealm@host.com',
     nonce: "dcd98b7102dd2f0e8b11d0f600bfb0c093",
     uri: "/dir/index.html",
+    algorithm: 'MD5',
     qop: 'auth',
     nc: '00000001',
     cnonce: "0a4f113b",
@@ -614,6 +620,7 @@ assert.equal(
     realm: 'testrealm@host.com',
     nonce: "dcd98b7102dd2f0e8b11d0f600bfb0c093",
     uri: "/dir/index.html",
+    algorithm: 'MD5',
     qop: 'auth',
     nc: '00000001',
     cnonce: "0a4f113b",
@@ -625,10 +632,11 @@ assert.equal(
   'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' +
   'uri="/dir/index.html", ' +
   'response="6629fae49393a05397450978507c4ef1", ' +
+  'algorithm=MD5, ' +
   'cnonce="0a4f113b", ' +
   'opaque="5ccc069c403ebaf9f0171e9517f40e41", ' +
-  'qop="auth", ' +
-  'nc="00000001"'
+  'qop=auth, ' +
+  'nc=00000001'
 );
 ```
 <a name="module_http-auth-utils/mechanisms/digest..DIGEST.computeHash"></a>

@@ -82,7 +82,7 @@ describe('utils', () => {
       });
     });
 
-    test('should normalize all keys to lowercase', () => {
+    test('should normalize keys to lowercase', () => {
       expect(
         parseHTTPHeadersQuotedKeyValueSet(
           'Realm="testrealm@host.com", ' +
@@ -112,7 +112,12 @@ describe('utils', () => {
             'stale=TRUE',
           ['realm', 'qop', 'nonce', 'opaque', 'stale'],
           ['realm', 'qop', 'nonce', 'opaque', 'stale'],
-          ['stale'],
+          {
+            stale: {
+              caseInsensitive: true,
+              values: ['false', 'true'],
+            },
+          },
         ),
       ).toEqual({
         realm: 'testrealm-UPPERCASE@host.com', // should not be changed
@@ -201,6 +206,57 @@ describe('utils', () => {
           'qop="auth, auth-int", ' +
           'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093"',
       );
+    });
+
+    test('should work with unquoted keys', () => {
+      expect(
+        buildHTTPHeadersQuotedKeyValueSet(
+          {
+            realm: 'testrealm@host.com',
+            qop: 'auth',
+            nc: '00000001',
+          },
+          ['realm', 'qop', 'nc'],
+          ['realm', 'qop', 'nc'],
+          ['qop', 'nc'],
+        ),
+      ).toEqual('realm="testrealm@host.com", qop=auth, nc=00000001');
+    });
+
+    test('should allow all valid HTTP token characters in unquoted values', () => {
+      expect(
+        buildHTTPHeadersQuotedKeyValueSet(
+          {
+            algorithm:
+              "!#$%&'*+-.^_`|~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+          },
+          ['algorithm'],
+          [],
+          ['algorithm'],
+        ),
+      ).toEqual(
+        "algorithm=!#$%&'*+-.^_`|~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+      );
+    });
+
+    test.each(['auth, auth-int', 'auth int', 'auth\r\nInjected: true'])(
+      'should reject invalid unquoted token value %p',
+      (value) => {
+        expect(() =>
+          buildHTTPHeadersQuotedKeyValueSet(
+            { qop: value },
+            ['qop'],
+            [],
+            ['qop'],
+          ),
+        ).toThrow(/E_MALFORMED_TOKEN/);
+      },
+    );
+
+    test('should continue allowing separators in quoted values', () => {
+      expect(
+        buildHTTPHeadersQuotedKeyValueSet({ qop: 'auth, auth-int' }, ['qop']),
+      ).toEqual('qop="auth, auth-int"');
     });
 
     test('should fail without required keys', () => {
