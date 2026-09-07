@@ -1,3 +1,9 @@
+## [7.1.0](https://github.com/nfroidure/http-auth-utils/compare/v7.0.1...v7.1.0) (2026-09-07)
+
+### Bug Fixes
+
+* **digest:** serialize token fields without quotes ([e324ced](https://github.com/nfroidure/http-auth-utils/commit/e324ced49ee90cafe50ca090409e2fb29c91c879))
+
 ## [7.0.1](https://github.com/nfroidure/http-auth-utils/compare/v7.0.0...v7.0.1) (2026-04-07)
 
 # [7.0.0](https://github.com/nfroidure/http-auth-utils/compare/v6.0.1...v7.0.0) (2026-03-27)
