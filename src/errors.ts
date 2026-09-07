@@ -22,5 +22,14 @@ declare module 'yerror' {
 
     /** Thrown when a required key is missing from the authentication data */
     E_REQUIRED_KEY: [name: string];
+
+    /** Thrown when an unquoted value is not a valid HTTP token */
+    E_MALFORMED_TOKEN: [name: string, value: string];
+
+    /** Thrown when a value is not in the allowed set */
+    E_UNSUPPORTED_VALUE: [name: string, value: string, allowed: string[]];
+
+    /** Thrown when a value is not valid */
+    E_INVALID_VALUE: [name: string, value: string, regExp: string];
   }
 }

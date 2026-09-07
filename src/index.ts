@@ -13,7 +13,7 @@ Since the `WWW-Authenticate` and the `Authorization` headers parsing
  a generic set of function that parse/build those headers given a
  list of authorized mechanisms.
 
-See the following [RFC](https://tools.ietf.org/html/rfc7235).
+See the following [RFC 7235](https://tools.ietf.org/html/rfc7235).
 
 */
 

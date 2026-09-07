@@ -15,13 +15,37 @@ describe('digest', () => {
           'realm="testrealm@host.com", ' +
             'qop="auth, auth-int", ' +
             'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' +
-            'opaque="5ccc069c403ebaf9f0171e9517f40e41"',
+            'opaque="5ccc069c403ebaf9f0171e9517f40e41", ' +
+            'charset=UTF-8, ' +
+            'userhash=TRUE',
         ),
       ).toEqual({
         realm: 'testrealm@host.com',
         qop: 'auth, auth-int',
         nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
         opaque: '5ccc069c403ebaf9f0171e9517f40e41',
+        charset: 'UTF-8',
+        userhash: 'true',
+      });
+    });
+
+    test('should upper case charset', () => {
+      expect(
+        DIGEST.parseWWWAuthenticateRest(
+          'realm="testrealm@host.com", ' +
+            'qop="auth, auth-int", ' +
+            'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' +
+            'opaque="5ccc069c403ebaf9f0171e9517f40e41", ' +
+            'charset=utf-8, ' +
+            'userhash=TRUE',
+        ),
+      ).toEqual({
+        realm: 'testrealm@host.com',
+        qop: 'auth, auth-int',
+        nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
+        opaque: '5ccc069c403ebaf9f0171e9517f40e41',
+        charset: 'UTF-8',
+        userhash: 'true',
       });
     });
 
@@ -40,6 +64,18 @@ describe('digest', () => {
         nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
       });
     });
+
+    test('should fail with bad charset', () => {
+      expect(() =>
+        DIGEST.parseWWWAuthenticateRest(
+          'realm="testrealm@host.com", ' +
+            'qop=auth, ' +
+            'algorithm=MD5, ' +
+            'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093",' +
+            'charset=UCS-2',
+        ),
+      ).toThrow('E_UNSUPPORTED_VALUE');
+    });
   });
 
   describe('buildWWWAuthenticateRest', () => {
@@ -50,13 +86,60 @@ describe('digest', () => {
           qop: 'auth, auth-int',
           nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
           opaque: '5ccc069c403ebaf9f0171e9517f40e41',
+          stale: 'false',
+          algorithm: 'MD5',
+          charset: 'UTF-8',
+          userhash: 'true',
         }),
       ).toEqual(
         'realm="testrealm@host.com", ' +
           'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' +
           'opaque="5ccc069c403ebaf9f0171e9517f40e41", ' +
-          'qop="auth, auth-int"',
+          'stale=false, ' +
+          'algorithm=MD5, ' +
+          'qop="auth, auth-int", ' +
+          'charset=UTF-8, ' +
+          'userhash=true',
       );
+    });
+
+    test('should uppercase charset and lowercase userhash', () => {
+      expect(
+        DIGEST.buildWWWAuthenticateRest({
+          realm: 'testrealm@host.com',
+          qop: 'auth, auth-int',
+          nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
+          opaque: '5ccc069c403ebaf9f0171e9517f40e41',
+          stale: 'FALSE' as 'false',
+          algorithm: 'SHA-256',
+          charset: 'utf-8' as 'UTF-8',
+          userhash: 'TRUE' as 'true',
+        }),
+      ).toEqual(
+        'realm="testrealm@host.com", ' +
+          'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' +
+          'opaque="5ccc069c403ebaf9f0171e9517f40e41", ' +
+          'stale=false, ' +
+          'algorithm=SHA-256, ' +
+          'qop="auth, auth-int", ' +
+          'charset=UTF-8, ' +
+          'userhash=true',
+      );
+    });
+
+    test('should fail with bad charset', () => {
+      expect(() =>
+        DIGEST.buildWWWAuthenticateRest({
+          realm: 'testrealm@host.com',
+          qop: 'auth, auth-int',
+          nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
+          opaque: '5ccc069c403ebaf9f0171e9517f40e41',
+          stale: 'false',
+          algorithm: 'MD5',
+          charset: 'UCS-2' as 'UTF-8',
+          userhash: 'true',
+        }),
+      ).toThrow('E_UNSUPPORTED_VALUE');
     });
 
     test('should be the inverse of parseWWWAuthenticateRest', () => {
@@ -82,11 +165,12 @@ describe('digest', () => {
             'realm="testrealm@host.com",' +
             'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093",' +
             'uri="/dir/index.html",' +
-            'qop="auth",' +
-            'nc="00000001",' +
+            'qop=auth,' +
+            'nc=00000001,' +
             'cnonce="0a4f113b",' +
             'response="6629fae49393a05397450978507c4ef1",' +
-            'opaque="5ccc069c403ebaf9f0171e9517f40e41"',
+            'opaque="5ccc069c403ebaf9f0171e9517f40e41",' +
+            'userhash=TRUE',
         ),
       ).toEqual({
         username: 'Mufasa',
@@ -98,9 +182,26 @@ describe('digest', () => {
         cnonce: '0a4f113b',
         response: '6629fae49393a05397450978507c4ef1',
         opaque: '5ccc069c403ebaf9f0171e9517f40e41',
+        userhash: 'true',
       });
     });
 
+    test('should fail with bad nc', () => {
+      expect(() => DIGEST.parseAuthorizationRest(
+          'username="Mufasa",' +
+            'realm="testrealm@host.com",' +
+            'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093",' +
+            'uri="/dir/index.html",' +
+            'qop=auth,' +
+            'nc=1,' +
+            'cnonce="0a4f113b",' +
+            'response="6629fae49393a05397450978507c4ef1",' +
+            'opaque="5ccc069c403ebaf9f0171e9517f40e41",' +
+            'userhash=TRUE',
+        )).toThrow(
+        /E_INVALID_VALUE/,
+      );
+    });
     test('should fail with empty rest', () => {
       expect(() => DIGEST.parseAuthorizationRest('')).toThrow(
         /E_MALFORMED_QUOTEDKEYVALUE/,
@@ -116,11 +217,13 @@ describe('digest', () => {
           realm: 'testrealm@host.com',
           nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
           uri: '/dir/index.html',
+          algorithm: 'MD5',
           qop: 'auth',
           nc: '00000001',
           cnonce: '0a4f113b',
           response: '6629fae49393a05397450978507c4ef1',
           opaque: '5ccc069c403ebaf9f0171e9517f40e41',
+          userhash: 'true',
         }),
       ).toEqual(
         'username="Mufasa", ' +
@@ -128,10 +231,12 @@ describe('digest', () => {
           'nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", ' +
           'uri="/dir/index.html", ' +
           'response="6629fae49393a05397450978507c4ef1", ' +
+          'algorithm=MD5, ' +
           'cnonce="0a4f113b", ' +
           'opaque="5ccc069c403ebaf9f0171e9517f40e41", ' +
-          'qop="auth", ' +
-          'nc="00000001"',
+          'qop=auth, ' +
+          'nc=00000001, ' +
+          'userhash=true',
       );
     });
 
