@@ -309,20 +309,52 @@ const DIGEST = {
     cnonce: string;
     qop: string;
   }): string {
-    const ha1 =
+    const { hashAlgorithm, sess } = _parseDigestAlgorithm(data.algorithm);
+    const partialHa1 =
       data.ha1 ||
       _computeHash(
-        data.algorithm,
+        hashAlgorithm,
         [data.username, data.realm, data.password].join(':'),
       );
-    const ha2 = _computeHash(data.algorithm, [data.method, data.uri].join(':'));
+    const ha1 = sess
+      ? _computeHash(
+          hashAlgorithm,
+          [partialHa1, data.nonce, data.cnonce].join(':'),
+        )
+      : partialHa1;
+    const ha2 = _computeHash(hashAlgorithm, [data.method, data.uri].join(':'));
 
     return _computeHash(
-      data.algorithm,
+      hashAlgorithm,
       [ha1, data.nonce, data.nc, data.cnonce, data.qop, ha2].join(':'),
     );
   },
 };
+
+const DIGEST_ALGORITHM_ALIASES: Record<string, string> = {
+  MD5: 'md5',
+  'SHA-256': 'sha256',
+  SHA256: 'sha256',
+  'SHA-512-256': 'sha512-256',
+  'SHA512-256': 'sha512-256',
+};
+
+function _parseDigestAlgorithm(algorithm: string): {
+  hashAlgorithm: string;
+  sess: boolean;
+} {
+  const normalizedAlgorithm = algorithm.trim();
+  const sess = normalizedAlgorithm.toUpperCase().endsWith('-SESS');
+  const baseAlgorithm = sess
+    ? normalizedAlgorithm.slice(0, -'-sess'.length)
+    : normalizedAlgorithm;
+
+  return {
+    hashAlgorithm:
+      DIGEST_ALGORITHM_ALIASES[baseAlgorithm.toUpperCase()] || baseAlgorithm,
+    sess,
+  };
+}
 
 function _computeHash(algorithm: string, str: string): string {
   const hashsum = crypto.createHash(algorithm);

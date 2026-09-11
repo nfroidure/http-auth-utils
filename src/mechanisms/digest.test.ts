@@ -270,21 +270,54 @@ describe('digest', () => {
   });
 
   describe('computeHash', () => {
-    test('should work', () => {
+    const data = {
+      username: 'Mufasa',
+      realm: 'testrealm@host.com',
+      password: 'Circle Of Life',
+      method: 'GET',
+      uri: '/dir/index.html',
+      nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
+      nc: '00000001',
+      cnonce: '0a4f113b',
+      qop: 'auth',
+    };
+
+    test.each([
+      ['md5', '6629fae49393a05397450978507c4ef1'],
+      ['MD5-sess', '8e3825c57e897f5a0dec6c2d4e5059d0'],
+      [
+        'SHA-256',
+        '5abdd07184ba512a22c53f41470e5eea7dcaa3a93a59b630c13dfe0a5dc6e38b',
+      ],
+      [
+        'SHA-256-sess',
+        'b8822e12417cb7750f4e2b8515f0dcf25b7dd26993e80bee1426201446a7f59b',
+      ],
+      [
+        'SHA-512-256',
+        'f23c08ec7334a881f8286e68450ddbd9f0cd91c41481f0e1433604da8113c6dc',
+      ],
+      [
+        'SHA-512-256-sess',
+        '0d21f0db3ec5cda5b850c0afa3bc29b4a3c5a6191959ff1baf511d4b38eb6b1e',
+      ],
+    ])('should support the %s algorithm', (algorithm, expectedHash) => {
       expect(
         DIGEST.computeHash({
-          username: 'Mufasa',
-          realm: 'testrealm@host.com',
-          password: 'Circle Of Life',
-          method: 'GET',
-          uri: '/dir/index.html',
-          nonce: 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
-          nc: '00000001',
-          cnonce: '0a4f113b',
-          qop: 'auth',
-          algorithm: 'md5',
+          ...data,
+          algorithm,
         }),
-      ).toEqual('6629fae49393a05397450978507c4ef1');
+      ).toEqual(expectedHash);
+    });
+
+    test('should apply -sess over a provided ha1 value', () => {
+      expect(
+        DIGEST.computeHash({
+          ...data,
+          ha1: '939e7578ed9e3c518a452acee763bce9',
+          algorithm: 'MD5-sess',
+        }),
+      ).toEqual('8e3825c57e897f5a0dec6c2d4e5059d0');
     });
   });
 });
