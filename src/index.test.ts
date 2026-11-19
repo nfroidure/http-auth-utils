@@ -13,6 +13,24 @@ import {
 
 describe('index', () => {
   describe('parseWWWAuthenticateHeader', () => {
+    test('should parse Basic charset and escaped challenge values', () => {
+      expect(
+        parseWWWAuthenticateHeader('Basic realm="foo", charset="UTF-8"').data,
+      ).toEqual({ realm: 'foo', charset: 'UTF-8' });
+      expect(
+        parseWWWAuthenticateHeader(
+          'Bearer realm="example", error="invalid_token", error_description="say \\"hi\\""',
+        ).data,
+      ).toEqual({
+        realm: 'example',
+        error: 'invalid_token',
+        error_description: 'say "hi"',
+      });
+      expect(
+        parseWWWAuthenticateHeader('Basic realm="say \\"hi\\", friend"').data,
+      ).toEqual({ realm: 'say "hi", friend' });
+    });
+
     test('should parse Basic headers', () => {
       expect(parseWWWAuthenticateHeader('Basic realm="test"')).toEqual({
         type: 'Basic',
@@ -64,6 +82,20 @@ describe('index', () => {
   });
 
   describe('parseAuthorizationHeader', () => {
+    test('should parse escaped Digest credentials', () => {
+      expect(
+        parseAuthorizationHeader(
+          'Digest username="Mu\\"fasa", realm="r", uri="/", nonce="n", response="x"',
+        ).data,
+      ).toEqual({
+        username: 'Mu"fasa',
+        realm: 'r',
+        uri: '/',
+        nonce: 'n',
+        response: 'x',
+      });
+    });
+
     test('should parse Basic headers', () => {
       expect(
         parseAuthorizationHeader('Basic QWxpIEJhYmE6b3BlbiBzZXNhbWU='),

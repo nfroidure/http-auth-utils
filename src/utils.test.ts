@@ -6,6 +6,32 @@ import {
 
 describe('utils', () => {
   describe('parseHTTPHeadersQuotedKeyValueSet', () => {
+    test('should handle long whitespace between parameters', () => {
+      const whitespace = ' \t'.repeat(50000);
+
+      expect(
+        parseHTTPHeadersQuotedKeyValueSet(
+          `realm="example",${whitespace}nonce="n"`,
+          ['realm', 'nonce'],
+        ),
+      ).toEqual({ realm: 'example', nonce: 'n' });
+      expect(
+        parseHTTPHeadersQuotedKeyValueSet(
+          `realm="example",${whitespace}invalid, nonce="n"`,
+          ['realm', 'nonce'],
+        ),
+      ).toEqual({ realm: 'example', nonce: 'n' });
+    });
+
+    test('should decode quoted pairs without ending at an escaped quote', () => {
+      expect(
+        parseHTTPHeadersQuotedKeyValueSet(
+          'realm="say \\"hi\\", friend", path="a\\\\b", other="a\\qb"',
+          ['realm', 'path', 'other'],
+        ),
+      ).toEqual({ realm: 'say "hi", friend', path: 'a\\b', other: 'aqb' });
+    });
+
     test('should work with good data', () => {
       expect(
         parseHTTPHeadersQuotedKeyValueSet(
@@ -156,6 +182,16 @@ describe('utils', () => {
   });
 
   describe('buildHTTPHeadersQuotedKeyValueSet', () => {
+    test('should escape quotes and backslashes in quoted values', () => {
+      const data = { realm: 'say "hi", \\ friend' };
+      const contents = buildHTTPHeadersQuotedKeyValueSet(data, ['realm']);
+
+      expect(contents).toEqual('realm="say \\"hi\\", \\\\ friend"');
+      expect(parseHTTPHeadersQuotedKeyValueSet(contents, ['realm'])).toEqual(
+        data,
+      );
+    });
+
     test('should work with good data', () => {
       expect(
         buildHTTPHeadersQuotedKeyValueSet(

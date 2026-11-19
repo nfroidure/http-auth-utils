@@ -9,6 +9,15 @@ describe('BASIC', () => {
   });
 
   describe('parseWWWAuthenticateRest', () => {
+    test('should normalize and validate an optional charset', () => {
+      expect(
+        BASIC.parseWWWAuthenticateRest('realm="foo", charset="utf-8"'),
+      ).toEqual({ realm: 'foo', charset: 'UTF-8' });
+      expect(() =>
+        BASIC.parseWWWAuthenticateRest('realm="foo", charset="UCS-2"'),
+      ).toThrow(/E_UNSUPPORTED_VALUE/);
+    });
+
     test('should work', () => {
       expect(BASIC.parseWWWAuthenticateRest('realm="perlinpinpin"')).toEqual({
         realm: 'perlinpinpin',
@@ -17,6 +26,18 @@ describe('BASIC', () => {
   });
 
   describe('buildWWWAuthenticateRest', () => {
+    test('should build and validate an optional charset', () => {
+      expect(
+        BASIC.buildWWWAuthenticateRest({ realm: 'foo', charset: 'UTF-8' }),
+      ).toEqual('realm="foo", charset="UTF-8"');
+      expect(() =>
+        BASIC.buildWWWAuthenticateRest({
+          realm: 'foo',
+          charset: 'UCS-2' as 'UTF-8',
+        }),
+      ).toThrow(/E_UNSUPPORTED_VALUE/);
+    });
+
     test('should work', () => {
       expect(
         BASIC.buildWWWAuthenticateRest({

@@ -5,17 +5,7 @@ const EQUAL = '=';
 const SEPARATOR = ', ';
 const TOKEN_REGEXP = /^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/;
 
-/*
- * Regular expression for matching the key-value pairs
- * \w+     = The key
- * =       = The equal sign
- * ".*?"   = Value option 1: A double-quoted value (using the non-greedy *? to stop at the first doublequote)
- * [^",]+  = Value option 2: A string without commas or double-quotes
- * (?=,|$) = Zero-width (as in not captured) positive lookahead assertion.
- *           The previous match will only be valid if it's followed by a " literal
- *           or the end of the string
- */
-const KEYVALUE_REGEXP = /\w+=(".*?"|[^",]+)(?=,|$)/g;
+const KEYVALUE_REGEXP = /(?<=,|^)\s*\w+=("(?:\\.|[^"\\\r\n])*"|[^",]+)(?=,|$)/g;
 
 // FIXME: Create a real parser
 export function parseHTTPHeadersQuotedKeyValueSet(
@@ -30,7 +20,7 @@ export function parseHTTPHeadersQuotedKeyValueSet(
 
   const data = matches
     .map((part, partPosition) => {
-      const [key, ...rest] = part.split(EQUAL);
+      const [key, ...rest] = part.trimStart().split(EQUAL);
       const value = rest.join(EQUAL);
       if (0 === rest.length) {
         throw new YError('E_MALFORMED_QUOTEDKEYVALUE', [partPosition, part]);
@@ -47,20 +37,9 @@ export function parseHTTPHeadersQuotedKeyValueSet(
           ]);
         }
 
-        /*
-         * Regular expression for stripping paired starting and ending double quotes off the value:
-         * ^      = The beginning of the string
-         * "      = The first double quote
-         * .*     = Characters of any kind
-         * (?="$) = Zero-width (as in not captured) positive lookahead assertion.
-         *          The previous match will only be valid if it's followed by a " literal
-         *          or the end of the string
-         * "      = The ending double quote
-         * $      = The end of the string
-         */ parsedValues[normalizedName] = value.replace(
-          /^"(.*(?="$))"$/,
-          '$1',
-        );
+        parsedValues[normalizedName] = value.startsWith(QUOTE)
+          ? value.slice(1, -1).replace(/\\(.)/g, '$1')
+          : value;
 
         return parsedValues;
       },
@@ -97,7 +76,7 @@ export function buildHTTPHeadersQuotedKeyValueSet(
         key +
         EQUAL +
         quote +
-        data[key] +
+        (unquoted ? data[key] : data[key].replace(/["\\]/g, '\\$&')) +
         quote
       );
     }
