@@ -7,13 +7,18 @@ import { YError } from 'yerror';
 import {
   parseHTTPHeadersQuotedKeyValueSet,
   buildHTTPHeadersQuotedKeyValueSet,
+  type AllowedValues,
 } from '../utils.js';
 
 const REQUIRED_WWW_AUTHENTICATE_KEYS = ['realm'];
-const AUTHORIZED_WWW_AUTHENTICATE_KEYS = REQUIRED_WWW_AUTHENTICATE_KEYS;
+const AUTHORIZED_WWW_AUTHENTICATE_KEYS = ['realm', 'charset'];
+const ALLOWED_VALUES: AllowedValues = {
+  charset: { values: ['UTF-8'], caseInsensitive: true },
+};
 
 export interface BasicWWWAuthenticateData {
   realm: string;
+  charset?: 'UTF-8';
 }
 export interface BasicAuthorizationData {
   username: string;
@@ -57,6 +62,7 @@ const BASIC = {
       rest,
       AUTHORIZED_WWW_AUTHENTICATE_KEYS,
       REQUIRED_WWW_AUTHENTICATE_KEYS,
+      ALLOWED_VALUES,
     ) as unknown as BasicWWWAuthenticateData;
   },
 
@@ -80,6 +86,8 @@ const BASIC = {
       data as unknown as Record<string, string>,
       AUTHORIZED_WWW_AUTHENTICATE_KEYS,
       REQUIRED_WWW_AUTHENTICATE_KEYS,
+      [],
+      ALLOWED_VALUES,
     );
   },
 
