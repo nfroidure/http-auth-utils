@@ -1,3 +1,9 @@
+## [7.1.1](https://github.com/nfroidure/http-auth-utils/compare/v7.1.0...v7.1.1) (2026-11-19)
+
+### Bug Fixes
+
+* **parser:** fix quote escapes ([fb24678](https://github.com/nfroidure/http-auth-utils/commit/fb246787e8f55b4027cb14d08297de52ec68da8f)), closes [#36](https://github.com/nfroidure/http-auth-utils/issues/36)
+
 ## [7.1.0](https://github.com/nfroidure/http-auth-utils/compare/v7.0.1...v7.1.0) (2026-09-07)
 
 ### Bug Fixes
